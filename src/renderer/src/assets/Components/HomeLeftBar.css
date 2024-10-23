@@ -1,0 +1,41 @@
+/*
+------
+Stylesheet for global left bar
+With list of music, profile (parameters) and report bugs.
+
+*/
+.homeLeftBarContainer {
+  display: grid;
+  grid-template-rows: 50px auto 50px;
+  padding: 5px;
+  height: calc(100vh - 45px);
+  border-right: var(--border-color) 1px solid;
+}
+
+/* Logo home */
+.homeLeftBarContainer .logo img:active {
+  transform: translate(0, 1px);
+}
+
+.homeLeftBarContainer .logo {
+  border-bottom: var(--border-color) 1px solid;
+  user-select: none;
+}
+
+/* Liste des musiques pins */
+.homeLeftBarContainer .listOfPinsAlbums {
+  overflow: scroll;
+  scrollbar-width: none;
+}
+
+/* PARAMS */
+.homeLeftBarContainer .parameters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.homeLeftBarContainer .parameters img:active {
+  transform: translate(0, 1px);
+}

@@ -1,0 +1,35 @@
+/* -----------
+Style pour la TOP BAR
+
+--------------
+ */
+.topBarContainer {
+  display: flex;
+  padding: 5px;
+  background-color: rgba(232, 232, 232, 0.71);
+  justify-content: end;
+  align-items: center;
+  -webkit-app-region: drag;
+  border-bottom: var(--border-color) 1px solid;
+}
+
+.topBarButton {
+  cursor: pointer;
+  border-radius: 2px;
+  padding: 2px;
+  padding-inline: 10px;
+  margin-inline: 10px;
+  -webkit-app-region: no-drag;
+}
+
+.topBarButton:hover {
+  background-color: #f0dc4e;
+}
+
+.topBarContainer .selected {
+  background-color: #7c93ee;
+}
+
+.topBarContainer .separator {
+  color: var(--border-color);
+}
