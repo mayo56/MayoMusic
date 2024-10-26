@@ -1,8 +1,24 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
+export type Music = {
+  titre: string
+  path: string
+}
+
 // Custom APIs for renderer
 const api = {
+  library: {
+    req: (): void => {
+      ipcRenderer.send('reqMusics')
+    },
+    MusicLibrary: (callback: (musics: Music[]) => void): void => {
+      ipcRenderer.on('MusicLibrary', (_, args: Music[]) => callback(args))
+    },
+    reloadList: (): void => {
+      ipcRenderer.send('reloadMusics')
+    }
+  },
   openFolderDialog: async (): Promise<null> => await ipcRenderer.invoke('dialog:openFolder')
 }
 
