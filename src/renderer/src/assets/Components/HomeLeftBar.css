@@ -39,3 +39,9 @@ With list of music, profile (parameters) and report bugs.
 .homeLeftBarContainer .parameters img:active {
   transform: translate(0, 1px);
 }
+
+/* PLAYER */
+.playerButtonContainer {
+  display: flex;
+  align-items: start;
+}

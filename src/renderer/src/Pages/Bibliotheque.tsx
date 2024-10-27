@@ -14,19 +14,29 @@ function Library(): React.JSX.Element {
 
   React.useEffect(() => {
     return (): void => {
-      console.log('enter useEffect')
       window.api.library.req()
       window.api.library.MusicLibrary((musics): void => {
-        console.log(musics)
         setMusics(musics as unknown as Music[])
+        console.info('Musics loaded', musics)
       })
-      console.log('end of useEffect')
     }
   }, [])
   return (
     <div className={'libraryContainer'}>
+      {/*
+      Barre de recherche
+      */}
       <LibrarySearchBar />
+      {/*
+      Indications de chargement
+      */}
       <div className={'loadBar'}>
+        <div className={'bar_left'}></div>
+        <span className={'count'}>{0} playlist chargés</span>
+        <div className={'bar'}></div>
+      </div>
+      <div className={'loadBar'}>
+        <div className={'bar_left'}></div>
         <span className={'count'}>{musics.length} titres chargés</span>
         <div className={'bar'}></div>
       </div>
@@ -36,7 +46,7 @@ function Library(): React.JSX.Element {
       <div className={'libraryMusicList'}>
         {musics.map((el, key) => {
           return (
-            <div key={key} className={'libraryMusic'}>
+            <div key={key} className={'libraryMusic'} title={`${el.title} - ${el.path}`}>
               <img
                 src={el.cover ? 'data:image/png;base64, ' + el.cover : music_icon}
                 alt={'cover ' + el.title}

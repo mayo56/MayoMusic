@@ -8,17 +8,21 @@ CSS pour la librairie (principale)
   flex-wrap: wrap;
   justify-content: start;
   align-items: start;
-  overflow: scroll;
   padding-top: 5px;
 }
-
+.libraryContainer {
+  overflow: scroll;
+  width: calc(100vw - 50px);
+  height: calc(100vh - 45px);
+}
 .libraryContainer .libraryMusic {
-  font-weight: 200;
   padding: 10px;
   background-color: rgb(240,240,240);
   cursor: pointer;
   border-radius: 5px;
-  margin-inline: 5px;
+  margin: 5px;
+  width: 156px;
+  height: 200px;
 }
 
 .libraryContainer .libraryMusic:hover {
@@ -26,9 +30,12 @@ CSS pour la librairie (principale)
 }
 
 .libraryMusic img {
-  max-width: 128px;
-  max-height: 256px;
+  width: 156px;
+  height: 156px;
   border-radius: 0;
+}
+.libraryMusic p {
+  font-weight: 200;
 }
 
 /* Load bar */
@@ -40,6 +47,11 @@ CSS pour la librairie (principale)
 .loadBar .bar {
   flex: 1;
   border-bottom: 1px solid var(--border-color);
+  margin-inline: 5px;
+}
+.loadBar .bar_left {
+  flex: 0.01;
+  border-bottom: solid 1px var(--border-color);
   margin-inline: 5px;
 }
 

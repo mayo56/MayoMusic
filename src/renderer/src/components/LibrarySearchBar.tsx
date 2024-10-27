@@ -14,6 +14,7 @@ function LibrarySearchBar(): React.JSX.Element {
         <input type={'text'} placeholder={'Rechercher un titre'} />
         <button className={'searchBarButton'}>Search</button>
       </div>
+      <button>Filters</button>
     </div>
   )
 }
