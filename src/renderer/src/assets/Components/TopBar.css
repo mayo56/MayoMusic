@@ -7,12 +7,25 @@ Style pour la TOP BAR
   display: flex;
   padding: 5px;
   background-color: rgba(232, 232, 232, 0.71);
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
   -webkit-app-region: drag;
   border-bottom: var(--border-color) 1px solid;
 }
 
+.topBarSpacesButtonsContainer {
+  display: flex;
+}
+
+/* PLAYER */
+.topBarPlayer {
+  margin-left: 100px;
+  -webkit-app-region: no-drag;
+  background-color: #f0dc4e;
+}
+
+
+/* SPACES BUTTONS */
 .topBarButton {
   cursor: pointer;
   border-radius: 2px;

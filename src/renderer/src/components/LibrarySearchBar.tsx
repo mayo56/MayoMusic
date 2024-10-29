@@ -3,7 +3,7 @@ import React from 'react'
 
 function LibrarySearchBar(): React.JSX.Element {
   const reloadRequest = (): void => {
-    window.api.library.reloadList()
+    window.api.library.reloadAlbums()
   }
   return (
     <div className={'LibrarySearchBarContainer'}>

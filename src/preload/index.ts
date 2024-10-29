@@ -1,22 +1,35 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-export type Music = {
+export type Album = {
   titre: string
   path: string
+}
+
+export type Music = {
+  title: string
 }
 
 // Custom APIs for renderer
 const api = {
   library: {
-    req: (): void => {
-      ipcRenderer.send('reqMusics')
+    // REQ Library list of Albums
+    reqAlbums: (): void => {
+      ipcRenderer.send('reqAlbums')
     },
-    MusicLibrary: (callback: (musics: Music[]) => void): void => {
-      ipcRenderer.on('MusicLibrary', (_, args: Music[]) => callback(args))
+    AlbumsList: (callback: (albums: Album[]) => void): void => {
+      ipcRenderer.on('AlbumsList', (_, args: Album[]) => callback(args))
     },
-    reloadList: (): void => {
-      ipcRenderer.send('reloadMusics')
+    reloadAlbums: (): void => {
+      ipcRenderer.send('reloadAlbums')
+    },
+
+    // REQ Library list of musics of album
+    reqMusics: (albumName: string): void => {
+      ipcRenderer.send('reqAlbums', albumName)
+    },
+    MusicsList: (callback: (music: Music[]) => void): void => {
+      ipcRenderer.on('MusicsList', (_, args: Music[]) => callback(args))
     }
   },
   openFolderDialog: async (): Promise<null> => await ipcRenderer.invoke('dialog:openFolder')

@@ -58,15 +58,21 @@ function ipcLibrary(): void {
     }
   }
   formatMusicFolder()
+  // REQ ALBUMS
   // Request liste des musiques
-  ipcMain.on('reqMusics', (event) => {
+  ipcMain.on('reqAlbums', (event) => {
     event.sender.send('MusicLibrary', library)
   })
   // reload la liste des musiques
-  ipcMain.on('reloadMusics', (event) => {
+  ipcMain.on('reloadAlbums', (event) => {
     library = []
     formatMusicFolder()
-    event.sender.send('MusicLibrary', library)
+    event.sender.send('AlbumsLibrary', library)
+  })
+
+  // REQ MUSICS
+  ipcMain.on('reqAlbums', (event, args) => {
+    event.sender.send('MusicLibrary', args)
   })
 }
 
