@@ -3,6 +3,8 @@ import fs from 'node:fs'
 import { AppSettings } from './libs/store'
 import { Music, music_setting } from './Types/types'
 
+import path from 'node:path'
+
 function ipcHandler(): void {
   ipcMain.handle('dialog:openFolder', async () => {
     const mainWindow = BrowserWindow.getFocusedWindow()
@@ -24,20 +26,20 @@ function ipcHandler(): void {
  */
 function ipcLibrary(): void {
   let library: Music[] = [
-    { title: 'oui', path: '/', cover: null },
-    { title: 'oui', path: '/', cover: null },
-    { title: 'oui', path: '/', cover: null },
+    { title: 'oui', path: '/', cover: undefined },
+    { title: 'oui', path: '/', cover: undefined },
+    { title: 'oui', path: '/', cover: undefined },
     {
       title: 'oui',
       path: '/',
-      cover: null
+      cover: undefined
     }
   ]
   const formatMusicFolder = (): void => {
     const folderList = fs.readdirSync(`${AppSettings().settings.savePath}/MayoMusic`)
     // Mise en format des dossiers
     for (const folder of folderList) {
-      let cover: null | string = null
+      let cover: undefined | string = undefined
       if (fs.existsSync(`${AppSettings().settings.savePath}/MayoMusic/${folder}/setting.json`)) {
         const music_setting: music_setting = JSON.parse(
           fs.readFileSync(
@@ -53,26 +55,39 @@ function ipcLibrary(): void {
       library.push({
         title: folder,
         path: `${AppSettings().settings.savePath}/MayoMusic/${folder}`,
-        cover: cover
+        cover: cover ? `data:image/png;base64,${cover}` : undefined
       })
     }
   }
   formatMusicFolder()
   // REQ ALBUMS
   // Request liste des musiques
-  ipcMain.on('reqAlbums', (event) => {
-    event.sender.send('MusicLibrary', library)
+  ipcMain.on('reqAlbums', (event): void => {
+    event.sender.send('AlbumsList', library)
   })
   // reload la liste des musiques
-  ipcMain.on('reloadAlbums', (event) => {
+  ipcMain.on('reloadAlbums', (event): void => {
     library = []
     formatMusicFolder()
-    event.sender.send('AlbumsLibrary', library)
+    event.sender.send('AlbumsList', library)
   })
 
   // REQ MUSICS
-  ipcMain.on('reqAlbums', (event, args) => {
-    event.sender.send('MusicLibrary', args)
+  ipcMain.on('reqMusics', (event, args: string): void => {
+    if (args == '' || !args) return
+    const listOfMusics = fs
+      .readdirSync(`${AppSettings().settings.savePath}/MayoMusic/${args}/`)
+      .filter((e) => ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase()))
+    event.sender.send('MusicsList', listOfMusics)
+  })
+
+  // EVENT PLAYER
+  ipcMain.on('sendMusic', (event, args: { album: string; music: string }) => {
+    const audio = fs.readFileSync(
+      `${AppSettings().settings.savePath}/MayoMusic/${args.album}/${args.music}`,
+      'base64'
+    )
+    event.sender.send('playMusic', `data:audio/mp3;base64,${audio}`)
   })
 }
 

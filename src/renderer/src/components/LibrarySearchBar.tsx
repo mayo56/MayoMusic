@@ -4,6 +4,7 @@ import React from 'react'
 function LibrarySearchBar(): React.JSX.Element {
   const reloadRequest = (): void => {
     window.api.library.reloadAlbums()
+    console.warn('Reload list')
   }
   return (
     <div className={'LibrarySearchBarContainer'}>

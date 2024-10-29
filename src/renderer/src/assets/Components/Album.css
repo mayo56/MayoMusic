@@ -1,0 +1,20 @@
+/*
+------------
+CSS pour la liste d'album
+
+*/
+.albumListContainer {
+  padding: 5px;
+}
+
+
+/* Card music */
+.musicCardContainer {
+  background-color: #f0dc4e;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.musicCardContainer:hover {
+  background-color: #7c93ee;
+}

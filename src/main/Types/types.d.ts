@@ -7,7 +7,7 @@ export type settings = {
 export type Music = {
   title: string
   path: string
-  cover: null | string
+  cover: undefined | string
 }
 
 export type music_setting = {

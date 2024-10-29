@@ -1,20 +1,25 @@
-import { ElectronAPI } from '@electron-toolkit/preload'
+import { ElectronAPI } from "@electron-toolkit/preload";
 import { Album, Music } from "./index";
 
 declare global {
   interface Window {
-    electron: ElectronAPI
+    electron: ElectronAPI;
     api: {
       library: {
         // REQ ALBUMS
         reqAlbums(): void,
-        AlbumsLibrary(callback: (albums: Album[]) => void)
+        AlbumsList(callback: (albums: Album[]) => void)
         reloadAlbums(): void
         // REQ MUSICS
         reqMusics(albumName: string): void
-        MusicsLibrary(callback: (musics: Music[]) => void)
-      }
+        MusicsList(callback: (musics: Music[]) => void)
+      },
+      player: {
+        // EVENT PLAY MUSIC
+        playMusic(album: string, music: string): void
+        receiveMusic(callback: (audio: string) => void)
+      },
       openFolderDialog(): Promise<string>
-    }
+    };
   }
 }

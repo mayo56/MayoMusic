@@ -17,9 +17,8 @@ function MusicList(props: {
   React.useEffect(() => {
     return (): void => {
       window.api.library.reqAlbums()
-      window.api.library.AlbumsLibrary((musics): void => {
+      window.api.library.AlbumsList((musics): void => {
         setMusics(musics as unknown as Music[])
-        console.info('Musics loaded', musics)
       })
     }
   }, [])
@@ -55,10 +54,7 @@ function MusicList(props: {
               className={'libraryMusic'}
               title={`${el.title} - ${el.path}`}
             >
-              <img
-                src={el.cover ? 'data:image/png;base64, ' + el.cover : music_icon}
-                alt={'cover ' + el.title}
-              />
+              <img src={el.cover || music_icon} alt={'cover ' + el.title} />
               <p>{el.title}</p>
             </div>
           )
