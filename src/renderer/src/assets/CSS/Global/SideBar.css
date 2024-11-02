@@ -1,5 +1,5 @@
 :root {
-  --choice-color: darkseagreen;
+    --choice-color: darkseagreen;
 }
 
 /*
@@ -8,54 +8,103 @@ CSS SideBar
 
 */
 .GlobalLeftBarContainer {
-  height: calc(100vh - 50px);
-  width: 200px;
+    height: calc(100vh - 50px);
+    width: 200px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 /* Menus selector */
 .MenuContainer {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }
 
 .MenuContainer .choice {
-  background-color: var(--choice-color);
-  border-radius: 10px;
-  width: 45%;
-  border: var(--choice-color) solid 2px;
-  cursor: pointer;
+    background-color: var(--choice-color);
+    border-radius: 10px;
+    width: 45%;
+    border: var(--choice-color) solid 2px;
+    cursor: pointer;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .MenuContainer .icon {
-  width: 30px;
+    width: 30px;
 }
 
 .MenuContainer .selected {
-  background-color: #f0dc4e;
+    background-color: #f0dc4e;
 }
 
 
 /* Liste des playlists */
 .listPlaylistContainer {
-  flex: 1;
-  overflow: visible;
+    flex: 1;
+    overflow: visible;
 }
 
 
 /* PLAYER */
+/* Depuis la SideBar.tsx */
 .playerContainer {
-  background-color: #7c93ee;
-  margin: 5px;
-  border-radius: 5px;
+    background-color: #7c93ee;
+    margin: 5px 5px 0;
+    border-radius: 5px;
+    font-weight: 200;
+}
+
+/* Depuis le Player.tsx*/
+.player_Container {
+    padding: 5px;
+}
+
+/* -- */
+/* Player Info */
+.player_info {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 5px;
+}
+
+.player_info .timer {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* -- */
+/* Player controller */
+.play_controller {
+    display: flex;
+    justify-content: space-around;
+}
+
+.play_controller img {
+    width: 15px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.play_controller img:hover {
+    background-color: #f0dc4e;
+}
+
+
+/* volume */
+.player_Container .volume {
+    padding-top: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.player_Container .hide {
+    display: none;
 }

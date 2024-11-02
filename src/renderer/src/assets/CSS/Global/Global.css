@@ -56,6 +56,20 @@ CSS Global Side Bar (controller)
   margin-left: 0;
 }
 
+/* CSS Pour la fenêtre de page */
 .GlobalPages {
   -webkit-app-region: no-drag;
+  padding: 5px; /* Padding automatique pour toutes les pages */
+}
+
+/* CSS POUR LES FEATURES EN BETA */
+.incoming_feature {
+  background: repeating-linear-gradient(
+    45deg,             /* Angle des bandes diagonales */
+    yellow,            /* Couleur de la première bande */
+    yellow 4px,       /* Largeur de la bande jaune */
+    black 4px,        /* Début de la bande noire après la bande jaune */
+    black 8px         /* Largeur de la bande noire */
+  );
+  background-size: 100% 100%;
 }

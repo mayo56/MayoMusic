@@ -1,21 +1,23 @@
 /*
 --------------
-CSS pour la librairie (principale)
+CSS Liste de musique (page principale)
 
 */
-.libraryMusicList {
+/* Contient le tout */
+.MusicListContainer {
+  overflow: scroll;
+  width: 100%;
+  height: 100%
+}
+
+/* Contient que la liste des musiques */
+.library {
   display: flex;
   flex-wrap: wrap;
   justify-content: start;
   align-items: start;
-  padding-top: 5px;
 }
-.libraryContainer {
-  overflow: scroll;
-  width: calc(100vw - 50px);
-  height: calc(100vh - 45px);
-}
-.libraryContainer .libraryMusic {
+.library .libraryMusic {
   padding: 10px;
   background-color: rgb(240,240,240);
   cursor: pointer;
@@ -25,7 +27,7 @@ CSS pour la librairie (principale)
   height: 200px;
 }
 
-.libraryContainer .libraryMusic:hover {
+.library .libraryMusic:hover {
   background-color: rgb(245,245,245);
 }
 

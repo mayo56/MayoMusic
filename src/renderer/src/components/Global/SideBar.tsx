@@ -1,10 +1,15 @@
 import React from 'react'
-import '@renderer/assets/CSS/Global/SideBar.css'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+// CSS
+import '@renderer/assets/CSS/Global/SideBar.css'
+
 // Icons
-import library_icon from '@renderer/assets/Images/radio-svgrepo-com.svg'
-import parameters_icon from '@renderer/assets/Images/cog-svgrepo-com.svg'
+import library_icon from '@renderer/assets/Images/library-svgrepo-com.svg'
+import parameters_icon from '@renderer/assets/Images/construct-svgrepo-com.svg'
+
+// Components
+import Player from '@renderer/components/Global/Player'
 
 function SideBar(): React.JSX.Element {
   const nav = useNavigate()
@@ -41,8 +46,7 @@ function SideBar(): React.JSX.Element {
       </div>
 
       <div className={'playerContainer'}>
-        <p>Name</p>
-        <input type={'range'} />
+        <Player />
       </div>
     </div>
   )

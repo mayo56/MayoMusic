@@ -3,20 +3,19 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 
 // CSS
-import '@renderer/assets/CSS/Components/Library.css'
+import '@renderer/assets/CSS/Library/MusicList.css'
 
 // Sub Pages
-import MusicList from '@renderer/Pages/Sous-Pages/Home/Library'
-import Album from '@renderer/Pages/Sous-Pages/Home/Album'
+import MusicList from '@renderer/Pages/Sous-Pages/Library/MusicList'
+import Album from '@renderer/Pages/Sous-Pages/Library/Album'
 
 function Library(): React.JSX.Element {
-  const [inAlbum, setInAlbum] = React.useState<{ title: string; cover: string | null } | null>(null)
   return (
     <Routes>
       {/* Library */}
-      <Route path={''} element={<MusicList setAlbum={setInAlbum} />} />
+      <Route path={''} element={<MusicList />} />
       {/* Show Album */}
-      <Route path={':id'} element={<Album setAlbum={setInAlbum} album={inAlbum!} />} />
+      <Route path={':id'} element={<Album />} />
     </Routes>
   )
 }

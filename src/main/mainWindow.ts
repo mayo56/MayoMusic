@@ -14,6 +14,8 @@ function createWindow(): void {
     titleBarStyle: 'hiddenInset',
     titleBarOverlay: true,
     transparent: false,
+    minWidth: 700,
+    minHeight: 500,
     // -----
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
