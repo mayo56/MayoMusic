@@ -42,6 +42,11 @@ const api = {
       ipcRenderer.on('playMusic', (_, args: string) => callback(args))
     }
   },
+  Global: {
+    fullscreen: (callback: (fullscreen_status: boolean) => void): void => {
+      ipcRenderer.on('fullscreen-status', (_, args: boolean) => callback((args)))
+    }
+  },
   openFolderDialog: async (): Promise<void> => {
     await ipcRenderer.invoke('dialog:openFolder')
   }

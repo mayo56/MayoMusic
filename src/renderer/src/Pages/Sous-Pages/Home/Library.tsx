@@ -1,6 +1,6 @@
 import React from 'react'
 import music_icon from '@renderer/assets/Images/music.svg'
-import '@renderer/assets/Components/Library.css'
+import '@renderer/assets/CSS/Components/Library.css'
 import LibrarySearchBar from '@renderer/components/LibrarySearchBar'
 
 type Music = {

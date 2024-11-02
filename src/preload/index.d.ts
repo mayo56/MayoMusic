@@ -19,6 +19,9 @@ declare global {
         playMusic(album: string, music: string): void
         receiveMusic(callback: (audio: string) => void)
       },
+      Global: {
+        fullscreen(callback: (fullscreen_status: boolean) => void)
+      },
       openFolderDialog(): Promise<string>
     };
   }

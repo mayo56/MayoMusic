@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 // CSS dans le CSS de Library
 
 function LibrarySearchBar(): React.JSX.Element {
@@ -6,6 +7,7 @@ function LibrarySearchBar(): React.JSX.Element {
     window.api.library.reloadAlbums()
     console.warn('Reload list')
   }
+  const nav = useNavigate()
   return (
     <div className={'LibrarySearchBarContainer'}>
       <button onClick={reloadRequest} className={'reloadButton'}>
@@ -15,7 +17,7 @@ function LibrarySearchBar(): React.JSX.Element {
         <input type={'text'} placeholder={'Rechercher un titre'} />
         <button className={'searchBarButton'}>Search</button>
       </div>
-      <button>Filters</button>
+      <button onClick={() => nav('/lol/non')}>Filters</button>
     </div>
   )
 }

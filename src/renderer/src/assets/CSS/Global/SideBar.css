@@ -1,0 +1,61 @@
+:root {
+  --choice-color: darkseagreen;
+}
+
+/*
+------
+CSS SideBar
+
+*/
+.GlobalLeftBarContainer {
+  height: calc(100vh - 50px);
+  width: 200px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Menus selector */
+.MenuContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.MenuContainer .choice {
+  background-color: var(--choice-color);
+  border-radius: 10px;
+  width: 45%;
+  border: var(--choice-color) solid 2px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.MenuContainer .icon {
+  width: 30px;
+}
+
+.MenuContainer .selected {
+  background-color: #f0dc4e;
+}
+
+
+/* Liste des playlists */
+.listPlaylistContainer {
+  flex: 1;
+  overflow: visible;
+}
+
+
+/* PLAYER */
+.playerContainer {
+  background-color: #7c93ee;
+  margin: 5px;
+  border-radius: 5px;
+}

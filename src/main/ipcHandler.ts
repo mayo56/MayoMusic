@@ -75,7 +75,7 @@ function ipcLibrary(): void {
     event.sender.send('MusicsList', listOfMusics)
   })
 
-  // EVENT PLAYE
+  // EVENT PLAYER
   // File d'attente de musique
   // const queue = []
   // Start a music

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import '@renderer//assets/Components/TopBar.css' // Icons
+import '@renderer/assets/CSS/Components/TopBar.css' // Icons
 import play_icon from '@renderer/assets/Images/play-svgrepo-com (1).svg'
 import next_icon from '@renderer/assets/Images/play-skip-forward-svgrepo-com.svg'
 import previous_icon from '@renderer/assets/Images/play-skip-back-svgrepo-com.svg'

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import '@renderer/assets/Components/Album.css'
+import '@renderer/assets/CSS/Components/Album.css'
 
 function Album(props: {
   setAlbum: React.Dispatch<React.SetStateAction<{ title: string; cover: string | null } | null>>

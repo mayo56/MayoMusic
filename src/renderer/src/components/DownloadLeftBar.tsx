@@ -1,5 +1,5 @@
 import React from 'react'
-import '../assets/Components/DownloadLeftBar.css'
+import '@renderer/assets/CSS/Components/DownloadLeftBar.css'
 
 function DownloadLeftBar(props: { menu: number; setMenu: any }): React.JSX.Element {
   return (
