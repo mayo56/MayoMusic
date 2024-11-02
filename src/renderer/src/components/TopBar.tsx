@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
-import '@renderer//assets/Components/TopBar.css'
+import '@renderer//assets/Components/TopBar.css' // Icons
+import play_icon from '@renderer/assets/Images/play-svgrepo-com (1).svg'
+import next_icon from '@renderer/assets/Images/play-skip-forward-svgrepo-com.svg'
+import previous_icon from '@renderer/assets/Images/play-skip-back-svgrepo-com.svg'
 
 function TopBar(props: { menu: number; setMenu: any }): React.JSX.Element {
   const changeMenu = (to: number): void => props.setMenu(to)
@@ -27,16 +30,23 @@ function TopBar(props: { menu: number; setMenu: any }): React.JSX.Element {
   return (
     <div className={'topBarContainer'}>
       <div className={'topBarPlayer'}>
-        <audio
-          src={audioSRC}
-          autoPlay={true}
-          ref={audioRef}
-          onTimeUpdate={changeProgressMusic}
-        />
-        <button>{'<-'}</button>
-        <button>{' P'}</button>
-        <button>{'->'}</button>
+        <audio src={audioSRC} autoPlay={true} ref={audioRef} onTimeUpdate={changeProgressMusic} />
+        {/*
+        Player controller
+        */}
+
+        <img className={'player_icon'} src={previous_icon} alt={'back skip icon'} />
+
+        <img className={'player_icon'} src={play_icon} alt={'play icon'} />
+
+        <img className={'player_icon'} src={next_icon} alt={'next icon'} />
+
+        {/*
+        Player Range
+        */}
+        <span>{audioRef?.current?.currentTime}</span>
         <input type={'range'} value={progress} />
+        <span>{audioRef.current?.duration}</span>
       </div>
       <div className={'topBarSpacesButtonsContainer'}>
         <div
@@ -50,7 +60,7 @@ function TopBar(props: { menu: number; setMenu: any }): React.JSX.Element {
           onClick={() => changeMenu(1)}
           className={props.menu == 1 ? 'topBarButton selected' : 'topBarButton'}
         >
-          <span>Download</span>
+          <span>Paramètres</span>
         </div>
       </div>
     </div>

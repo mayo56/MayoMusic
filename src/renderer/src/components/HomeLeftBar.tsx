@@ -1,5 +1,5 @@
 import React from 'react'
-import electron_logo from '../assets/electron.svg'
+import electron_logo from '../assets/Images/electron.svg'
 import '../assets/Components/HomeLeftBar.css'
 import { useNavigate } from 'react-router-dom'
 

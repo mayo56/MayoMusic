@@ -1,6 +1,7 @@
 /* -----------
 Style pour la TOP BAR
-
+#edeefd (fond)
+##4f55f1 (texte)
 --------------
  */
 .topBarContainer {
@@ -23,7 +24,9 @@ Style pour la TOP BAR
   -webkit-app-region: no-drag;
   background-color: #f0dc4e;
 }
-
+.player_icon {
+  width: 25px;
+}
 
 /* SPACES BUTTONS */
 .topBarButton {

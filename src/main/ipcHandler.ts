@@ -25,16 +25,8 @@ function ipcHandler(): void {
  * les titres
  */
 function ipcLibrary(): void {
-  let library: Music[] = [
-    { title: 'oui', path: '/', cover: undefined },
-    { title: 'oui', path: '/', cover: undefined },
-    { title: 'oui', path: '/', cover: undefined },
-    {
-      title: 'oui',
-      path: '/',
-      cover: undefined
-    }
-  ]
+  let library: Music[] = []
+  // Formatage des dossiers
   const formatMusicFolder = (): void => {
     const folderList = fs.readdirSync(`${AppSettings().settings.savePath}/MayoMusic`)
     // Mise en format des dossiers
@@ -77,17 +69,32 @@ function ipcLibrary(): void {
     if (args == '' || !args) return
     const listOfMusics = fs
       .readdirSync(`${AppSettings().settings.savePath}/MayoMusic/${args}/`)
-      .filter((e) => ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase()))
+      .filter((e) =>
+        ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase())
+      )
     event.sender.send('MusicsList', listOfMusics)
   })
 
-  // EVENT PLAYER
+  // EVENT PLAYE
+  // File d'attente de musique
+  // const queue = []
+  // Start a music
   ipcMain.on('sendMusic', (event, args: { album: string; music: string }) => {
     const audio = fs.readFileSync(
       `${AppSettings().settings.savePath}/MayoMusic/${args.album}/${args.music}`,
       'base64'
     )
     event.sender.send('playMusic', `data:audio/mp3;base64,${audio}`)
+  })
+  // Next music
+  ipcMain.on('nextMusic', (event, args) => {
+    // A FINIR
+    event.sender.send('playMusic', args)
+  })
+  // Previous music
+  ipcMain.on('previousMusic', (event, args) => {
+    // A FINIR
+    event.sender.send('playMusic', args)
   })
 }
 
