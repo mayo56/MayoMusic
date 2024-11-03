@@ -3,18 +3,26 @@
 CSS pour la liste d'album
 
 */
-.albumListContainer {
-  padding: 5px;
+.AlbumContainer {
+  height: calc(100vh - 30px);
+  border-radius: 5px;
+  overflow: scroll;
 }
 
+.AlbumMusicList {
+}
 
 /* Card music */
-.musicCardContainer {
-  background-color: #f0dc4e;
-  padding: 5px;
+.AlbumMusicCardContainer {
+  background-color: transparent;
+
+  padding: 10px;
+  margin: 5px;
+
   cursor: pointer;
 }
 
-.musicCardContainer:hover {
+.AlbumMusicCardContainer:hover {
   background-color: #7c93ee;
+  text-decoration: underline;
 }

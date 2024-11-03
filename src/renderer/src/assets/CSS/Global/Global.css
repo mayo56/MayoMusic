@@ -6,6 +6,8 @@
 
 :root {
   --border-color: #b5b5b5;
+  --global-interface-color: rgba(242,214,109,0.8);
+  --global-page-shadow-color: rgba(0,0,0,0.5);
 }
 
 /*
@@ -18,7 +20,7 @@ CSS Global
   height: 100vh;
   max-width: 100vw;
   max-height: 100vh;
-  background-color: #087ea4;
+  background-color: var(--global-interface-color);
 }
 
 .GlobalPages {
@@ -29,7 +31,7 @@ CSS Global
   right: 10px;
   left: 200px;
   background-color: white;
-  box-shadow: black 0 0 5px;
+  box-shadow: var(--global-page-shadow-color) 0 0 5px;
 }
 
 /*

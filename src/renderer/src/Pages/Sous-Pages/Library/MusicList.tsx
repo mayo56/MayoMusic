@@ -21,12 +21,11 @@ function MusicList(): React.JSX.Element {
   const [musics, setMusics] = React.useState<Music[]>([])
 
   React.useEffect(() => {
-    return (): void => {
-      window.api.library.reqAlbums()
-      window.api.library.AlbumsList((musics): void => {
-        setMusics(musics as unknown as Music[])
-      })
-    }
+    window.api.library.reqAlbums()
+    window.api.library.AlbumsList((musics): void => {
+      setMusics(musics as unknown as Music[])
+      console.log(musics)
+    })
   }, [])
 
   const nav = useNavigate()

@@ -84,7 +84,10 @@ function ipcLibrary(): void {
       `${AppSettings().settings.savePath}/MayoMusic/${args.album}/${args.music}`,
       'base64'
     )
-    event.sender.send('playMusic', `data:audio/mp3;base64,${audio}`)
+    event.sender.send('playMusic', {
+      name: args.music,
+      audio: `data:audio/mp3;base64,${audio}`
+    })
   })
   // Next music
   ipcMain.on('nextMusic', (event, args) => {

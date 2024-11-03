@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from "electron";
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 export type Album = {
@@ -29,8 +29,8 @@ const api = {
     reqMusics: (albumName: string): void => {
       ipcRenderer.send('reqMusics', albumName)
     },
-    MusicsList: (callback: (music: Music[]) => void): void => {
-      ipcRenderer.on('MusicsList', (_, args: Music[]) => callback(args))
+    MusicsList: (callback: (music: string[]) => void): void => {
+      ipcRenderer.on('MusicsList', (_, args: string[]) => callback(args))
     }
   },
   player: {
@@ -38,13 +38,13 @@ const api = {
     playMusic: (album: string, music: string): void => {
       ipcRenderer.send('sendMusic', { album, music })
     },
-    receiveMusic: (callback: (audio: string) => void): void => {
-      ipcRenderer.on('playMusic', (_, args: string) => callback(args))
+    receiveMusic: (callback: (info: { name: string; audio: string }) => void): void => {
+      ipcRenderer.on('playMusic', (_, args: { name: string; audio: string }) => callback(args))
     }
   },
   Global: {
     fullscreen: (callback: (fullscreen_status: boolean) => void): void => {
-      ipcRenderer.on('fullscreen-status', (_, args: boolean) => callback((args)))
+      ipcRenderer.on('fullscreen-status', (_, args: boolean) => callback(args))
     }
   },
   openFolderDialog: async (): Promise<void> => {

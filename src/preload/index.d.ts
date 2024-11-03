@@ -12,12 +12,12 @@ declare global {
         reloadAlbums(): void
         // REQ MUSICS
         reqMusics(albumName: string): void
-        MusicsList(callback: (musics: Music[]) => void)
+        MusicsList(callback: (musics: string[]) => void)
       },
       player: {
         // EVENT PLAY MUSIC
         playMusic(album: string, music: string): void
-        receiveMusic(callback: (audio: string) => void)
+        receiveMusic(callback: (info: { name: string, audio: string }) => void)
       },
       Global: {
         fullscreen(callback: (fullscreen_status: boolean) => void)
