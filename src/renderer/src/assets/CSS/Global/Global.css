@@ -1,0 +1,77 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+:root {
+  --border-color: #b5b5b5;
+  --global-interface-color: rgba(242,214,109,0.8);
+  --global-page-shadow-color: rgba(0,0,0,0.5);
+}
+
+/*
+-----
+CSS Global
+
+*/
+.GlobalContainer {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  background-color: var(--global-interface-color);
+}
+
+.GlobalPages {
+  border-radius: 10px;
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: 10px;
+  left: 200px;
+  background-color: white;
+  box-shadow: var(--global-page-shadow-color) 0 0 5px;
+}
+
+/*
+------
+CSS Global Side Bar (controller)
+
+ */
+.GlobalSideBarControllerContainer {
+  width: 100vw;
+  height: 40px;
+  -webkit-app-region: drag;
+}
+
+.GlobalSideBarControllerContainer .icon {
+  width: 20px;
+  margin-top: 9px;
+}
+
+.GlobalSideBarControllerContainer .not_fullscreen {
+  margin-left: 80px;
+}
+
+.GlobalSideBarControllerContainer .fullscreen {
+  margin-left: 0;
+}
+
+/* CSS Pour la fenêtre de page */
+.GlobalPages {
+  -webkit-app-region: no-drag;
+  padding: 5px; /* Padding automatique pour toutes les pages */
+}
+
+/* CSS POUR LES FEATURES EN BETA */
+.incoming_feature {
+  background: repeating-linear-gradient(
+    45deg,             /* Angle des bandes diagonales */
+    yellow,            /* Couleur de la première bande */
+    yellow 4px,       /* Largeur de la bande jaune */
+    black 4px,        /* Début de la bande noire après la bande jaune */
+    black 8px         /* Largeur de la bande noire */
+  );
+  background-size: 100% 100%;
+}

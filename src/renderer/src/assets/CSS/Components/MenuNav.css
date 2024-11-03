@@ -1,0 +1,62 @@
+:root {
+  --black-button: #0f0f0f;
+  --transparent-color-button: rgba(0,0,0,0.05);
+  --transparent-color-button-hover: rgba(0,0,0,0.07);
+}
+
+.MenuNavContainer {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+
+  height: calc(100vh - 40px);
+
+  padding: 5px;
+
+  background-color: white;
+  border-right: var(--border-color) 1px solid;
+
+  overflow: scroll;
+}
+
+/* CATEGORY */
+.MenuNavCategoryContainer {
+  width: 100%;
+}
+.MenuNavCategoryContainer .name {
+  font-size: 14px;
+  font-weight: 200;
+  color: var(--global-page-shadow-color);
+
+  margin-bottom: 5px;
+  margin-top: 10px;
+}
+
+/* BUTTON */
+.MenuNavButtonContainer {
+  background-color: transparent;
+  padding: 3px 5px 3px 5px;
+  margin: 1px 5px 1px 5px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.MenuNavButtonContainer:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+.MenuNavButtonContainer .label {
+  font-size: 16px;
+}
+.MenuNavButtonContainer .icon {
+  width: 15px;
+}
+.MenuNavContainer .selected {
+  background-color: rgba(0,0,0,0.1);
+}
+.MenuNavContainer .selected:hover {
+  background-color: rgba(0,0,0,0.05);
+}

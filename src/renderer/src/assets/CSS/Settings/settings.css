@@ -1,0 +1,16 @@
+/*
+-----
+CSS pour les settings
+*/
+/* Global */
+.SettingsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  width: 100%;
+  height: 100%;
+}
+.SettingsPage {
+  flex: 1;
+  padding-left: 5px;
+}

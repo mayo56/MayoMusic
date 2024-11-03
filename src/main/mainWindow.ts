@@ -11,8 +11,11 @@ function createWindow(): void {
     height: 670,
     show: false,
     // Titre personnalisé de la fenêtre
-    titleBarStyle: 'hidden',
-    trafficLightPosition: { x: 10, y: 9 },
+    titleBarStyle: 'hiddenInset',
+    titleBarOverlay: true,
+    transparent: false,
+    minWidth: 700,
+    minHeight: 500,
     // -----
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -38,6 +41,16 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  // — EVENT PLEIN ÉCRAN —
+  // Entrée en mode pleine écran
+  mainWindow.on('enter-full-screen', () => {
+    mainWindow?.webContents.send('fullscreen-status', true)
+  })
+  // Sortie du mode pleine écran
+  mainWindow.on('leave-full-screen', () => {
+    mainWindow?.webContents.send('fullscreen-status', false)
+  })
 }
 
 export { mainWindow, createWindow }

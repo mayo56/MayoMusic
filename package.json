@@ -1,9 +1,10 @@
 {
   "name": "mayomusic",
-  "version": "0.0.1^prototype",
-  "description": "An Electron application with React and TypeScript",
+  "version": "0.3.0-alpha",
+  "description": "A music player",
   "main": "./out/main/index.js",
-  "author": "example.com",
+  "author": "The Mayo Compagny",
+  "productName": "MayoMusic",
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",
