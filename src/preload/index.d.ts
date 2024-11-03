@@ -1,5 +1,5 @@
 import { ElectronAPI } from "@electron-toolkit/preload";
-import { Album, Music } from "./index";
+import { Album } from "./index";
 
 declare global {
   interface Window {
@@ -12,7 +12,7 @@ declare global {
         reloadAlbums(): void
         // REQ MUSICS
         reqMusics(albumName: string): void
-        MusicsList(callback: (musics: string[]) => void)
+        MusicsList(callback: (musics: { musics: string[]; cover: string | undefined }) => void)
       },
       player: {
         // EVENT PLAY MUSIC

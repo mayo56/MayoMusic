@@ -28,7 +28,11 @@ function ipcLibrary(): void {
   let library: Music[] = []
   // Formatage des dossiers
   const formatMusicFolder = (): void => {
-    const folderList = fs.readdirSync(`${AppSettings().settings.savePath}/MayoMusic`)
+    const folderList = fs
+      .readdirSync(`${AppSettings().settings.savePath}/MayoMusic`, { withFileTypes: true })
+      .filter((e) => e.isDirectory())
+      .map((e) => e.name)
+    console.log(folderList)
     // Mise en format des dossiers
     for (const folder of folderList) {
       let cover: undefined | string = undefined
@@ -66,13 +70,18 @@ function ipcLibrary(): void {
 
   // REQ MUSICS
   ipcMain.on('reqMusics', (event, args: string): void => {
-    if (args == '' || !args) return
+    if (args === '' || !args) return
     const listOfMusics = fs
       .readdirSync(`${AppSettings().settings.savePath}/MayoMusic/${args}/`)
       .filter((e) =>
         ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase())
       )
-    event.sender.send('MusicsList', listOfMusics)
+
+    // Envoie des données
+    event.sender.send('MusicsList', {
+      musics: listOfMusics,
+      cover: library.filter((e) => e.title === args)[0].cover
+    })
   })
 
   // EVENT PLAYER

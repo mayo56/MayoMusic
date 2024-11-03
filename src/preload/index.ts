@@ -29,8 +29,12 @@ const api = {
     reqMusics: (albumName: string): void => {
       ipcRenderer.send('reqMusics', albumName)
     },
-    MusicsList: (callback: (music: string[]) => void): void => {
-      ipcRenderer.on('MusicsList', (_, args: string[]) => callback(args))
+    MusicsList: (
+      callback: (data: { musics: string[]; cover: string | undefined }) => void
+    ): void => {
+      ipcRenderer.on('MusicsList', (_, args: { musics: string[]; cover: string | undefined }) =>
+        callback(args)
+      )
     }
   },
   player: {

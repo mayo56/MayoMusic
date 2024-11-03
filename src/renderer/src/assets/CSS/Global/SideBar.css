@@ -87,7 +87,7 @@ Liste des playlists
     padding: 1px;
     padding-inline: 2px;
     border-radius: 5px;
-    cursor: pointer;
+    cursor: not-allowed;
     margin-top: 5px;
 }
 .createPlaylistContainer:hover {
@@ -98,6 +98,7 @@ Liste des playlists
 }
 .createPlaylistContainer .texte {
     font-size: 15px;
+    font-weight: 100;
 }
 
 
@@ -109,6 +110,7 @@ Liste des playlists
     margin: 5px 5px 0;
     border-radius: 5px;
     font-weight: 200;
+    box-shadow: var(--global-page-shadow-color) 0 0 5px;
 }
 
 /* Depuis le Player.tsx*/

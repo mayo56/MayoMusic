@@ -25,10 +25,14 @@ CSS Liste de musique (page principale)
   margin: 5px;
   width: 156px;
   height: 200px;
+
+  transition: all 0.2s linear;
 }
 
 .library .libraryMusic:hover {
   background-color: rgb(245,245,245);
+
+  box-shadow: var(--global-page-shadow-color) 0 0 5px;
 }
 
 .libraryMusic img {
@@ -60,6 +64,7 @@ CSS Liste de musique (page principale)
 .loadBar .count {
   margin-inline: 5px;
   font-weight: 100;
+  font-size: 16px;
 }
 
 /* Search Bar */

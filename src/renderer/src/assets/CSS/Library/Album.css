@@ -9,6 +9,24 @@ CSS pour la liste d'album
   overflow: scroll;
 }
 
+/* INFO */
+.AlbumContainer .info {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.info img {
+  width: 50%;
+}
+.info .texte {
+  max-width: 70%;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
 .AlbumMusicList {
 }
 

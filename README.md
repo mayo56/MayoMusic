@@ -1,49 +1,28 @@
 # MayoMusic
+MayoMusic is a music player for macOS based on Arc Browser style.
 
-### Build
+Languages
+- English (this)
+- French
+---
 
-```bash
-# For windows
-$ npm run build:win
+- INSTALLATION
+  - OS
+    - macOS
+    - Windows
+    - Linux
+  - Update
+  - Dependencies
+  - Compile
+- USAGE
+  - Music
+- AUDIO CONFIGURATION
 
-# For macOS
-$ npm run build:mac
+## INSTALLATION
+### OS
 
-# For Linux
-$ npm run build:linux
-```
+## USAGE
 
-### Settings.json
+### Music
 
-```json
-{
-  "settings": {
-    "savePath": ""
-  },
-  "externalMusics": [
-    {
-      "name": "name",
-      "path": "path/to/external/music/folder"
-    },
-    ...
-  ],
-  "pinMusic": [
-    "name",
-    ...
-  ]
-}
-```
-
-### Folder/File music setting
-
-```json
-{
-  "type": "folder | file",
-  "cover": "path/to/cover | null",
-  "author": "author's name | null",
-  "musicList": [
-    "path/to/music/audio",
-    ...
-  ]
-}
-```
+## AUDIO CONFIGURATION
