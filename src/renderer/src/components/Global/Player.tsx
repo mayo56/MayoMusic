@@ -144,7 +144,7 @@ function Player(): React.JSX.Element {
           className={'incoming_feature'}
         />
         <img src={skip_back_icon} alt={'skip back icon'} />
-        <img onClick={controlPlaying} src={isPlaying ? play_icon : pause_icon} alt={'play icon'} />
+        <img onClick={controlPlaying} src={isPlaying ? pause_icon : play_icon} alt={'play icon'} />
         <img
           onClick={() => window.api.player.playMusic('Spice & Wolf', 'Forrest Song.opus')}
           src={skip_forward_con}

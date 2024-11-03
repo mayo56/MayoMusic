@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import music_icon from '@renderer/assets/Images/musical-notes-svgrepo-com.svg'
 
 // Components
-import LibrarySearchBar from '@renderer/components/LibrarySearchBar'
+import LibrarySearchBar from '@renderer/components/Library/LibrarySearchBar'
 
 // CSS
 import '@renderer/assets/CSS/Library/MusicList.css'

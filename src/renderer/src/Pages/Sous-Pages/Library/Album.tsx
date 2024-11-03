@@ -1,15 +1,18 @@
 // React Import
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // CSS
 import '@renderer/assets/CSS/Library/Album.css'
 
 // Icons
 import music_icon from '@renderer/assets/Images/musical-notes-svgrepo-com.svg'
+import back_arrow_icon from '@renderer/assets/Images/arrow-back-svgrepo-com.svg'
+import folder_icon from '@renderer/assets/Images/folder-open-svgrepo-com.svg'
 
 function Album(): React.JSX.Element {
   const { id } = useParams()
+  const nav = useNavigate()
 
   const [musicList, setMusicList] = React.useState<string[]>([])
   const [cover, setCover] = React.useState<undefined | string>(undefined)
@@ -27,13 +30,23 @@ function Album(): React.JSX.Element {
   return (
     <div className={'AlbumContainer'}>
       {/*
+      Navigation bar
+      */}
+      <div className={'AlbumNavBarContainer'}>
+        <img onClick={() => nav('/library')} src={back_arrow_icon} alt={'arrow back icon'} />
+        <img src={folder_icon} alt={'folder icon'} />
+      </div>
+      {/*
       Album info
       */}
       <div className={'info'}>
         <img src={cover ? cover : music_icon} alt={'album cover'} />
         <span className={'texte'}>{id}</span>
+        <div className={'separator'}>
+          <span className={'texte'}>{musicList.length} titres chargés</span>
+          <div className={'bar'} />
+        </div>
       </div>
-      <hr />
 
       {/*
       Liste des musiques
@@ -48,10 +61,8 @@ function Album(): React.JSX.Element {
               onClick={() => window.api.player.playMusic(id!, music)}
               key={index}
             >
-              <span>
-                {index + 1 + '. '}
-                {name.join('.')}
-              </span>
+              <span className={'number'}>{index + 1}</span>
+              <span>{name.join('.')}</span>
             </div>
           )
         })}

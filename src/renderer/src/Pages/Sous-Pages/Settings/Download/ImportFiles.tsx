@@ -6,7 +6,7 @@ function ImportFilesPage(): React.JSX.Element {
   const handleOpenFolder = async (): Promise<void> => {
     const result = await window.api.openFolderDialog()
     if (result && result.length > 0) {
-      setFolderPath(result[0]) // On prend le premier chemin (au cas où il y a plusieurs)
+      setFolderPath(result[0]) // On prend le premier chemin (au cas où il y a plusieurs).
     }
   }
   return (

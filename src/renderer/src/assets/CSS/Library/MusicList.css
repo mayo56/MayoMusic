@@ -19,7 +19,7 @@ CSS Liste de musique (page principale)
 }
 .library .libraryMusic {
   padding: 10px;
-  background-color: rgb(240,240,240);
+  background-color: rgba(0,0,0, 0.03);
   cursor: pointer;
   border-radius: 5px;
   margin: 5px;
@@ -30,7 +30,7 @@ CSS Liste de musique (page principale)
 }
 
 .library .libraryMusic:hover {
-  background-color: rgb(245,245,245);
+  background-color: rgba(0,0,0,0.05);
 
   box-shadow: var(--global-page-shadow-color) 0 0 5px;
 }
@@ -63,8 +63,8 @@ CSS Liste de musique (page principale)
 
 .loadBar .count {
   margin-inline: 5px;
-  font-weight: 100;
-  font-size: 16px;
+  font-weight: 50;
+  font-size: 14px;
 }
 
 /* Search Bar */

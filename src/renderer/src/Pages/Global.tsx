@@ -5,7 +5,7 @@ import '@renderer/assets/CSS/Global/Global.css' // Différentes pages
 import Library from '@renderer/Pages/Library' // Side Bar
 import GlobalController from '@renderer/components/Global/GlobalController'
 import SideBar from '@renderer/components/Global/SideBar'
-import Parameters from '@renderer/Pages/Parameters'
+import Settings from '@renderer/Pages/Settings'
 
 function Global(): React.JSX.Element {
   return (
@@ -26,7 +26,7 @@ function Global(): React.JSX.Element {
           {/*
           Pages paramètres
           */}
-          <Route path={'/settings/*'} element={<Parameters />} />
+          <Route path={'/settings/*'} element={<Settings />} />
 
           {/*
           Pages de bibliothèque et album
