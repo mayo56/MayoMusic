@@ -28,7 +28,13 @@ declare global {
           error: boolean
           message: string
           version: string
-        }) => void)
+        }) => void);
+        yt_dlp_download_req: (data: {
+          url: string
+          quality: string
+          playlist: boolean
+          folderName: string
+        }): void
       },
       openFolderDialog(): Promise<string>
     };

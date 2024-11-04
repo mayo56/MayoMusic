@@ -145,6 +145,19 @@ function ipcDownload(): void {
       }
     })
   })
+
+  // Téléchargement des musiques
+  ipcMain.on('yt-dlp-download:req', (event, args) => {
+    let commande = `yt-dlp "${args.url}" `
+    args.playlist ? (commande += '--yes-playlist ') : (commande += '--no-playlist ') // playlist
+    commande += `--audio-quality ${args.quality} `
+    commande += `-o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s" `
+    exec(commande, (err, stdout, stderr) => {
+      if (err) return
+      console.log(stdout, stderr)
+      event.sender.send('yt-dlp-download:finish')
+    })
+  })
 }
 
 export { ipcHandler, ipcLibrary, ipcDownload }

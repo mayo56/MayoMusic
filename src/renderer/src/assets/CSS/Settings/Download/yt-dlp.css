@@ -3,6 +3,9 @@
 CSS Pour la page de téléchargement YT-DLP
 
 */
+:root {
+  --bg-info-yt-dlp: rgba(0,0,0,0.05)
+}
 .yt-dlp-container {
 
 }
@@ -11,4 +14,42 @@ CSS Pour la page de téléchargement YT-DLP
 .yt-dlp-title .texte {
   font-size: 32px;
   font-weight: bold;
+}
+
+
+/* module d'info */
+.yt-dlp-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  background-color: var(--bg-info-yt-dlp);
+  padding: 5px;
+  border-radius: 5px;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.yt-dlp-info .info {
+  font-size: 14px;
+  font-weight: 300;
+}
+.yt-dlp-info .icon {
+  width: 20px;
+  padding: 5px;
+}
+.yt-dlp-info-global {
+  display: flex;
+  align-items: center;
+}
+
+/* Download button */
+.yt-dlp-button {
+}
+
+.yt-dlp-button .icon {
+  background-color: rgba(0,0,0,0.2);
+  width: 30px;
+  padding: 10px;
+  padding-inline: 20px;
+  border-radius: 10px;
 }

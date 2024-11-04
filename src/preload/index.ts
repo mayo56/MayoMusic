@@ -69,6 +69,15 @@ const api = {
           }
         ) => callback(args)
       )
+    },
+
+    yt_dlp_download_req: (data: {
+      url: string
+      quality: string
+      playlist: boolean
+      folderName: string
+    }): void => {
+      ipcRenderer.send('yt-dlp-download:req', data)
     }
   },
   openFolderDialog: async (): Promise<void> => {
