@@ -1,5 +1,6 @@
 import { BrowserWindow, dialog, ipcMain } from 'electron'
 import fs from 'node:fs'
+import { exec } from 'node:child_process'
 import { AppSettings } from './libs/store'
 import { Music, music_setting } from './Types/types'
 
@@ -74,7 +75,7 @@ function ipcLibrary(): void {
   // REQ MUSICS
   ipcMain.on('reqMusics', (event, args: string): void => {
     if (args === '' || !args) return
-    let listOfMusics: string[] = []
+    let listOfMusics: string[]
     if (!library.filter((e) => e.title === args)[0].order) {
       listOfMusics = fs
         .readdirSync(`${AppSettings().settings.savePath}/MayoMusic/${args}/`)
@@ -118,4 +119,32 @@ function ipcLibrary(): void {
   })
 }
 
-export { ipcHandler, ipcLibrary }
+// Partie DL
+function ipcDownload(): void {
+  // Verification de yt-dlp
+  ipcMain.on('yt-dlp-status:req', (event): void => {
+    exec('yt-dlp --version', (err, stdout, stderr) => {
+      if (err) {
+        return event.sender.send('yt-dlp-status:res', {
+          error: true,
+          version: '',
+          message: ''
+        })
+      } else if (stderr) {
+        return event.sender.send('yt-dlp-status:res', {
+          error: true,
+          version: '',
+          message: stderr
+        })
+      } else {
+        return event.sender.send('yt-dlp-status:res', {
+          error: false,
+          version: stdout,
+          message: ''
+        })
+      }
+    })
+  })
+}
+
+export { ipcHandler, ipcLibrary, ipcDownload }

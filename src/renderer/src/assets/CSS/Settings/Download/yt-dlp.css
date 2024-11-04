@@ -1,0 +1,14 @@
+/*
+-------
+CSS Pour la page de téléchargement YT-DLP
+
+*/
+.yt-dlp-container {
+
+}
+
+/* Module titre */
+.yt-dlp-title .texte {
+  font-size: 32px;
+  font-weight: bold;
+}

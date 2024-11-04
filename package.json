@@ -5,6 +5,36 @@
   "main": "./out/main/index.js",
   "author": "The Mayo Compagny",
   "productName": "MayoMusic",
+  "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "mayo56",
+        "repo": "mayomusic"
+      }
+    ],
+    "appId": "com.mayocompagnie.mayomusic",
+    "productName": "MayoMusic",
+    "mac": {
+      "category": "public.app-category.music",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "zip"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    }
+  },
   "homepage": "https://electron-vite.org",
   "scripts": {
     "format": "prettier --write .",

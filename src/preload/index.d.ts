@@ -22,6 +22,14 @@ declare global {
       Global: {
         fullscreen(callback: (fullscreen_status: boolean) => void)
       },
+      download: {
+        yt_dlp_status_req(): void
+        yt_dlp_status_res(callback: (data: {
+          error: boolean
+          message: string
+          version: string
+        }) => void)
+      },
       openFolderDialog(): Promise<string>
     };
   }

@@ -51,6 +51,26 @@ const api = {
       ipcRenderer.on('fullscreen-status', (_, args: boolean) => callback(args))
     }
   },
+  download: {
+    yt_dlp_status_req: (): void => {
+      ipcRenderer.send('yt-dlp-status:req')
+    },
+    yt_dlp_status_res: (
+      callback: (data: { error: boolean; message: string; version: string }) => void
+    ): void => {
+      ipcRenderer.on(
+        'yt-dlp-status:res',
+        (
+          _,
+          args: {
+            error: boolean
+            message: string
+            version: string
+          }
+        ) => callback(args)
+      )
+    }
+  },
   openFolderDialog: async (): Promise<void> => {
     await ipcRenderer.invoke('dialog:openFolder')
   }
