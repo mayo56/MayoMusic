@@ -1,0 +1,136 @@
+/*
+-------
+CSS Pour la page de téléchargement YT-DLP
+
+*/
+:root {
+  --bg-info-yt-dlp: rgba(0,0,255,0.1)
+}
+.yt-dlp-container {
+
+}
+
+/* Module titre */
+.yt-dlp-title .texte {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+
+/* module d'info */
+.yt-dlp-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  background-color: var(--bg-info-yt-dlp);
+  padding: 5px;
+  border-radius: 5px;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+  max-width: 200px;
+}
+.yt-dlp-info .info {
+  font-size: 14px;
+  font-weight: 300;
+}
+.yt-dlp-info .icon {
+  width: 20px;
+  padding: 5px;
+}
+.yt-dlp-info-global {
+  display: flex;
+  align-items: center;
+}
+
+
+/* important input */
+.yt-dlp-important-input {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(10,255,10,0.2);
+  padding: 10px;
+  border-radius: 5px;
+
+  box-shadow: rgba(0,0,0,0.05) 0 0 5px;
+  max-width: 500px;
+}
+
+.yt-dlp-input-module {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  padding-top: 5px;
+}
+
+.yt-dlp-input-module .label {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.7);
+  padding: 5px;
+}
+
+.yt-dlp-input-module .texte-input {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background-color: white;
+  width: 300px;
+}
+
+/* Options avancées */
+.yt-dlp-advanced-input {
+  display: flex;
+  justify-content: start;
+  flex-direction: column;
+  align-items: start;
+
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+.yt-dlp-advanced-input .icon {
+  width: 20px;
+}
+.yt-dlp-advanced-input .title {
+  cursor: pointer;
+  width: auto;
+  user-select: none;
+}
+.yt-dlp-advanced-module {
+  margin: 5px;
+}
+.yt-dlp-advanced-input .label {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(0,0,0,0.7);
+  padding: 5px;
+}
+
+
+/* Download button */
+.yt-dlp-button {
+  padding: 10px;
+}
+
+.yt-dlp-button .icon {
+  background-color: rgba(0,0,255,0.3);
+  width: 30px;
+  padding: 10px;
+  padding-inline: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.yt-dlp-button .icon:hover {
+  background-color: rgba(0,0,255,0.25);
+}
+
+.yt-dlp-button .disabled {
+  cursor: not-allowed;
+  background-color: rgba(0,0,0,0.2);
+}
+.yt-dlp-button .disabled:hover {
+  background-color: rgba(0,0,0,0.2);
+}

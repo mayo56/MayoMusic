@@ -95,7 +95,6 @@ function Player(): React.JSX.Element {
     }
   }
 
-  // Volume control
   const [showVolume, setShowVolume] = React.useState<boolean>(false)
   return (
     <div

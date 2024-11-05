@@ -30,7 +30,8 @@ function Settings(): React.JSX.Element {
           [
             {
               label: 'yt-dlp',
-              path: '/settings/download/yt-dlp'
+              path: '/settings/download/yt-dlp',
+              experimental: true
             }
           ]
         ]}
