@@ -37,6 +37,7 @@ le style de [Arc Browser](https://arc.net "Arc Browser").
 * [UTILISATION](#utilisation)
   * [Musique](#musique)
 * [CONFIGURATION](#configuration)
+* [OBJECTIFS](#objectifs)
 
 <!-- END Summary -->
 
