@@ -118,7 +118,7 @@ ENJOY !
 Create beautiful music player, simply to use and local/server
 - Player
   - [x] Read audio files
-  - [ ] Queue system
+  - [x] Queue system
   - [x] Volume
   - [x] Progress bar for music
   - [ ] Loop
