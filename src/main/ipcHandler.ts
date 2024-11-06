@@ -38,7 +38,7 @@ function ipcLibrary(): void {
     // Mise en format des dossiers
     for (const folder of folderList) {
       let cover: undefined | string = undefined
-      let order: undefined | string[] = []
+      let order: string[] = []
 
       const album_pathname = `${AppSettings().settings.savePath}/MayoMusic/${folder}`
 
@@ -66,7 +66,7 @@ function ipcLibrary(): void {
         title: folder,
         path: `${album_pathname}`,
         cover: cover ? `data:image/png;base64,${cover}` : undefined,
-        order: order
+        order
       })
     }
   }
@@ -85,10 +85,7 @@ function ipcLibrary(): void {
 
   // REQ MUSICS
   ipcMain.on('reqMusics', (event, args: string): void => {
-    // VERIFICATION
-    //
-    //
-    // Envoie des données
+    // Envoie des données (en cache)
     event.sender.send('MusicsList', {
       musics: library.filter((e) => e.title === args)[0].order,
       cover: library.filter((e) => e.title === args)[0].cover
@@ -104,13 +101,39 @@ function ipcLibrary(): void {
   }
   // Start a music
   ipcMain.on('sendMusic', (event, args: { album: string; index: number }) => {
-    const album = library.filter((e) => e.title === args.album)[0]
+    // --- Verifications 1st step ---
+    const temp_album = library.filter((e) => e.title === args.album)
+    if (!temp_album) {
+      event.sender.send('ErrorCreate', {
+        status: 1
+      })
+      return
+    }
+    // -----
+    const album = temp_album[0]
     const musicName = album.order[args.index]
 
+    // --- Verifications 2d step ---
+    // Vérification de l'existence de l'album
+    if (!fs.existsSync(`${album.path}`)) {
+      event.sender.send('ErrorCreate', {
+        status: 1
+      })
+      return
+    }
+    // Vérification de l'existence du fichier
+    else if (!fs.existsSync(`${album.path}/${musicName}`)) {
+      event.sender.send('ErrorCreate', {
+        status: 1
+      })
+      return
+    }
+
+    // --- Get audio file and send to Web ---
     // Audio file
     const audio = fs.readFileSync(`${album.path}/${musicName}`, 'base64')
 
-    // Audio queue
+    // Set Audio Queue
     queue.order = album.order
     queue.albumName = album.title
     queue.path = album.path
