@@ -23,7 +23,6 @@ export function AppSettings(): settings {
           JSON.stringify(sett)
         )
       }
-      console.table(data)
       sett = JSON.parse(data) as settings
     }
   )

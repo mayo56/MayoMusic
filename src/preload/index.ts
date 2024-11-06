@@ -42,12 +42,22 @@ const api = {
     playMusic: (album: string, index: number): void => {
       ipcRenderer.send('sendMusic', { album, index })
     },
+    // Reception de la musique
     receiveMusic: (
-      callback: (info: { name: string; audio: string; index: number }) => void
+      callback: (info: { name: string; audio: string; index: number | null }) => void
     ): void => {
       ipcRenderer.on('playMusic', (_, args: { name: string; audio: string; index: number }) =>
         callback(args)
       )
+    },
+
+    // nextMusic
+    nextMusic: (index: number): void => {
+      ipcRenderer.send('nextMusic', index)
+    },
+    // previousMusic
+    previousMusic: (index: number): void => {
+      ipcRenderer.send('previousMusic', index)
     }
   },
   Global: {

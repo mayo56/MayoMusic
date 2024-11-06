@@ -101,7 +101,10 @@ function ipcLibrary(): void {
 
   // EVENT PLAYER
   // File d'attente de musique
-  let queue: string[] = []
+  const queue: { albumName: string; order: string[] } = {
+    albumName: '',
+    order: []
+  }
   // Start a music
   ipcMain.on('sendMusic', (event, args: { album: string; index: number }) => {
     const album = library.filter((e) => e.title === args.album)[0]
@@ -114,7 +117,8 @@ function ipcLibrary(): void {
     )
 
     // Audio queue
-    queue = album.order
+    queue.order = album.order
+    queue.albumName = album.title
 
     // Response
     event.sender.send('playMusic', {
@@ -125,14 +129,47 @@ function ipcLibrary(): void {
   })
 
   // Next music
-  ipcMain.on('nextMusic', (event, args) => {
-    // A FINIR
-    event.sender.send('playMusic', args)
+  ipcMain.on('nextMusic', (event, args: number | null) => {
+    // Si aucune file d'attente
+    if (queue.albumName === '' || args === null) return
+
+    let nextMusic = args + 1
+    if (nextMusic === queue.order.length) {
+      nextMusic = 0
+    }
+
+    const audio = fs.readFileSync(
+      `${AppSettings().settings.savePath}/MayoMusic/${queue.albumName}/${queue.order[nextMusic]}`,
+      'base64'
+    )
+
+    event.sender.send('playMusic', {
+      name: queue.order[nextMusic],
+      audio: `data:audio/mp3;base64,${audio}`,
+      index: nextMusic
+    })
   })
   // Previous music
-  ipcMain.on('previousMusic', (event, args) => {
-    // A FINIR
-    event.sender.send('playMusic', args)
+  ipcMain.on('previousMusic', (event, args: number | null) => {
+    // Si aucune file d'attente
+    if (queue.albumName === '' || args === null) return
+
+    let nextMusic = args - 1
+    console.log(nextMusic)
+    if (nextMusic < 0) {
+      nextMusic = queue.order.length - 1
+    }
+    console.log(nextMusic)
+    const audio = fs.readFileSync(
+      `${AppSettings().settings.savePath}/MayoMusic/${queue.albumName}/${queue.order[nextMusic]}`,
+      'base64'
+    )
+
+    event.sender.send('playMusic', {
+      name: queue.order[nextMusic],
+      audio: `data:audio/mp3;base64,${audio}`,
+      index: nextMusic
+    })
   })
 }
 
