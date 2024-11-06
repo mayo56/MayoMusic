@@ -15,7 +15,10 @@ function Player(): React.JSX.Element {
   // -- Audio parameters --
   const [audioSRC, setAudioSRC] = React.useState<string | undefined>(undefined)
   const audioREF = React.useRef<HTMLAudioElement | null>(null)
-  const [audioINFO, setAudioINFO] = React.useState<{ name: string }>({ name: 'Aucune musique' })
+  const [audioINFO, setAudioINFO] = React.useState<{ name: string; index: null | number }>({
+    name: 'Aucune musique',
+    index: null
+  })
   // Events audio
   React.useEffect(() => {
     window.api.player.receiveMusic((info) => {
@@ -27,7 +30,8 @@ function Player(): React.JSX.Element {
         const audioName = info.name.split('.')
         audioName.pop()
         setAudioINFO({
-          name: audioName.join('.')
+          name: audioName.join('.'),
+          index: info.index
         })
         console.warn(info)
       }
@@ -108,6 +112,7 @@ function Player(): React.JSX.Element {
       <audio
         onPause={() => setIsPlaying(false)}
         onPlay={() => setIsPlaying(true)}
+        onEnded={() => window.api.player.nextMusic(audioINFO.index)}
         src={audioSRC}
         ref={audioREF}
         onTimeUpdate={UpdateTime}
@@ -142,10 +147,14 @@ function Player(): React.JSX.Element {
           alt={'fullscreen music icon'}
           className={'incoming_feature'}
         />
-        <img src={skip_back_icon} alt={'skip back icon'} />
+        <img
+          onClick={() => window.api.player.previousMusic(audioINFO.index)}
+          src={skip_back_icon}
+          alt={'skip back icon'}
+        />
         <img onClick={controlPlaying} src={isPlaying ? pause_icon : play_icon} alt={'play icon'} />
         <img
-          onClick={() => window.api.player.playMusic('Spice & Wolf', 'Forrest Song.opus')}
+          onClick={() => window.api.player.nextMusic(audioINFO.index)}
           src={skip_forward_con}
           alt={'skip forward icon'}
         />
@@ -167,6 +176,7 @@ function Player(): React.JSX.Element {
           min={0}
           max={100}
         />
+        <p>{JSON.stringify(audioINFO)}</p>
       </div>
     </div>
   )

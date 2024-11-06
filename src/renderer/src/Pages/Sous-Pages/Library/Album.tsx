@@ -58,7 +58,7 @@ function Album(): React.JSX.Element {
           return (
             <div
               className={'AlbumMusicCardContainer'}
-              onClick={() => window.api.player.playMusic(id!, music)}
+              onClick={() => window.api.player.playMusic(id!, index)}
               key={index}
             >
               <span className={'number'}>{index + 1}</span>

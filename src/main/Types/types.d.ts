@@ -8,7 +8,7 @@ export type Music = {
   title: string
   path: string
   cover: undefined | string
-  order: undefined | string[]
+  order: string[]
 }
 
 export type music_setting = {

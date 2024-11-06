@@ -1,5 +1,5 @@
-import { ElectronAPI } from "@electron-toolkit/preload";
-import { Album } from "./index";
+import { ElectronAPI } from '@electron-toolkit/preload'
+import { Album } from './index'
 
 declare global {
   interface Window {
@@ -16,8 +16,12 @@ declare global {
       },
       player: {
         // EVENT PLAY MUSIC
-        playMusic(album: string, music: string): void
-        receiveMusic(callback: (info: { name: string, audio: string }) => void)
+        playMusic(album: string, index: number): void
+        receiveMusic(callback: (info: { name: string, audio: string, index: number | null }) => void)
+
+        // Controller
+        nextMusic(index: number): void
+        previousMusic(index: number): void
       },
       Global: {
         fullscreen(callback: (fullscreen_status: boolean) => void)
@@ -29,7 +33,7 @@ declare global {
           message: string
           version: string
         }) => void);
-        yt_dlp_download_req: (data: {
+        yt_dlp_download_req(data: {
           url: string
           quality: string
           playlist: boolean
