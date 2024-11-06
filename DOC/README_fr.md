@@ -30,30 +30,69 @@ le style de [Arc Browser](https://arc.net "Arc Browser").
 <!-- BEGIN Summary -->
 
 * [INSTALLATION](#INSTALLATION)
-  * [Detail Instructions](#instructions-détaillées)
-  * [Update](#mises-à-jour)
-  * [Dependencies](#dépendances)
-  * [Compile](#compilation)
-* [USAGE](#utilisation)
-  * [Music](#Music)
-* [AUDIO CONFIGURATION](#configuration-audio)
+  * [Instructions](#instructions-détaillées)
+  * [Mise à jour](#mises-à-jour)
+  * [Dépendances](#dépendances)
+  * [Compilation](#compilation)
+* [UTILISATION](#utilisation)
+  * [Musique](#musique)
+* [CONFIGURATION](#configuration)
 
 <!-- END Summary -->
 
-## INSTALLATION
+# INSTALLATION
 
-### Instructions détaillées
+## Instructions détaillées
 
-### Mises à jour
+## Mises à jour
 
-### Dépendances
+`Pas encore disponible`
 
-### Compilation
+## Dépendances
 
-## UTILISATION
+## Compilation
 
-### Music
+<div align="left">
 
-## CONFIGURATION AUDIO
+**Dépendances**
 
+[![Node.js Badge](https://img.shields.io/badge/node.js-node?style=for-the-badge&logo=nodedotjs&logoColor=green&color=black)](https://nodejs.org/ "Node.js")
+
+</div>
+
+Télécharger le projet et installez les dépendances
+```shell
+git clone https://github.com/mayo56/MayoMusic.git
+cd MayoMusic
+npm install
+```
+Compiler selon votre plateforme
+```shell
+# MacOS
+npm build:mac
+# Windows
+npm build:win
+# Linux
+npm build:linux
+```
+Le build se trouve dans le dossier `dist`
+
+ENJOY !
+
+# UTILISATION
+
+## Musique
+
+# CONFIGURATION
+
+## Fichier supporté
+
+| Fichier | Extension | Supporté |
+|---------|-----------|:--------:|
+| MPEG    | `.mp3`    |    ✅     |
+| MPEG    | `.mp4`    |    ❌     |
+| OGG     | `.ogg`    |    ✅     |
+| WEBM    | `.webm`   |    ✅     |
+| OPUS    | `.opus`   |    ✅     |
+| M4A     | `.m4a`    |    ✅     |
 
