@@ -20,10 +20,10 @@ MayoMusic is a local music player based on
 
 <!-- BEGIN Supported Languages -->
 
-| Language | Supported | Documentation                                                     |
-|----------|:---------:|-------------------------------------------------------------------|
-| French   |     ✅     | [README fr](https://github.com/mayo56/MayoMusic/DOC/README_fr.md) |
-| English  |     ❌     | [README en](https://github.com/mayo56/MayoMusic/README.md)        |
+| Language | Supported | Documentation                                                               |
+|----------|:---------:|-----------------------------------------------------------------------------|
+| French   |     ✅     | [README fr](https://github.com/mayo56/MayoMusic/blob/main/DOC/README_fr.md) |
+| English  |     ❌     | [README en](https://github.com/mayo56/MayoMusic/README.md)                  |
 
 <!-- END Supported languages -->
 
