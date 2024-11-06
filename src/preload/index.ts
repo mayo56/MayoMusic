@@ -52,11 +52,11 @@ const api = {
     },
 
     // nextMusic
-    nextMusic: (index: number): void => {
+    nextMusic: (index: number | null): void => {
       ipcRenderer.send('nextMusic', index)
     },
     // previousMusic
-    previousMusic: (index: number): void => {
+    previousMusic: (index: number | null): void => {
       ipcRenderer.send('previousMusic', index)
     }
   },

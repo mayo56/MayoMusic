@@ -17,11 +17,11 @@ declare global {
       player: {
         // EVENT PLAY MUSIC
         playMusic(album: string, index: number): void
-        receiveMusic(callback: (info: { name: string, audio: string, index: number | null }) => void)
+        receiveMusic(callback: (info: { name: string, audio: string, index: number }) => void)
 
         // Controller
-        nextMusic(index: number): void
-        previousMusic(index: number): void
+        nextMusic(index: number | null ): void
+        previousMusic(index: number | null): void
       },
       Global: {
         fullscreen(callback: (fullscreen_status: boolean) => void)

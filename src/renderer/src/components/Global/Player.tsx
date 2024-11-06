@@ -176,7 +176,6 @@ function Player(): React.JSX.Element {
           min={0}
           max={100}
         />
-        <p>{JSON.stringify(audioINFO)}</p>
       </div>
     </div>
   )
