@@ -1,5 +1,7 @@
 # MayoMusic
-MayoMusic is a music local player for macOS based on Arc Browser style.
+
+MayoMusic est un lecteur de musique en local basé sur
+le style de [Arc Browser](https://arc.net "Arc Browser").
 
 <!-- BEGIN Version & Dependencies -->
 <div align="center">
@@ -16,34 +18,42 @@ MayoMusic is a music local player for macOS based on Arc Browser style.
 </div>
 <!-- END Version & Dependencies -->
 
+<!-- BEGIN Supported Languages -->
+
+| Langue   | Supporté | Documentation    |
+|----------|:--------:|------------------|
+| Français |    ✅     | README fr (this) |
+| Anglais  |    ❌     |                  |
+
+<!-- END Supported languages -->
+
 <!-- BEGIN Summary -->
+
 * [INSTALLATION](#INSTALLATION)
-  * [Detail Instructions](#detail-instructions)
-  * [Update](#Update)
-  * [Dependencies](#Dependencies)
-  * [Compile](#Compile)
-* [USAGE](#USAGE)
+  * [Detail Instructions](#instructions-détaillées)
+  * [Update](#mises-à-jour)
+  * [Dependencies](#dépendances)
+  * [Compile](#compilation)
+* [USAGE](#utilisation)
   * [Music](#Music)
-* [AUDIO CONFIGURATION](#audio-configuration)
+* [AUDIO CONFIGURATION](#configuration-audio)
+
 <!-- END Summary -->
 
-
 ## INSTALLATION
-### Detail Instructions
 
-### Update
+### Instructions détaillées
 
-### Dependencies
+### Mises à jour
 
-### Compile
+### Dépendances
 
+### Compilation
 
+## UTILISATION
 
-## USAGE
 ### Music
 
-
-
-## AUDIO CONFIGURATION
+## CONFIGURATION AUDIO
 
 
