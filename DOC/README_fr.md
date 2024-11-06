@@ -54,8 +54,6 @@ le style de [Arc Browser](https://arc.net "Arc Browser").
 
 <div align="left">
 
-**Dépendances**
-
 [![Node.js Badge](https://img.shields.io/badge/node.js-node?style=for-the-badge&logo=nodedotjs&logoColor=green&color=black)](https://nodejs.org/ "Node.js")
 
 </div>
