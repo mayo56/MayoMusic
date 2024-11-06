@@ -59,7 +59,7 @@ le style de [Arc Browser](https://arc.net "Arc Browser").
 
 Dépendances optionnelles
 
-| Nom     | Telecaster                       | Usage                                     |
+| Nom     | Télécharger                      | Usage                                     |
 |---------|----------------------------------|-------------------------------------------|
 | YT-DLP* | https://github.com/yt-dlp/yt-dlp | Télécharger les musiques depuis MayoMusic |
 
