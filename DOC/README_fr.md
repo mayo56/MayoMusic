@@ -20,10 +20,10 @@ le style de [Arc Browser](https://arc.net "Arc Browser").
 
 <!-- BEGIN Supported Languages -->
 
-| Langue   | Supporté | Documentation    |
-|----------|:--------:|------------------|
-| Français |    ✅     | README fr (this) |
-| Anglais  |    ❌     |                  |
+| Langue   | Supporté | Documentation                                                     |
+|----------|:--------:|-------------------------------------------------------------------|
+| Français |    ✅     | [README fr](https://github.com/mayo56/MayoMusic/DOC/README_fr.md) |
+| Anglais  |    ❌     | [README en](https://github.com/mayo56/MayoMusic/README.md)        |
 
 <!-- END Supported languages -->
 
@@ -114,6 +114,7 @@ ENJOY !
 | M4A     | `.m4a`    |    ✅     |
 
 # Objectifs
+
 Créer un lecteur de musique jolie, façile d'utilisation et en local/serveur
 
 - Lecteur
