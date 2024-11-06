@@ -39,11 +39,15 @@ const api = {
   },
   player: {
     // EVENT PLAY MUSIQUE
-    playMusic: (album: string, music: string): void => {
-      ipcRenderer.send('sendMusic', { album, music })
+    playMusic: (album: string, index: number): void => {
+      ipcRenderer.send('sendMusic', { album, index })
     },
-    receiveMusic: (callback: (info: { name: string; audio: string }) => void): void => {
-      ipcRenderer.on('playMusic', (_, args: { name: string; audio: string }) => callback(args))
+    receiveMusic: (
+      callback: (info: { name: string; audio: string; index: number }) => void
+    ): void => {
+      ipcRenderer.on('playMusic', (_, args: { name: string; audio: string; index: number }) =>
+        callback(args)
+      )
     }
   },
   Global: {

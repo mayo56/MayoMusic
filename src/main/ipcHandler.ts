@@ -2,9 +2,9 @@ import { BrowserWindow, dialog, ipcMain } from 'electron'
 import fs from 'node:fs'
 import { exec } from 'node:child_process'
 import { AppSettings } from './libs/store'
-import { Music, music_setting } from './Types/types'
-
 import path from 'node:path'
+
+import { Music, music_setting } from './Types/types'
 
 function ipcHandler(): void {
   ipcMain.handle('dialog:openFolder', async () => {
@@ -29,15 +29,18 @@ function ipcLibrary(): void {
   let library: Music[] = []
   // Formatage des dossiers
   const formatMusicFolder = (): void => {
+    // Liste de album
     const folderList = fs
       .readdirSync(`${AppSettings().settings.savePath}/MayoMusic`, { withFileTypes: true })
       .filter((e) => e.isDirectory())
       .map((e) => e.name)
-    console.log(folderList)
+
     // Mise en format des dossiers
     for (const folder of folderList) {
       let cover: undefined | string = undefined
-      let order: undefined | string[] = undefined
+      let order: undefined | string[] = []
+
+      // Si fichier de configuration
       if (fs.existsSync(`${AppSettings().settings.savePath}/MayoMusic/${folder}/setting.json`)) {
         const music_setting: music_setting = JSON.parse(
           fs.readFileSync(
@@ -45,12 +48,24 @@ function ipcLibrary(): void {
             'utf-8'
           )
         )
-        cover = fs.readFileSync(
-          `${AppSettings().settings.savePath}/MayoMusic/${folder}/${music_setting.cover}`,
-          'base64'
-        )
-        order = music_setting.order
+        if (music_setting.cover) {
+          cover = fs.readFileSync(
+            `${AppSettings().settings.savePath}/MayoMusic/${folder}/${music_setting.cover}`,
+            'base64'
+          )
+        }
+        if (music_setting.order) {
+          order = music_setting.order
+        }
+      } else {
+        order = fs
+          .readdirSync(`${AppSettings().settings.savePath}/MayoMusic/${folder}/`)
+          .filter((e) =>
+            ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase())
+          )
       }
+
+      // On push toute les info dans la library
       library.push({
         title: folder,
         path: `${AppSettings().settings.savePath}/MayoMusic/${folder}`,
@@ -74,39 +89,41 @@ function ipcLibrary(): void {
 
   // REQ MUSICS
   ipcMain.on('reqMusics', (event, args: string): void => {
-    if (args === '' || !args) return
-    let listOfMusics: string[]
-    if (!library.filter((e) => e.title === args)[0].order) {
-      listOfMusics = fs
-        .readdirSync(`${AppSettings().settings.savePath}/MayoMusic/${args}/`)
-        .filter((e) =>
-          ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase())
-        )
-    } else {
-      listOfMusics = library.filter((e) => e.title === args)[0].order!
-    }
-
+    // VERIFICATION
+    //
+    //
     // Envoie des données
     event.sender.send('MusicsList', {
-      musics: listOfMusics,
+      musics: library.filter((e) => e.title === args)[0].order,
       cover: library.filter((e) => e.title === args)[0].cover
     })
   })
 
   // EVENT PLAYER
   // File d'attente de musique
-  // const queue = []
+  let queue: string[] = []
   // Start a music
-  ipcMain.on('sendMusic', (event, args: { album: string; music: string }) => {
+  ipcMain.on('sendMusic', (event, args: { album: string; index: number }) => {
+    const album = library.filter((e) => e.title === args.album)[0]
+    const musicName = album.order[args.index]
+
+    // Audio file
     const audio = fs.readFileSync(
-      `${AppSettings().settings.savePath}/MayoMusic/${args.album}/${args.music}`,
+      `${AppSettings().settings.savePath}/MayoMusic/${args.album}/${musicName}`,
       'base64'
     )
+
+    // Audio queue
+    queue = album.order
+
+    // Response
     event.sender.send('playMusic', {
-      name: args.music,
-      audio: `data:audio/mp3;base64,${audio}`
+      name: musicName,
+      audio: `data:audio/mp3;base64,${audio}`,
+      index: args.index
     })
   })
+
   // Next music
   ipcMain.on('nextMusic', (event, args) => {
     // A FINIR
