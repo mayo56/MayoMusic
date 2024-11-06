@@ -44,11 +44,25 @@ le style de [Arc Browser](https://arc.net "Arc Browser").
 
 ## Instructions détaillées
 
+| Plateforme | Disponible | Lien |
+|------------|------------|------|
+| MacOS      | Oui        | /    |
+| Linux      | Non        | /    |
+| Windows    | Non        | /    |
+
 ## Mises à jour
 
 `Pas encore disponible`
 
 ## Dépendances
+
+Dépendances optionnelles
+
+| Nom     | Telecaster                       | Usage                                     |
+|---------|----------------------------------|-------------------------------------------|
+| YT-DLP* | https://github.com/yt-dlp/yt-dlp | Télécharger les musiques depuis MayoMusic |
+
+*YT-DLP: Attention à avoir la variable d'environnement nommée `yt-dlp`.
 
 ## Compilation
 
@@ -59,12 +73,15 @@ le style de [Arc Browser](https://arc.net "Arc Browser").
 </div>
 
 Télécharger le projet et installez les dépendances
+
 ```shell
 git clone https://github.com/mayo56/MayoMusic.git
 cd MayoMusic
 npm install
 ```
+
 Compiler selon votre plateforme
+
 ```shell
 # MacOS
 npm build:mac
@@ -73,6 +90,7 @@ npm build:win
 # Linux
 npm build:linux
 ```
+
 Le build se trouve dans le dossier `dist`
 
 ENJOY !
@@ -94,3 +112,23 @@ ENJOY !
 | OPUS    | `.opus`   |    ✅     |
 | M4A     | `.m4a`    |    ✅     |
 
+# Objectifs
+Créer un lecteur de musique jolie, façile d'utilisation et en local/serveur
+
+- Lecteur
+  - [x] Lire des fichiers audio
+  - [ ] Système de file d'attente
+  - [x] Volume
+  - [x] Bar de progression dans la musique
+  - [ ] Boucle
+- Paramètres
+  - [ ] Modifier le chemin de stockage des musiques
+  - [ ] Mise en forme automatique des dossiers
+  - [x] Téléchargement via YT-DLP (avec bugs)
+  - [ ] Modification des couleurs
+  - [ ] Connexion à un serveur distant (dans le futur)
+- Musiques
+  - [x] Lecture du dossier répertoire de musique
+  - [x] Affichage des cover/noms
+  - [x] Affichage des musiques
+  - [ ] Affichage du dossier répertoire des musiques
