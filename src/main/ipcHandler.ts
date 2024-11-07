@@ -260,7 +260,11 @@ function ipcDownload(): void {
     'yt-dlp-download:req',
     (event, args: { url: string; playlist: boolean; quality: string; folderName: string }) => {
       // --- Verification args ---
-      if (!['best', 'medium', 'low'].includes(args.quality) || args.url === '' || args.folderName === '') {
+      if (
+        !['best', 'medium', 'low'].includes(args.quality) ||
+        args.url === '' ||
+        args.folderName === ''
+      ) {
         event.sender.send('ErrorCreate', {
           status: 1
         })
