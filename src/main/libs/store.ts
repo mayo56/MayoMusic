@@ -11,10 +11,16 @@ export function AppSettings(): settings {
       savePath: app.getPath('music')
     }
   }
-  fs.readFile(
-    `${app.getPath('userData')}/MayoMusicSettings/settings.json`,
-    'utf-8',
-    (err, data) => {
+
+  const pathname = `${app.getPath('userData')}/MayoMusicSettings/`
+
+  if (!fs.existsSync(pathname)) {
+    fs.mkdirSync(pathname)
+  }
+  if (!fs.existsSync(`${pathname}/settings.json`)) {
+    fs.writeFileSync(`${pathname}/settings.json`, JSON.stringify(sett))
+  } else {
+    fs.readFile(`${pathname}/settings.json`, 'utf-8', (err, data) => {
       if (err) {
         console.error(err)
         fs.mkdirSync(`${app.getPath('userData')}/MayoMusicSettings`)
@@ -24,7 +30,8 @@ export function AppSettings(): settings {
         )
       }
       sett = JSON.parse(data) as settings
-    }
-  )
+    })
+  }
+
   return sett
 }
