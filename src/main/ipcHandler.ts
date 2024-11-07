@@ -148,6 +148,11 @@ function ipcLibrary(): void {
     })
   })
 
+  /**
+   * Incrémente ou décrémente une variable
+   * @param index
+   * @param change
+   */
   const indexUpdate = (index: number, change: number): number => {
     index += change
     if (index === queue.order.length) {
@@ -158,56 +163,60 @@ function ipcLibrary(): void {
     return index
   }
 
-  // Next music
-  ipcMain.on('nextMusic', (event, index: number | null) => {
+  /**
+   * Checking the queue of album
+   * @param index
+   * @param change
+   */
+  const validityFileVerifications = (
+    index: number | null,
+    change: number
+  ): { name: string; audio: string; index: number } | null => {
     // --- Verification 1st step ---
     // Queue and index arg
     if (queue.albumName === '' || index === null) {
-      return
+      return null
     }
 
     // --- Verification 2nd step ---
     // File validity
-    index = indexUpdate(index, 1)
+    index = indexUpdate(index, change)
     while (!fs.existsSync(`${queue.path}/${queue.order[index]}`)) {
       const temp = index
-      index = indexUpdate(index, 1)
-      if (temp === index) return
+      index = indexUpdate(index, change)
+      if (temp === index) return null
     }
+
+    // --- If all good ---
     // Get Audio File
     const audio = fs.readFileSync(`${queue.path}/${queue.order[index]}`, 'base64')
 
-    event.sender.send('playMusic', {
+    // Send the result
+    return {
       name: queue.order[index],
       audio: `data:audio/mp3;base64,${audio}`,
       index
-    })
+    }
+  }
+
+  // Next music
+  ipcMain.on('nextMusic', (event, index: number | null) => {
+    // --- Verifications ---
+    const info = validityFileVerifications(index, 1)
+    if (!info) return
+    // ---------------------
+
+    event.sender.send('playMusic', info)
   })
 
   // Previous music
   ipcMain.on('previousMusic', (event, index: number | null) => {
-    // --- Verification 1st step ---
-    // Queue and index arg
-    if (queue.albumName === '' || index === null) {
-      return
-    }
+    // --- Verification ---
+    const info = validityFileVerifications(index, 1)
+    if (!info) return
+    // --------------------
 
-    // --- Verification 2nd step ---
-    // File validity
-    index = indexUpdate(index, -1)
-    while (!fs.existsSync(`${queue.path}/${queue.order[index]}`)) {
-      const temp = index
-      index = indexUpdate(index, -1)
-      if (temp === index) return
-    }
-    // Get Audio File
-    const audio = fs.readFileSync(`${queue.path}/${queue.order[index]}`, 'base64')
-
-    event.sender.send('playMusic', {
-      name: queue.order[index],
-      audio: `data:audio/mp3;base64,${audio}`,
-      index
-    })
+    event.sender.send('playMusic', info)
   })
 }
 
