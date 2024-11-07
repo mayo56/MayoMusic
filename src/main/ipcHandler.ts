@@ -167,16 +167,16 @@ function ipcLibrary(): void {
    * Checking the queue of album
    * @param index
    * @param change
+   * @param event
    */
   const validityFileVerifications = (
     index: number | null,
-    change: number
+    change: number,
+    event: any
   ): { name: string; audio: string; index: number } | null => {
     // --- Verification 1st step ---
     // Queue and index arg
-    if (queue.albumName === '' || index === null) {
-      return null
-    }
+    if (queue.albumName === '' || index === null) return null
 
     // --- Verification 2nd step ---
     // File validity
@@ -184,7 +184,15 @@ function ipcLibrary(): void {
     while (!fs.existsSync(`${queue.path}/${queue.order[index]}`)) {
       const temp = index
       index = indexUpdate(index, change)
-      if (temp === index) return null
+
+      // Si l'incrémentation est la même,
+      // alors il n'y a plus de fichier valide
+      if (temp === index) {
+        event.sender.send('ErrorCreate', {
+          status: 1
+        })
+        return null
+      }
     }
 
     // --- If all good ---
@@ -202,7 +210,7 @@ function ipcLibrary(): void {
   // Next music
   ipcMain.on('nextMusic', (event, index: number | null) => {
     // --- Verifications ---
-    const info = validityFileVerifications(index, 1)
+    const info = validityFileVerifications(index, 1, event)
     if (!info) return
     // ---------------------
 
@@ -212,7 +220,7 @@ function ipcLibrary(): void {
   // Previous music
   ipcMain.on('previousMusic', (event, index: number | null) => {
     // --- Verification ---
-    const info = validityFileVerifications(index, 1)
+    const info = validityFileVerifications(index, 1, event)
     if (!info) return
     // --------------------
 
