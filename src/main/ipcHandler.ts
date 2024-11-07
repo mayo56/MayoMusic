@@ -233,25 +233,23 @@ function ipcDownload(): void {
   // Verification de yt-dlp
   ipcMain.on('yt-dlp-status:req', (event): void => {
     exec('yt-dlp --version', (err, stdout, stderr) => {
-      if (err) {
-        return event.sender.send('yt-dlp-status:res', {
-          error: true,
-          version: '',
-          message: ''
-        })
-      } else if (stderr) {
-        return event.sender.send('yt-dlp-status:res', {
-          error: true,
-          version: '',
-          message: stderr
-        })
-      } else {
-        return event.sender.send('yt-dlp-status:res', {
-          error: false,
-          version: stdout,
-          message: ''
-        })
+      // Valeur yt dlp
+      const data = {
+        error: false,
+        version: '',
+        message: ''
       }
+      // Formatage des données
+      if (err) {
+        data.error = true
+      } else if (stderr) {
+        data.error = true
+        data.message = stderr
+      } else {
+        data.version = stdout
+      }
+      // Envoie
+      return event.sender.send('yt-dlp-status:res', data)
     })
   })
 
