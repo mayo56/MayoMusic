@@ -30,9 +30,15 @@ function ipcLibrary(): void {
   // Formatage des dossiers
   const formatMusicFolder = (): void => {
     // --- Verification
-    // Liste de album
+    // Vérification du dossier
+    const pathname = `${AppSettings().settings.savePath}/MayoMusic`
+    if (!fs.existsSync(pathname)) {
+      fs.mkdirSync(pathname)
+    }
+
+    // Récupération de la liste de dossier
     const folderList = fs
-      .readdirSync(`${AppSettings().settings.savePath}/MayoMusic`, { withFileTypes: true })
+      .readdirSync(pathname, { withFileTypes: true })
       .filter((e) => e.isDirectory())
       .map((e) => e.name)
 
@@ -41,7 +47,7 @@ function ipcLibrary(): void {
       let cover: undefined | string = undefined
       let order: string[] = []
 
-      const album_pathname = `${AppSettings().settings.savePath}/MayoMusic/${folder}`
+      const album_pathname = `${pathname}/${folder}`
 
       // Si fichier de configuration
       if (fs.existsSync(`${album_pathname}/setting.json`)) {
