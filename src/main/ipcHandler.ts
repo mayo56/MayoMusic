@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog, ipcMain } from 'electron'
+import { BrowserWindow, dialog, ipcMain, IpcMainEvent } from 'electron'
 import fs from 'node:fs'
 import { exec } from 'node:child_process'
 import { AppSettings } from './libs/store'
@@ -172,7 +172,7 @@ function ipcLibrary(): void {
   const validityFileVerifications = (
     index: number | null,
     change: number,
-    event: any
+    event: IpcMainEvent
   ): { name: string; audio: string; index: number } | null => {
     // --- Verification 1st step ---
     // Queue and index arg
@@ -256,17 +256,35 @@ function ipcDownload(): void {
   })
 
   // Téléchargement des musiques
-  ipcMain.on('yt-dlp-download:req', (event, args) => {
-    let commande = `yt-dlp "${args.url}" `
-    args.playlist ? (commande += '--yes-playlist ') : (commande += '--no-playlist ') // playlist
-    commande += `--audio-quality ${args.quality} `
-    commande += `-o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s" `
-    exec(commande, (err, stdout, stderr) => {
-      if (err) return console.log(err)
-      console.log(stdout, stderr)
-      event.sender.send('yt-dlp-download:finish')
-    })
-  })
+  ipcMain.on(
+    'yt-dlp-download:req',
+    (event, args: { url: string; playlist: boolean; quality: string; folderName: string }) => {
+      // --- Verification args ---
+      if (!['best', 'medium', 'low'].includes(args.quality) || args.url === '' || args.folderName === '') {
+        event.sender.send('ErrorCreate', {
+          status: 1
+        })
+        return
+      }
+
+      const commande = `yt-dlp "${args.url}" ${args.playlist ? '--yes-playlist' : '--no-playlist'} --audio-quality ${args.quality} -o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s"`
+
+      // Command Execution
+      exec(commande, (err) => {
+        // -- Verification d'erreur --
+        if (err) {
+          event.sender.send('ErrorCreate', {
+            status: 1
+          })
+          console.log(err)
+          return
+        }
+        // ------
+        // Envoie d'une notification pour dire que c'est terminé
+        event.sender.send('NotificationCreate:yt-dlp-success-download')
+      })
+    }
+  )
 }
 
 export { ipcHandler, ipcLibrary, ipcDownload }
