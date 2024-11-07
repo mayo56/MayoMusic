@@ -29,6 +29,7 @@ function ipcLibrary(): void {
   let library: Music[] = []
   // Formatage des dossiers
   const formatMusicFolder = (): void => {
+    // --- Verification
     // Liste de album
     const folderList = fs
       .readdirSync(`${AppSettings().settings.savePath}/MayoMusic`, { withFileTypes: true })
@@ -53,7 +54,8 @@ function ipcLibrary(): void {
         if (music_setting.order) {
           order = music_setting.order
         }
-      } else {
+      }
+      if (order.length === 0) {
         order = fs
           .readdirSync(`${album_pathname}/`)
           .filter((e) =>
@@ -146,42 +148,65 @@ function ipcLibrary(): void {
     })
   })
 
-  // Next music
-  ipcMain.on('nextMusic', (event, args: number | null) => {
-    // Si aucune file d'attente
-    if (queue.albumName === '' || args === null) return
+  const indexUpdate = (index: number, change: number): number => {
+    index += change
+    if (index === queue.order.length) {
+      return 0
+    } else if (index < 0) {
+      return queue.order.length - 1
+    }
+    return index
+  }
 
-    let nextMusic = args + 1
-    if (nextMusic === queue.order.length) {
-      nextMusic = 0
+  // Next music
+  ipcMain.on('nextMusic', (event, index: number | null) => {
+    // --- Verification 1st step ---
+    // Queue and index arg
+    if (queue.albumName === '' || index === null) {
+      return
     }
 
-    // Get audio file
-    const audio = fs.readFileSync(`${queue.path}/${queue.order[nextMusic]}`, 'base64')
+    // --- Verification 2nd step ---
+    // File validity
+    index = indexUpdate(index, 1)
+    while (!fs.existsSync(`${queue.path}/${queue.order[index]}`)) {
+      const temp = index
+      index = indexUpdate(index, 1)
+      if (temp === index) return
+    }
+    // Get Audio File
+    const audio = fs.readFileSync(`${queue.path}/${queue.order[index]}`, 'base64')
 
     event.sender.send('playMusic', {
-      name: queue.order[nextMusic],
+      name: queue.order[index],
       audio: `data:audio/mp3;base64,${audio}`,
-      index: nextMusic
+      index
     })
   })
-  // Previous music
-  ipcMain.on('previousMusic', (event, args: number | null) => {
-    // Si aucune file d'attente
-    if (queue.albumName === '' || args === null) return
 
-    let nextMusic = args - 1
-    if (nextMusic < 0) {
-      nextMusic = queue.order.length - 1
+  // Previous music
+  ipcMain.on('previousMusic', (event, index: number | null) => {
+    // --- Verification 1st step ---
+    // Queue and index arg
+    if (queue.albumName === '' || index === null) {
+      return
     }
 
-    // Get audio file
-    const audio = fs.readFileSync(`${queue.path}/${queue.order[nextMusic]}`, 'base64')
+    // --- Verification 2nd step ---
+    // File validity
+    index = indexUpdate(index, -1)
+    while (!fs.existsSync(`${queue.path}/${queue.order[index]}`)) {
+      const temp = index
+      index = indexUpdate(index, -1)
+      if (temp === index) return
+    }
+    // Get Audio File
+    const audio = fs.readFileSync(`${queue.path}/${queue.order[index]}`, 'base64')
 
     event.sender.send('playMusic', {
-      name: queue.order[nextMusic],
+      name: queue.order[index],
       audio: `data:audio/mp3;base64,${audio}`,
-      index: nextMusic
+      index
     })
   })
 }
@@ -220,7 +245,7 @@ function ipcDownload(): void {
     commande += `--audio-quality ${args.quality} `
     commande += `-o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s" `
     exec(commande, (err, stdout, stderr) => {
-      if (err) return
+      if (err) return console.log(err)
       console.log(stdout, stderr)
       event.sender.send('yt-dlp-download:finish')
     })
