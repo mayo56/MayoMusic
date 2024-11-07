@@ -1,4 +1,4 @@
-import { BrowserWindow, dialog, ipcMain } from 'electron'
+import { BrowserWindow, dialog, ipcMain, IpcMainEvent } from 'electron'
 import fs from 'node:fs'
 import { exec } from 'node:child_process'
 import { AppSettings } from './libs/store'
@@ -29,6 +29,7 @@ function ipcLibrary(): void {
   let library: Music[] = []
   // Formatage des dossiers
   const formatMusicFolder = (): void => {
+    // --- Verification
     // Liste de album
     const folderList = fs
       .readdirSync(`${AppSettings().settings.savePath}/MayoMusic`, { withFileTypes: true })
@@ -38,28 +39,25 @@ function ipcLibrary(): void {
     // Mise en format des dossiers
     for (const folder of folderList) {
       let cover: undefined | string = undefined
-      let order: undefined | string[] = []
+      let order: string[] = []
+
+      const album_pathname = `${AppSettings().settings.savePath}/MayoMusic/${folder}`
 
       // Si fichier de configuration
-      if (fs.existsSync(`${AppSettings().settings.savePath}/MayoMusic/${folder}/setting.json`)) {
+      if (fs.existsSync(`${album_pathname}/setting.json`)) {
         const music_setting: music_setting = JSON.parse(
-          fs.readFileSync(
-            `${AppSettings().settings.savePath}/MayoMusic/${folder}/setting.json`,
-            'utf-8'
-          )
+          fs.readFileSync(`${album_pathname}/setting.json`, 'utf-8')
         )
         if (music_setting.cover) {
-          cover = fs.readFileSync(
-            `${AppSettings().settings.savePath}/MayoMusic/${folder}/${music_setting.cover}`,
-            'base64'
-          )
+          cover = fs.readFileSync(`${album_pathname}/${music_setting.cover}`, 'base64')
         }
         if (music_setting.order) {
           order = music_setting.order
         }
-      } else {
+      }
+      if (order.length === 0) {
         order = fs
-          .readdirSync(`${AppSettings().settings.savePath}/MayoMusic/${folder}/`)
+          .readdirSync(`${album_pathname}/`)
           .filter((e) =>
             ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase())
           )
@@ -68,9 +66,9 @@ function ipcLibrary(): void {
       // On push toute les info dans la library
       library.push({
         title: folder,
-        path: `${AppSettings().settings.savePath}/MayoMusic/${folder}`,
+        path: `${album_pathname}`,
         cover: cover ? `data:image/png;base64,${cover}` : undefined,
-        order: order
+        order
       })
     }
   }
@@ -89,10 +87,7 @@ function ipcLibrary(): void {
 
   // REQ MUSICS
   ipcMain.on('reqMusics', (event, args: string): void => {
-    // VERIFICATION
-    //
-    //
-    // Envoie des données
+    // Envoie des données (en cache)
     event.sender.send('MusicsList', {
       musics: library.filter((e) => e.title === args)[0].order,
       cover: library.filter((e) => e.title === args)[0].cover
@@ -101,24 +96,49 @@ function ipcLibrary(): void {
 
   // EVENT PLAYER
   // File d'attente de musique
-  const queue: { albumName: string; order: string[] } = {
+  const queue: { albumName: string; order: string[]; path: string } = {
     albumName: '',
-    order: []
+    order: [],
+    path: ''
   }
   // Start a music
   ipcMain.on('sendMusic', (event, args: { album: string; index: number }) => {
-    const album = library.filter((e) => e.title === args.album)[0]
+    // --- Verifications 1st step ---
+    const temp_album = library.filter((e) => e.title === args.album)
+    if (!temp_album) {
+      event.sender.send('ErrorCreate', {
+        status: 1
+      })
+      return
+    }
+    // -----
+    const album = temp_album[0]
     const musicName = album.order[args.index]
 
-    // Audio file
-    const audio = fs.readFileSync(
-      `${AppSettings().settings.savePath}/MayoMusic/${args.album}/${musicName}`,
-      'base64'
-    )
+    // --- Verifications 2d step ---
+    // Vérification de l'existence de l'album
+    if (!fs.existsSync(`${album.path}`)) {
+      event.sender.send('ErrorCreate', {
+        status: 1
+      })
+      return
+    }
+    // Vérification de l'existence du fichier
+    else if (!fs.existsSync(`${album.path}/${musicName}`)) {
+      event.sender.send('ErrorCreate', {
+        status: 1
+      })
+      return
+    }
 
-    // Audio queue
+    // --- Get audio file and send to Web ---
+    // Audio file
+    const audio = fs.readFileSync(`${album.path}/${musicName}`, 'base64')
+
+    // Set Audio Queue
     queue.order = album.order
     queue.albumName = album.title
+    queue.path = album.path
 
     // Response
     event.sender.send('playMusic', {
@@ -128,48 +148,83 @@ function ipcLibrary(): void {
     })
   })
 
+  /**
+   * Incrémente ou décrémente une variable
+   * @param index
+   * @param change
+   */
+  const indexUpdate = (index: number, change: number): number => {
+    index += change
+    if (index === queue.order.length) {
+      return 0
+    } else if (index < 0) {
+      return queue.order.length - 1
+    }
+    return index
+  }
+
+  /**
+   * Checking the queue of album
+   * @param index
+   * @param change
+   * @param event
+   */
+  const validityFileVerifications = (
+    index: number | null,
+    change: number,
+    event: IpcMainEvent
+  ): { name: string; audio: string; index: number } | null => {
+    // --- Verification 1st step ---
+    // Queue and index arg
+    if (queue.albumName === '' || index === null) return null
+
+    // --- Verification 2nd step ---
+    // File validity
+    index = indexUpdate(index, change)
+    while (!fs.existsSync(`${queue.path}/${queue.order[index]}`)) {
+      const temp = index
+      index = indexUpdate(index, change)
+
+      // Si l'incrémentation est la même,
+      // alors il n'y a plus de fichier valide
+      if (temp === index) {
+        event.sender.send('ErrorCreate', {
+          status: 1
+        })
+        return null
+      }
+    }
+
+    // --- If all good ---
+    // Get Audio File
+    const audio = fs.readFileSync(`${queue.path}/${queue.order[index]}`, 'base64')
+
+    // Send the result
+    return {
+      name: queue.order[index],
+      audio: `data:audio/mp3;base64,${audio}`,
+      index
+    }
+  }
+
   // Next music
-  ipcMain.on('nextMusic', (event, args: number | null) => {
-    // Si aucune file d'attente
-    if (queue.albumName === '' || args === null) return
+  ipcMain.on('nextMusic', (event, index: number | null) => {
+    // --- Verifications ---
+    const info = validityFileVerifications(index, 1, event)
+    if (!info) return
+    // ---------------------
 
-    let nextMusic = args + 1
-    if (nextMusic === queue.order.length) {
-      nextMusic = 0
-    }
-
-    const audio = fs.readFileSync(
-      `${AppSettings().settings.savePath}/MayoMusic/${queue.albumName}/${queue.order[nextMusic]}`,
-      'base64'
-    )
-
-    event.sender.send('playMusic', {
-      name: queue.order[nextMusic],
-      audio: `data:audio/mp3;base64,${audio}`,
-      index: nextMusic
-    })
+    event.sender.send('playMusic', info)
   })
+
   // Previous music
-  ipcMain.on('previousMusic', (event, args: number | null) => {
-    // Si aucune file d'attente
-    if (queue.albumName === '' || args === null) return
+  ipcMain.on('previousMusic', (event, index: number | null) => {
+    // --- Verification ---
+    const info = validityFileVerifications(index, 1, event)
+    if (!info) return
+    // --------------------
 
-    let nextMusic = args - 1
-    console.log(nextMusic)
-    if (nextMusic < 0) {
-      nextMusic = queue.order.length - 1
-    }
-    console.log(nextMusic)
-    const audio = fs.readFileSync(
-      `${AppSettings().settings.savePath}/MayoMusic/${queue.albumName}/${queue.order[nextMusic]}`,
-      'base64'
-    )
-
-    event.sender.send('playMusic', {
-      name: queue.order[nextMusic],
-      audio: `data:audio/mp3;base64,${audio}`,
-      index: nextMusic
-    })
+    event.sender.send('playMusic', info)
   })
 }
 
@@ -178,40 +233,60 @@ function ipcDownload(): void {
   // Verification de yt-dlp
   ipcMain.on('yt-dlp-status:req', (event): void => {
     exec('yt-dlp --version', (err, stdout, stderr) => {
-      if (err) {
-        return event.sender.send('yt-dlp-status:res', {
-          error: true,
-          version: '',
-          message: ''
-        })
-      } else if (stderr) {
-        return event.sender.send('yt-dlp-status:res', {
-          error: true,
-          version: '',
-          message: stderr
-        })
-      } else {
-        return event.sender.send('yt-dlp-status:res', {
-          error: false,
-          version: stdout,
-          message: ''
-        })
+      // Valeur yt dlp
+      const data = {
+        error: false,
+        version: '',
+        message: ''
       }
+      // Formatage des données
+      if (err) {
+        data.error = true
+      } else if (stderr) {
+        data.error = true
+        data.message = stderr
+      } else {
+        data.version = stdout
+      }
+      // Envoie
+      return event.sender.send('yt-dlp-status:res', data)
     })
   })
 
   // Téléchargement des musiques
-  ipcMain.on('yt-dlp-download:req', (event, args) => {
-    let commande = `yt-dlp "${args.url}" `
-    args.playlist ? (commande += '--yes-playlist ') : (commande += '--no-playlist ') // playlist
-    commande += `--audio-quality ${args.quality} `
-    commande += `-o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s" `
-    exec(commande, (err, stdout, stderr) => {
-      if (err) return
-      console.log(stdout, stderr)
-      event.sender.send('yt-dlp-download:finish')
-    })
-  })
+  ipcMain.on(
+    'yt-dlp-download:req',
+    (event, args: { url: string; playlist: boolean; quality: string; folderName: string }) => {
+      // --- Verification args ---
+      if (
+        !['best', 'medium', 'low'].includes(args.quality) ||
+        args.url === '' ||
+        args.folderName === ''
+      ) {
+        event.sender.send('ErrorCreate', {
+          status: 1
+        })
+        return
+      }
+
+      const commande = `yt-dlp "${args.url}" ${args.playlist ? '--yes-playlist' : '--no-playlist'} --audio-quality ${args.quality} -o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s"`
+
+      // Command Execution
+      exec(commande, (err) => {
+        // -- Verification d'erreur --
+        if (err) {
+          event.sender.send('ErrorCreate', {
+            status: 1
+          })
+          console.log(err)
+          return
+        }
+        // ------
+        // Envoie d'une notification pour dire que c'est terminé
+        event.sender.send('NotificationCreate:yt-dlp-success-download')
+      })
+    }
+  )
 }
 
 export { ipcHandler, ipcLibrary, ipcDownload }
