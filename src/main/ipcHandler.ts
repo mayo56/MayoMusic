@@ -232,6 +232,20 @@ function ipcLibrary(): void {
 
     event.sender.send('playMusic', info)
   })
+
+  // -------------------
+  // Format album folder
+  //
+
+  // Format all
+  ipcMain.on('auto-format-album', (event, args) => {
+    event.sender.send('', args)
+  })
+
+  // Formater un album précis
+  ipcMain.on('format-album', (event, args) => {
+    event.sender.send('', args)
+  })
 }
 
 // Partie DL
