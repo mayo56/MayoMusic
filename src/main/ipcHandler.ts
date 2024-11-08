@@ -237,13 +237,9 @@ function ipcLibrary(): void {
   // Format album folder
   //
 
-  // Format all
-  ipcMain.on('auto-format-album', (event, args) => {
-    event.sender.send('', args)
-  })
-
   // Formater un album précis
   ipcMain.on('format-album', (event, args) => {
+    // Mettre des infos dans le json de l'album
     event.sender.send('', args)
   })
 }
