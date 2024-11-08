@@ -5,6 +5,7 @@ import { AppSettings } from './libs/store'
 import path from 'node:path'
 
 import { Music, music_setting } from './Types/types'
+import ErrorCreate from './libs/Error'
 
 function ipcHandler(): void {
   ipcMain.handle('dialog:openFolder', async () => {
@@ -76,6 +77,7 @@ function ipcLibrary(): void {
         cover: cover ? `data:image/png;base64,${cover}` : undefined,
         order
       })
+      console.log(library)
     }
   }
   formatMusicFolder()
@@ -111,11 +113,10 @@ function ipcLibrary(): void {
   ipcMain.on('sendMusic', (event, args: { album: string; index: number }) => {
     // --- Verifications 1st step ---
     const temp_album = library.filter((e) => e.title === args.album)
+    console.log(temp_album)
     if (!temp_album) {
-      event.sender.send('ErrorCreate', {
-        status: 1
-      })
-      return
+      console.log('inconnu album')
+      return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
     }
     // -----
     const album = temp_album[0]
@@ -124,17 +125,13 @@ function ipcLibrary(): void {
     // --- Verifications 2d step ---
     // Vérification de l'existence de l'album
     if (!fs.existsSync(`${album.path}`)) {
-      event.sender.send('ErrorCreate', {
-        status: 1
-      })
-      return
+      console.log('inconnu folder')
+      return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
     }
     // Vérification de l'existence du fichier
     else if (!fs.existsSync(`${album.path}/${musicName}`)) {
-      event.sender.send('ErrorCreate', {
-        status: 1
-      })
-      return
+      console.log('inconnu msuci')
+      return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
     }
 
     // --- Get audio file and send to Web ---
@@ -194,9 +191,7 @@ function ipcLibrary(): void {
       // Si l'incrémentation est la même,
       // alors il n'y a plus de fichier valide
       if (temp === index) {
-        event.sender.send('ErrorCreate', {
-          status: 1
-        })
+        new ErrorCreate(event).setStatus(1).setMessage('').sendError()
         return null
       }
     }
@@ -232,6 +227,16 @@ function ipcLibrary(): void {
 
     event.sender.send('playMusic', info)
   })
+
+  // -------------------
+  // Format album folder
+  //
+
+  // Formater un album précis
+  ipcMain.on('format-album', (event, args) => {
+    // Mettre des infos dans le json de l'album
+    event.sender.send('', args)
+  })
 }
 
 // Partie DL
@@ -248,6 +253,7 @@ function ipcDownload(): void {
       // Formatage des données
       if (err) {
         data.error = true
+        data.message = `${err}`
       } else if (stderr) {
         data.error = true
         data.message = stderr
@@ -262,34 +268,84 @@ function ipcDownload(): void {
   // Téléchargement des musiques
   ipcMain.on(
     'yt-dlp-download:req',
-    (event, args: { url: string; playlist: boolean; quality: string; folderName: string }) => {
+    async (
+      event,
+      args: { url: string; file_extension: string; quality: string; folderName: string }
+    ) => {
       // --- Verification args ---
       if (
         !['best', 'medium', 'low'].includes(args.quality) ||
         args.url === '' ||
         args.folderName === ''
       ) {
-        event.sender.send('ErrorCreate', {
-          status: 1
-        })
-        return
+        return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
       }
+      args.file_extension = 'm4a'
 
-      const commande = `yt-dlp "${args.url}" --extract-audio ${args.playlist ? '--yes-playlist' : '--no-playlist'} --audio-quality ${args.quality} -o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s"`
+      const info_command = `yt-dlp "${args.url}" --get-title --get-id --skip-download`
+      console.log('Loading...')
+      // ----- Récupération d'info -----
+      exec(info_command, (err, stdout) => {
+        // -- Album info --
+        const video_list: { title: string; id: string }[] = []
+        const pathname = `${AppSettings().settings.savePath}/MayoMusic/${args.folderName}`
 
-      // Command Execution
-      exec(commande, (err) => {
-        // -- Verification d'erreur --
-        if (err) {
-          event.sender.send('ErrorCreate', {
-            status: 1
-          })
-          console.log(err)
-          return
+        // -- existence du dossier --
+        const existFolder = fs.existsSync(pathname)
+        if (!existFolder) {
+          fs.mkdirSync(pathname)
         }
-        // ------
-        // Envoie d'une notification pour dire que c'est terminé
-        event.sender.send('NotificationCreate:yt-dlp-success-download')
+
+        // -- Errors --
+        if (err) {
+          console.log(err)
+          return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
+        }
+
+        // -- Formatage des videos --
+        const brut_data: string[] = stdout.trim().split('\n')
+        const videos_title: string[] = []
+        for (let i = 0; i < brut_data.length; i += 2) {
+          // video_title
+          videos_title.push(`${brut_data[i]}.${args.file_extension}`)
+          // video_list
+          video_list.push({
+            title: brut_data[i],
+            id: brut_data[i + 1]
+          })
+        }
+        console.log(videos_title)
+
+        // --- Téléchargement dans l'ordre ---
+        for (const video of video_list) {
+          const url = `https://youtu.be`
+          const video_command = `yt-dlp "${url}/${video.id}" --extract-audio --audio-format ${args.file_extension} --audio-quality ${args.quality} -o "${pathname}/%(title)s.%(ext)s"`
+          exec(video_command, (err) => {
+            // -- Error --
+            if (err) {
+              console.log(err)
+              return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
+            }
+
+            // Création d'une notification de fin de téléchargement
+            event.sender.send('NotificationCreate')
+          })
+        }
+
+        // -- Formatage de l'album (setting.json) --
+        if (existFolder && fs.existsSync(`${pathname}/setting.json`)) {
+          const data: { cover: null | string; order: string[] } = JSON.parse(
+            fs.readFileSync(`${pathname}/setting.json`, 'utf-8')
+          )
+
+          videos_title.map((e) => data.order.push(e))
+          fs.writeFileSync(`${pathname}/setting.json`, JSON.stringify(data))
+        } else {
+          fs.writeFileSync(
+            `${pathname}/setting.json`,
+            JSON.stringify({ cover: null, order: videos_title })
+          )
+        }
       })
     }
   )

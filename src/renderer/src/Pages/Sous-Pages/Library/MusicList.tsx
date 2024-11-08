@@ -24,7 +24,6 @@ function MusicList(): React.JSX.Element {
     window.api.library.reqAlbums()
     window.api.library.AlbumsList((musics): void => {
       setMusics(musics as unknown as Music[])
-      console.log(musics)
     })
   }, [])
 
