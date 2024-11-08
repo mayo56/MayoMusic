@@ -275,7 +275,7 @@ function ipcDownload(): void {
         return
       }
 
-      const commande = `yt-dlp "${args.url}" ${args.playlist ? '--yes-playlist' : '--no-playlist'} --audio-quality ${args.quality} -o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s"`
+      const commande = `yt-dlp "${args.url}" --extract-audio ${args.playlist ? '--yes-playlist' : '--no-playlist'} --audio-quality ${args.quality} -o "${AppSettings().settings.savePath}/MayoMusic/${args.folderName}/%(title)s.%(ext)s"`
 
       // Command Execution
       exec(commande, (err) => {
