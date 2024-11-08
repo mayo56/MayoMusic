@@ -52,7 +52,7 @@ function Album(): React.JSX.Element {
       Liste des musiques
       */}
       <div className={'AlbumMusicList'}>
-        {musicList.map((music, index) => {
+        {musicList.map((music, index): React.JSX.Element => {
           const name = music.split('.')
           name.pop()
           return (
