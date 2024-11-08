@@ -262,6 +262,7 @@ function ipcDownload(): void {
       // Formatage des données
       if (err) {
         data.error = true
+        data.message = `${err}`
       } else if (stderr) {
         data.error = true
         data.message = stderr
