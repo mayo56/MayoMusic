@@ -6,12 +6,14 @@ class ErrorCreate {
 
   constructor(private _event: IpcMainEvent) {}
 
-  public setStatus(code: number): void {
+  public setStatus(code: number): this {
     this.status = code
+    return this
   }
 
-  public setMessage(message: string): void {
+  public setMessage(message: string): this {
     this.message = message
+    return this
   }
 
   public sendError(): void {
