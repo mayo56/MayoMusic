@@ -94,6 +94,11 @@ const api = {
       ipcRenderer.send('yt-dlp-download:req', data)
     }
   },
+  folder: {
+    openAlbumDirectory: (albumName: string): void => {
+      ipcRenderer.send('OpenAlbumDirectory', albumName)
+    }
+  },
   openFolderDialog: async (): Promise<void> => {
     await ipcRenderer.invoke('dialog:openFolder')
   }

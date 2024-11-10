@@ -18,6 +18,13 @@ function ipcHandler(): void {
     }
     return null
   })
+
+  // Ouvrir l'emplacement physique de l'album
+  ipcMain.on('OpenAlbumDirectory', (_, albumName: string) => {
+    const pathname = `${AppSettings().settings.savePath}/MayoMusic/${albumName}`
+    console.log(pathname)
+    exec(`open "${pathname}"`)
+  })
 }
 
 /**

@@ -9,6 +9,7 @@ import '@renderer/assets/CSS/Settings/settings.css'
 import MenuNav from '@renderer/components/Settings/MenuNav'
 import YoutubeDLPage from '@renderer/Pages/Sous-Pages/Settings/Download/Youtube-DL'
 import ComingSoon from '@renderer/Pages/Sous-Pages/Settings/Error/CommingSoon'
+import GlobalSettings from '@renderer/Pages/Sous-Pages/Settings/Params/GlobalSettings'
 
 function Settings(): React.JSX.Element {
   return (
@@ -40,6 +41,7 @@ function Settings(): React.JSX.Element {
       <div className={'SettingsPage'}>
         <Routes>
           <Route path={'download/yt-dlp'} element={<YoutubeDLPage />} />
+          <Route path={'/'} element={<GlobalSettings />} />
           <Route path={'*'} element={<ComingSoon />} />
         </Routes>
       </div>

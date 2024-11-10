@@ -13,19 +13,19 @@ declare global {
         // REQ MUSICS
         reqMusics(albumName: string): void
         MusicsList(callback: (musics: { musics: string[]; cover: string | undefined }) => void)
-      },
+      }
       player: {
         // EVENT PLAY MUSIC
         playMusic(album: string, index: number): void
         receiveMusic(callback: (info: { name: string, audio: string, index: number }) => void)
 
         // Controller
-        nextMusic(index: number | null ): void
+        nextMusic(index: number | null): void
         previousMusic(index: number | null): void
-      },
+      }
       Global: {
         fullscreen(callback: (fullscreen_status: boolean) => void)
-      },
+      }
       download: {
         yt_dlp_status_req(): void
         yt_dlp_status_res(callback: (data: {
@@ -39,7 +39,10 @@ declare global {
           playlist: boolean
           folderName: string
         }): void
-      },
+      }
+      folder: {
+        openAlbumDirectory(albumName: string): void
+      }
       openFolderDialog(): Promise<string>
     };
   }

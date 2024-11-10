@@ -34,7 +34,11 @@ function Album(): React.JSX.Element {
       */}
       <div className={'AlbumNavBarContainer'}>
         <img onClick={() => nav('/library')} src={back_arrow_icon} alt={'arrow back icon'} />
-        <img src={folder_icon} alt={'folder icon'} />
+        <img
+          onClick={() => window.api.folder.openAlbumDirectory(id!)}
+          src={folder_icon}
+          alt={'folder icon'}
+        />
       </div>
       {/*
       Album info
