@@ -8,7 +8,7 @@ import fs from 'node:fs'
 export function AppSettings(): settings {
   let sett: settings = {
     settings: {
-      savePath: app.getPath('music')
+      savePath: `${app.getPath('music')}/MayoMusic`
     }
   }
 
@@ -35,3 +35,5 @@ export function AppSettings(): settings {
 
   return sett
 }
+
+export const AppGlobalSetting = `${app.getPath('userData')}/MayoMusicSettings/settings.json`

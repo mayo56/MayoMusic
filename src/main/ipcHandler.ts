@@ -1,24 +1,70 @@
+// Import NodeJS Library
 import { BrowserWindow, dialog, ipcMain, IpcMainEvent } from 'electron'
-import fs from 'node:fs'
+import { AppSettings, AppGlobalSetting } from './libs/store'
 import { exec } from 'node:child_process'
-import { AppSettings } from './libs/store'
 import path from 'node:path'
+import fs from 'node:fs'
 
-import { Music, music_setting } from './Types/types'
+// Custom types and Class
 import ErrorCreate from './libs/Error'
+import { Music, music_setting, settings } from './Types/types'
 
-function ipcHandler(): void {
-  ipcMain.handle('dialog:openFolder', async () => {
-    const mainWindow = BrowserWindow.getFocusedWindow()
-    if (mainWindow) {
-      const result = await dialog.showOpenDialog(mainWindow, {
-        properties: ['openDirectory']
-      })
-      return result.filePaths
+// -- GLOBAL VARIABLES AND FUNCTIONS --
+let library: Music[] = []
+let library_pathname: string = `${AppSettings().settings.savePath}/MayoMusic`
+// Formatage des dossiers
+const formatMusicFolder = (): void => {
+  // --- Verification
+  // Vérification du dossier
+  const pathname = `${AppSettings().settings.savePath}/MayoMusic`
+  if (!fs.existsSync(pathname)) {
+    fs.mkdirSync(pathname)
+  }
+
+  // Récupération de la liste de dossier
+  const folderList = fs
+    .readdirSync(pathname, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+
+  // Mise en format des dossiers
+  for (const folder of folderList) {
+    let cover: undefined | string = undefined
+    let order: string[] = []
+
+    const album_pathname = `${pathname}/${folder}`
+
+    // Si fichier de configuration
+    if (fs.existsSync(`${album_pathname}/setting.json`)) {
+      const music_setting: music_setting = JSON.parse(
+        fs.readFileSync(`${album_pathname}/setting.json`, 'utf-8')
+      )
+      if (music_setting.cover) {
+        cover = fs.readFileSync(`${album_pathname}/${music_setting.cover}`, 'base64')
+      }
+      if (music_setting.order) {
+        order = music_setting.order
+      }
     }
-    return null
-  })
+    if (order.length === 0) {
+      order = fs
+        .readdirSync(`${album_pathname}/`)
+        .filter((e) =>
+          ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase())
+        )
+    }
+
+    // On push toute les info dans la library
+    library.push({
+      title: folder,
+      path: `${album_pathname}`,
+      cover: cover ? `data:image/png;base64,${cover}` : undefined,
+      order
+    })
+    console.log(library)
+  }
 }
+// -- --
 
 /**
  * @brief Liste des event ipcMain pour la liste des musiques
@@ -27,59 +73,6 @@ function ipcHandler(): void {
  * les titres
  */
 function ipcLibrary(): void {
-  let library: Music[] = []
-  // Formatage des dossiers
-  const formatMusicFolder = (): void => {
-    // --- Verification
-    // Vérification du dossier
-    const pathname = `${AppSettings().settings.savePath}/MayoMusic`
-    if (!fs.existsSync(pathname)) {
-      fs.mkdirSync(pathname)
-    }
-
-    // Récupération de la liste de dossier
-    const folderList = fs
-      .readdirSync(pathname, { withFileTypes: true })
-      .filter((e) => e.isDirectory())
-      .map((e) => e.name)
-
-    // Mise en format des dossiers
-    for (const folder of folderList) {
-      let cover: undefined | string = undefined
-      let order: string[] = []
-
-      const album_pathname = `${pathname}/${folder}`
-
-      // Si fichier de configuration
-      if (fs.existsSync(`${album_pathname}/setting.json`)) {
-        const music_setting: music_setting = JSON.parse(
-          fs.readFileSync(`${album_pathname}/setting.json`, 'utf-8')
-        )
-        if (music_setting.cover) {
-          cover = fs.readFileSync(`${album_pathname}/${music_setting.cover}`, 'base64')
-        }
-        if (music_setting.order) {
-          order = music_setting.order
-        }
-      }
-      if (order.length === 0) {
-        order = fs
-          .readdirSync(`${album_pathname}/`)
-          .filter((e) =>
-            ['.ogg', '.mp3', '.webm', '.m4a', '.opus'].includes(path.extname(e).toLowerCase())
-          )
-      }
-
-      // On push toute les info dans la library
-      library.push({
-        title: folder,
-        path: `${album_pathname}`,
-        cover: cover ? `data:image/png;base64,${cover}` : undefined,
-        order
-      })
-      console.log(library)
-    }
-  }
   formatMusicFolder()
   // REQ ALBUMS
   // Request liste des musiques
@@ -349,6 +342,43 @@ function ipcDownload(): void {
       })
     }
   )
+}
+
+function ipcHandler(): void {
+  ipcMain.handle('dialog:openFolder', async () => {
+    const mainWindow = BrowserWindow.getFocusedWindow()
+    if (mainWindow) {
+      const result = await dialog.showOpenDialog(mainWindow, {
+        properties: ['openDirectory']
+      })
+      return result.filePaths
+    }
+    return null
+  })
+
+  // Ouvrir l'emplacement physique de l'album
+  ipcMain.on('OpenAlbumDirectory', (_, albumName: string) => {
+    const pathname = `${library_pathname}/${albumName}`
+    console.log(pathname)
+    exec(`open "${pathname}"`)
+  })
+
+  // Envoyer le pathname du répertoire d'album
+  ipcMain.handle('GetAlbumPathName', async (): Promise<string> => {
+    return AppSettings().settings.savePath
+  })
+
+  // Change album directory folder path name
+  ipcMain.handle('ChangeAlbumDirectoryPath', (_, pathname: string) => {
+    const settings_path = AppGlobalSetting
+    const setting: settings = JSON.parse(fs.readFileSync(settings_path, 'utf-8'))
+    setting.settings.savePath = pathname
+    fs.writeFileSync(settings_path, JSON.stringify(setting))
+
+    library_pathname = pathname
+    formatMusicFolder()
+    return true
+  })
 }
 
 export { ipcHandler, ipcLibrary, ipcDownload }
