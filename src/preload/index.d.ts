@@ -13,6 +13,8 @@ declare global {
         // REQ MUSICS
         reqMusics(albumName: string): void
         MusicsList(callback: (musics: { musics: string[]; cover: string | undefined }) => void)
+        // File
+        openMusicFolder(albumName: string): void
       },
       player: {
         // EVENT PLAY MUSIC

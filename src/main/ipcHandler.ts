@@ -11,12 +11,12 @@ import { Music, music_setting, settings } from './Types/types'
 
 // -- GLOBAL VARIABLES AND FUNCTIONS --
 let library: Music[] = []
-let library_pathname: string = `${AppSettings().settings.savePath}/MayoMusic`
+let library_pathname: string = `${AppSettings().settings.savePath}`
 // Formatage des dossiers
 const formatMusicFolder = (): void => {
   // --- Verification
   // Vérification du dossier
-  const pathname = `${AppSettings().settings.savePath}/MayoMusic`
+  const pathname = `${AppSettings().settings.savePath}`
   if (!fs.existsSync(pathname)) {
     fs.mkdirSync(pathname)
   }

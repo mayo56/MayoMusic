@@ -35,6 +35,11 @@ const api = {
       ipcRenderer.on('MusicsList', (_, args: { musics: string[]; cover: string | undefined }) =>
         callback(args)
       )
+    },
+
+    // File
+    openMusicFolder: (albumName: string): void => {
+      ipcRenderer.send('OpenAlbumDirectory', albumName)
     }
   },
   player: {
