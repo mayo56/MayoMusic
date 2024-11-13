@@ -14,6 +14,7 @@ import '@renderer/assets/CSS/Library/MusicList.css'
 type Music = {
   title: string
   path: string
+  author: string | null
   cover: string | null
 }
 
@@ -59,7 +60,7 @@ function MusicList(): React.JSX.Element {
               <img src={el.cover || music_icon} alt={'cover ' + el.title} />
               <div className={'libraryMusicInfo'}>
                 <p className={'title'}>{el.title}</p>
-                <p className={'author'}>Author</p>
+                <p className={'author'}>{el.author ? el.author : 'Artiste inconnue'}</p>
               </div>
             </div>
           )

@@ -30,6 +30,7 @@ const formatMusicFolder = (): void => {
   // Mise en format des dossiers
   for (const folder of folderList) {
     let cover: undefined | string = undefined
+    let author: null | string = null
     let order: string[] = []
 
     const album_pathname = `${pathname}/${folder}`
@@ -41,6 +42,9 @@ const formatMusicFolder = (): void => {
       )
       if (music_setting.cover) {
         cover = fs.readFileSync(`${album_pathname}/${music_setting.cover}`, 'base64')
+      }
+      if (music_setting.author && music_setting.author.length > 0) {
+        author = music_setting.author.join(', ')
       }
       if (music_setting.order) {
         order = music_setting.order
@@ -58,6 +62,7 @@ const formatMusicFolder = (): void => {
     library.push({
       title: folder,
       path: `${album_pathname}`,
+      author: author,
       cover: cover ? `data:image/png;base64,${cover}` : undefined,
       order
     })
@@ -123,6 +128,7 @@ function ipcLibrary(): void {
     }
     // Vérification de l'existence du fichier
     else if (!fs.existsSync(`${album.path}/${musicName}`)) {
+      console.log(album.path, musicName, fs.existsSync(`${album.path}/${musicName}`))
       console.log('inconnu msuci')
       return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
     }
