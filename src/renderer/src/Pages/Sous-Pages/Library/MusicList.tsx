@@ -51,13 +51,16 @@ function MusicList(): React.JSX.Element {
         {musics.map((el, key) => {
           return (
             <div
-              onClick={() => nav(`/library/${el.title}`)}
               key={key}
               className={'libraryMusic'}
               title={`${el.title}\n${el.path}`}
+              onClick={() => nav(`/library/${el.title}`)}
             >
               <img src={el.cover || music_icon} alt={'cover ' + el.title} />
-              <p>{el.title}</p>
+              <div className={'libraryMusicInfo'}>
+                <p className={'title'}>{el.title}</p>
+                <p className={'author'}>Author</p>
+              </div>
             </div>
           )
         })}

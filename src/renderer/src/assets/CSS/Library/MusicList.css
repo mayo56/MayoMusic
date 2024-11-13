@@ -18,14 +18,17 @@ CSS Liste de musique (page principale)
   align-items: start;
 }
 .library .libraryMusic {
-  padding: 10px;
   background-color: rgba(0,0,0, 0.03);
   cursor: pointer;
   border-radius: 5px;
-  margin: 5px;
-  width: 156px;
-  height: 200px;
 
+  padding: 10px;
+  margin: 5px;
+
+  width: 500px;
+
+  display: flex;
+  justify-content: start;
   transition: all 0.2s linear;
 }
 
@@ -35,12 +38,22 @@ CSS Liste de musique (page principale)
   box-shadow: var(--global-page-shadow-color) 0 0 5px;
 }
 
-.libraryMusic img {
-  width: 156px;
-  height: 156px;
-  border-radius: 0;
+.libraryMusicInfo {
+  margin-left: 10px;
 }
-.libraryMusic p {
+
+.libraryMusic img {
+  width: 128px;
+  height: 128px;
+  border-radius: 5px;
+  background-color: white;
+}
+.libraryMusicInfo .title {
+  font-weight: 600;
+  font-size: 20px;
+}
+.libraryMusicInfo .author {
+  font-size: 15px;
   font-weight: 200;
 }
 

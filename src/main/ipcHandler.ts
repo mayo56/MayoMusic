@@ -281,7 +281,7 @@ function ipcDownload(): void {
       exec(info_command, (err, stdout) => {
         // -- Album info --
         const video_list: { title: string; id: string }[] = []
-        const pathname = `${AppSettings().settings.savePath}/MayoMusic/${args.folderName}`
+        const pathname = `${AppSettings().settings.savePath}/${args.folderName}`
 
         // -- existence du dossier --
         const existFolder = fs.existsSync(pathname)
