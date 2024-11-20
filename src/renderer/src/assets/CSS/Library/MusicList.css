@@ -18,44 +18,64 @@ CSS Liste de musique (page principale)
   align-items: start;
 }
 .library .libraryMusic {
-  background-color: rgba(0,0,0, 0.03);
+  background-color: transparent;
+  border-bottom: 1px solid rgba(240,240,240,1);
   cursor: pointer;
-  border-radius: 5px;
 
   padding: 10px;
-  margin: 5px;
 
-  width: 500px;
+  width: 100%;
 
   display: flex;
   justify-content: start;
+  align-items: center;
   transition: all 0.2s linear;
 }
 
 .library .libraryMusic:hover {
-  background-color: rgba(0,0,0,0.05);
-
-  box-shadow: var(--global-page-shadow-color) 0 0 5px;
+  background-color: rgba(250, 250, 250, 1);
 }
 
 .libraryMusicInfo {
-  margin-left: 10px;
+  max-width: calc(100% - 70px);
+}
+
+.libraryMusicInfo p {
+  margin: 5px 5px 5px 10px;
 }
 
 .libraryMusic img {
-  width: 128px;
-  height: 128px;
+  width: 64px;
+  height: 64px;
   border-radius: 5px;
   background-color: white;
 }
 .libraryMusicInfo .title {
-  font-weight: 600;
-  font-size: 20px;
+  font-weight: 500;
+  font-size: 16px;
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - 15px);
 }
 .libraryMusicInfo .author {
-  font-size: 15px;
-  font-weight: 200;
+  font-size: 14px;
+  font-weight: 100;
 }
+
+@media screen and (min-width: 1200px) {
+  .library .libraryMusic {
+    width: calc(90% / 2);
+    margin-inline: 5px;
+  }
+
+  .library {
+    margin: auto;
+    width: calc(100% - 30px);
+  }
+}
+
+
 
 /* Load bar */
 .loadBar {

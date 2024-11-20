@@ -3,6 +3,7 @@ import React from 'react'
 
 // CSS
 // In SideBar.css
+
 // Icons
 import fullscreen_music_icon from '@renderer/assets/Images/resize-svgrepo-com.svg'
 import skip_back_icon from '@renderer/assets/Images/play-skip-back-svgrepo-com.svg'
