@@ -2,9 +2,10 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 export type Album = {
-  titre: string
+  title: string
   path: string
   cover: undefined | string
+  author: string
 }
 
 export type Music = {

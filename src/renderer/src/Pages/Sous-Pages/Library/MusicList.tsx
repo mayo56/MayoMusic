@@ -14,7 +14,9 @@ import '@renderer/assets/CSS/Library/MusicList.css'
 type Music = {
   title: string
   path: string
+  author: string | null
   cover: string | null
+  isActive: boolean
 }
 
 function MusicList(): React.JSX.Element {
@@ -51,13 +53,16 @@ function MusicList(): React.JSX.Element {
         {musics.map((el, key) => {
           return (
             <div
-              onClick={() => nav(`/library/${el.title}`)}
               key={key}
               className={'libraryMusic'}
               title={`${el.title}\n${el.path}`}
+              onClick={() => nav(`/library/${el.title}`)}
             >
               <img src={el.cover || music_icon} alt={'cover ' + el.title} />
-              <p>{el.title}</p>
+              <div className={'libraryMusicInfo'}>
+                <p className={'title'}>{el.title}</p>
+                <p className={'author'}>{el.author ? el.author : 'Artiste inconnue'}</p>
+              </div>
             </div>
           )
         })}

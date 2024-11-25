@@ -3,6 +3,7 @@ import React from 'react'
 
 // CSS
 // In SideBar.css
+
 // Icons
 import fullscreen_music_icon from '@renderer/assets/Images/resize-svgrepo-com.svg'
 import skip_back_icon from '@renderer/assets/Images/play-skip-back-svgrepo-com.svg'
@@ -122,23 +123,27 @@ function Player(): React.JSX.Element {
       {/*
       Player info
       */}
-      <div className={`player_info ${showInfo ? 'show' : 'hide'}`}>
-        <span className={'title'}>{audioINFO.name}</span>
-        <div className={'timer'}>
-          <span>{formatDuration(audioREF.current?.currentTime)}</span>
-          <span>{formatDuration(audioREF.current?.duration)}</span>
-        </div>
-        {/*
+      {showInfo ? (
+        <div className={`player_info`}>
+          <span className={'title'}>{audioINFO.name}</span>
+          <div className={'timer'}>
+            <span>{formatDuration(audioREF.current?.currentTime)}</span>
+            <span>{formatDuration(audioREF.current?.duration)}</span>
+          </div>
+          {/*
         Progress bar de la musique en cours
         */}
-        <input
-          value={progressBar}
-          min={0}
-          max={100}
-          onChange={(e) => UserChangeTime(Number(e.target.value))}
-          type={'range'}
-        />
-      </div>
+          <input
+            value={progressBar}
+            min={0}
+            max={100}
+            onChange={(e) => UserChangeTime(Number(e.target.value))}
+            type={'range'}
+          />
+        </div>
+      ) : (
+        <></>
+      )}
 
       {/* Play controller, Volume controller */}
       <div className={'play_controller'}>
