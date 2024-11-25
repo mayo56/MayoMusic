@@ -16,6 +16,7 @@ type Music = {
   path: string
   author: string | null
   cover: string | null
+  isActive: boolean
 }
 
 function MusicList(): React.JSX.Element {

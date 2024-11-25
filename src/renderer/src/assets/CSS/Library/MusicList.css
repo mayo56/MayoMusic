@@ -38,6 +38,7 @@ CSS Liste de musique (page principale)
 
 .libraryMusicInfo {
   max-width: calc(100% - 70px);
+  flex: 1;
 }
 
 .libraryMusicInfo p {
