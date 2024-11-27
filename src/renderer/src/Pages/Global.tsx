@@ -9,11 +9,11 @@ import Settings from '@renderer/Pages/Settings'
 
 function Global(): React.JSX.Element {
   return (
-    <div className={'GlobalContainer'}>
+    <div className={'mm-global-container'}>
       {/*
       SideBar (Pour toutes les pages)
       */}
-      <div className={'GlobalSideBar'}>
+      <div className={'mm-global-left-bar-container'}>
         <GlobalController />
         <SideBar />
       </div>
@@ -21,7 +21,7 @@ function Global(): React.JSX.Element {
       {/*
       Différentes pages
       */}
-      <div className={'GlobalPages'}>
+      <div className={'mm-global-pages-container'}>
         <Routes>
           {/*
           Pages paramètres
