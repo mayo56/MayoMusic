@@ -2,10 +2,10 @@
 import React from 'react'
 
 // CSS
-// In SideBar.css
+import '@renderer/assets/CSS/Global/Player.css'
 
 // Icons
-import fullscreen_music_icon from '@renderer/assets/Images/resize-svgrepo-com.svg'
+import music_icon from '@renderer/assets/Images/musical-notes-svgrepo-com.svg'
 import skip_back_icon from '@renderer/assets/Images/play-skip-back-svgrepo-com.svg'
 import play_icon from '@renderer/assets/Images/play-svgrepo-com (1).svg'
 import pause_icon from '@renderer/assets/Images/pause-svgrepo-com.svg'
@@ -26,6 +26,23 @@ function Player(): React.JSX.Element {
       if (audioREF.current?.src === info.audio) {
         audioREF.current.currentTime = 0
         audioREF.current.play()
+
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: 'Ma Meilleure Ennemie',
+            artist: 'Stromae, Pomme',
+            album: 'Arcane Season 2 Soundtrack',
+            artwork: [
+              { src: 'https://example.com/image-96x96.jpg', sizes: '96x96', type: 'image/jpeg' },
+              {
+                src: 'https://example.com/image-128x128.jpg',
+                sizes: '128x128',
+                type: 'image/jpeg'
+              },
+              { src: 'https://example.com/image-192x192.jpg', sizes: '192x192', type: 'image/jpeg' }
+            ]
+          })
+        }
       } else {
         setAudioSRC(info.audio)
         const audioName = info.name.split('.')
@@ -39,8 +56,6 @@ function Player(): React.JSX.Element {
     })
   }, [])
 
-  // -- Show Informations --
-  const [showInfo, setShowInfo] = React.useState<boolean>(false)
   // Formatage des timestamps de musique (player)
   const formatDuration = (duration: number | undefined): string => {
     if (duration) {
@@ -102,11 +117,7 @@ function Player(): React.JSX.Element {
 
   const [showVolume, setShowVolume] = React.useState<boolean>(false)
   return (
-    <div
-      className={'player_Container'}
-      onMouseMove={() => setShowInfo(true)}
-      onMouseLeave={() => setShowInfo(false)}
-    >
+    <div className={'player-container'}>
       {/*
       Balise audio
       */}
@@ -123,13 +134,48 @@ function Player(): React.JSX.Element {
       {/*
       Player info
       */}
-      {showInfo ? (
-        <div className={`player_info`}>
-          <span className={'title'}>{audioINFO.name}</span>
-          <div className={'timer'}>
-            <span>{formatDuration(audioREF.current?.currentTime)}</span>
-            <span>{formatDuration(audioREF.current?.duration)}</span>
+
+      <div className={`player-info`}>
+        <div className={'player-cover-container'}>
+          <img className={'cover'} src={music_icon} alt={'music cover'} />
+        </div>
+        <div className={'player-data-origin-container'}>
+          <div>
+            <span className={'title'}>{audioINFO.name}</span>
           </div>
+          <div>
+            <span className={'author'}>Author</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Play controller, Volume controller */}
+      <div className={'play-controller'}>
+        <div>
+          <img
+            onClick={() => window.api.player.previousMusic(audioINFO.index)}
+            src={skip_back_icon}
+            alt={'skip back icon'}
+          />
+          <img
+            onClick={controlPlaying}
+            src={isPlaying ? pause_icon : play_icon}
+            alt={'play icon'}
+          />
+          <img
+            onClick={() => window.api.player.nextMusic(audioINFO.index)}
+            src={skip_forward_con}
+            alt={'skip forward icon'}
+          />
+          <img
+            onClick={() => setShowVolume((state) => !state)}
+            src={volume_icon}
+            alt={'volume icon'}
+          />
+        </div>
+
+        <div className={'player-progress'}>
+          <span>{formatDuration(audioREF.current?.currentTime)}</span>
           {/*
         Progress bar de la musique en cours
         */}
@@ -140,34 +186,8 @@ function Player(): React.JSX.Element {
             onChange={(e) => UserChangeTime(Number(e.target.value))}
             type={'range'}
           />
+          <span>{formatDuration(audioREF.current?.duration)}</span>
         </div>
-      ) : (
-        <></>
-      )}
-
-      {/* Play controller, Volume controller */}
-      <div className={'play_controller'}>
-        <img
-          src={fullscreen_music_icon}
-          alt={'fullscreen music icon'}
-          className={'incoming_feature'}
-        />
-        <img
-          onClick={() => window.api.player.previousMusic(audioINFO.index)}
-          src={skip_back_icon}
-          alt={'skip back icon'}
-        />
-        <img onClick={controlPlaying} src={isPlaying ? pause_icon : play_icon} alt={'play icon'} />
-        <img
-          onClick={() => window.api.player.nextMusic(audioINFO.index)}
-          src={skip_forward_con}
-          alt={'skip forward icon'}
-        />
-        <img
-          onClick={() => setShowVolume((state) => !state)}
-          src={volume_icon}
-          alt={'volume icon'}
-        />
       </div>
 
       {/*

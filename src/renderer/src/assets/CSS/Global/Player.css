@@ -1,0 +1,80 @@
+/* -------------- */
+/*     PLAYER     */
+/* -------------- */
+
+/* Depuis le Player.tsx*/
+.player-container {
+  background-color: #0f0f0f;
+  border-radius: 10px;
+  color: white;
+
+  display: grid;
+  position: relative;
+  grid-template-columns: 30% 70%;
+}
+
+/* -- */
+/* Player Info Data */
+.player-info {
+  display: flex;
+  justify-content: start;
+  padding-left: 10px;
+  font: 400 14px / 1.6 "Open Sans", sans-serif;
+}
+.player-info .cover {
+  width: 40px;
+  height: 40px;
+}
+.player-data-origin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  flex: 1;
+}
+.player-data-origin-container .title {
+  font-size: 15px;
+  vertical-align: middle;
+  line-height: 0;
+}
+.player-data-origin-container .author {
+  font-size: 13px;
+  vertical-align: middle;
+  line-height: 0;
+}
+
+/* -- */
+/* PLAYER CONTROLLER */
+.play-controller {
+  display: grid;
+  grid-template-rows: 50% 50%;
+}
+
+.play-controller img {
+  width: 15px;
+  border-radius: 5px;
+}
+
+.play-controller img:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+/* Progress bar */
+.player-progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.player-progress input {
+  flex: 1;
+}
+
+/* volume */
+.player-container .volume {
+  padding-top: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.player-container .hide {
+  display: none;
+}

@@ -7,7 +7,6 @@ import '@renderer/assets/CSS/Global/SideBar.css'
 // Icons
 import library_icon from '@renderer/assets/Images/library-svgrepo-com.svg'
 import parameters_icon from '@renderer/assets/Images/construct-svgrepo-com.svg'
-import Player from '@renderer/components/Global/Player'
 
 function SideBar(): React.JSX.Element {
   const nav = useNavigate()
@@ -45,8 +44,6 @@ function SideBar(): React.JSX.Element {
         >
           <img className={'icon'} src={parameters_icon} alt={'icon parameters'} />
         </div>
-
-        <Player />
       </div>
 
       <div>

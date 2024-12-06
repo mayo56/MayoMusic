@@ -10,7 +10,7 @@ import ErrorCreate from './libs/Error'
 import { Music, music_setting, settings } from './Types/types'
 
 // -- GLOBAL VARIABLES AND FUNCTIONS --
-let library: Music[] = []
+const library: Music[] = []
 let library_pathname: string = `${AppSettings().settings.savePath}`
 // Formatage des dossiers
 const formatMusicFolder = (): void => {
@@ -79,28 +79,35 @@ const formatMusicFolder = (): void => {
  */
 function ipcLibrary(): void {
   formatMusicFolder()
+
+  // ------------------------------------------------------------------------------- //
+  //                              ALBUM/MUSICS DATA                                  //
+  // ------------------------------------------------------------------------------- //
   // REQ ALBUMS
-  // Request liste des musiques
-  ipcMain.on('reqAlbums', (event): void => {
-    event.sender.send('AlbumsList', library)
-  })
-  // reload la liste des musiques
-  ipcMain.on('reloadAlbums', (event): void => {
-    library = []
-    formatMusicFolder()
-    event.sender.send('AlbumsList', library)
+  // Request liste des albums
+  ipcMain.on('request.albums', (event): void => {
+    const albums_list = library.map((e) => {
+      return {
+        title: e.title,
+        path: e.path,
+        author: e.path
+      }
+    })
+    event.sender.send('response.albumsList', albums_list)
   })
 
   // REQ MUSICS
-  ipcMain.on('reqMusics', (event, args: string): void => {
+  ipcMain.on('request.musics', (event, args: string): void => {
     // Envoie des données (en cache)
-    event.sender.send('MusicsList', {
+    event.sender.send('response.musicsList', {
       musics: library.filter((e) => e.title === args)[0].order,
       cover: library.filter((e) => e.title === args)[0].cover
     })
   })
 
-  // EVENT PLAYER
+  // ------------------------------------------------------------------------------- //
+  //                                EVENT PLAYER                                     //
+  // ------------------------------------------------------------------------------- //
   // File d'attente de musique
   const queue: { albumName: string; order: string[]; path: string } = {
     albumName: '',
@@ -238,7 +245,11 @@ function ipcLibrary(): void {
   })
 }
 
-// Partie DL
+
+
+// ------------------------------------------------------------------------------- //
+//                                  DOWNLOAD                                       //
+// ------------------------------------------------------------------------------- //
 function ipcDownload(): void {
   // Verification de yt-dlp
   ipcMain.on('yt-dlp-status:req', (event): void => {

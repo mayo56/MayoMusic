@@ -5,9 +5,8 @@
 }
 
 :root {
-  --border-color: #b5b5b5;
-  --global-interface-color: rgba(242,214,109,0.8);
-  --global-page-shadow-color: rgba(0,0,0,0.5);
+  --global-page-background-color: rgba(0,0,0,0.0.5);
+  --global-box-shadow: rgba(0,0,0,0.5);
 }
 
 /*
@@ -20,54 +19,32 @@ CSS Global
   height: 100vh;
   max-width: 100vw;
   max-height: 100vh;
-  min-width: 100vh;
-  min-height: 100vw;
 
   transition: 0.5s all ease-in-out;
 
   display: grid;
   grid-template-columns: 100px auto 0;
-}
 
-.GlobalPages {
-  border-radius: 10px;
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  right: 10px;
-  left: 200px;
-  background-color: white;
-  box-shadow: var(--global-page-shadow-color) 0 0 5px;
-}
-
-/*
-------
-CSS Global Side Bar (controller)
-
- */
-.GlobalSideBarControllerContainer {
-  width: 100vw;
-  height: 40px;
   -webkit-app-region: drag;
 }
 
-.GlobalSideBarControllerContainer .icon {
-  width: 20px;
-  margin-top: 9px;
-}
+/* Patern pour toutes les pages */
+.mm-global-pages-container {
+  background-color: var(--global-page-background-color);
+  box-shadow: var(--global-box-shadow) 0 0 5px;
 
-.GlobalSideBarControllerContainer .not_fullscreen {
-  margin-left: 80px;
-}
-
-.GlobalSideBarControllerContainer .fullscreen {
-  margin-left: 0;
-}
-
-/* CSS Pour la fenêtre de page */
-.GlobalPages {
   -webkit-app-region: no-drag;
-  padding: 5px; /* Padding automatique pour toutes les pages */
+
+  border-radius: 10px;
+  margin: 5px 5px 5px 0;
+  max-height: calc(100vh - 10px);
+
+  display: grid;
+  grid-template-rows: auto 50px;
+}
+
+.mm-global-pages-content {
+  overflow: scroll;
 }
 
 /* CSS POUR LES FEATURES EN BETA */

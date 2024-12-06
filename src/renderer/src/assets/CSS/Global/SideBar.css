@@ -10,15 +10,12 @@ CSS SideBar
 
 */
 .mm-global-left-bar {
-  height: calc(100vh - 40px);
+  height: 100vh;
   width: 100%;
 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  /* dev */
-  border: 1px red solid;
 }
 
 /* Menus selector */
@@ -42,139 +39,18 @@ CSS SideBar
   align-items: center;
   padding-top: 10px;
   padding-bottom: 10px;
+
+  -webkit-app-region: no-drag;
 }
 
 .mm-global-left-bar-menu .icon {
   width: 20px;
 }
 
-.MenuContainer .selected {
+.mm-global-left-bar-menu .selected {
   background-color: var(--choice-selected-color);
   border-color: rgb(124, 147, 238, 0.5);
 }
 
 
-/*
-Liste des playlists
-*/
-.listPlaylistContainer {
-  flex: 1;
-  overflow: scroll;
-  margin-top: 5px;
-  margin-left: 5px;
-  user-select: none;
-}
 
-/* Separator */
-.listPlaylistContainer .separator {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.separator .bar {
-  flex: 1;
-  border-bottom: 1px solid var(--separator-color);
-}
-
-.separator .texte {
-  color: var(--separator-color);
-  padding-inline: 5px;
-  font-size: 12px;
-}
-
-.separator .endBar {
-  flex: 0.05;
-  border-bottom: 1px solid var(--separator-color);
-}
-
-/* Career une playlist */
-.createPlaylistContainer {
-  background-color: var(--choice-color);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 1px;
-  padding-inline: 2px;
-  border-radius: 5px;
-  cursor: not-allowed;
-  margin-top: 5px;
-}
-
-.createPlaylistContainer:hover {
-  background-color: var(--choice-selected-color);
-}
-
-.createPlaylistContainer img {
-  width: 20px;
-}
-
-.createPlaylistContainer .texte {
-  font-size: 15px;
-  font-weight: 100;
-}
-
-
-/* PLAYER */
-/* Depuis la SideBar.tsx */
-.playerContainer {
-  background-color: rgba(0, 0, 0, 0.9);
-  color: white;
-  margin: 5px 5px 0;
-  border-radius: 5px;
-  font-weight: 200;
-  box-shadow: var(--global-page-shadow-color) 0 0 5px;
-}
-
-/* Depuis le Player.tsx*/
-.player_Container {
-  padding: 5px;
-}
-
-/* -- */
-/* Player Info */
-.player_info {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 5px;
-}
-
-.player_info .title {
-  text-wrap: nowrap;
-  overflow: scroll;
-  text-overflow: ellipsis;
-}
-
-.player_info .timer {
-  display: flex;
-  justify-content: space-between;
-}
-
-/* -- */
-/* Player controller */
-.play_controller {
-  display: flex;
-  justify-content: space-around;
-}
-
-.play_controller img {
-  width: 15px;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-.play_controller img:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-
-/* volume */
-.player_Container .volume {
-  padding-top: 5px;
-  display: flex;
-  flex-direction: column;
-}
-
-.player_Container .hide {
-  display: none;
-}
