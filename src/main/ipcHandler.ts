@@ -1,6 +1,6 @@
 // Import NodeJS Library
 import { BrowserWindow, dialog, ipcMain, IpcMainEvent } from 'electron'
-import { AppSettings, AppGlobalSetting } from './libs/store'
+import { AppGlobalSetting, AppSettings } from './libs/store'
 import { exec } from 'node:child_process'
 import path from 'node:path'
 import fs from 'node:fs'
@@ -69,6 +69,7 @@ const formatMusicFolder = (): void => {
     console.log(library)
   }
 }
+
 // -- --
 
 /**
@@ -244,8 +245,6 @@ function ipcLibrary(): void {
     event.sender.send('', args)
   })
 }
-
-
 
 // ------------------------------------------------------------------------------- //
 //                                  DOWNLOAD                                       //
