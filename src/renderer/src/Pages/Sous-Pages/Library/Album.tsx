@@ -19,8 +19,8 @@ function Album(): React.JSX.Element {
 
   React.useEffect(() => {
     if (!id) return
-    window.api.library.reqMusics(id)
-    window.api.library.MusicsList((data) => {
+    window.api.library.request.musics(id)
+    window.api.library.response.musics((data) => {
       setMusicList(data.musics)
       setCover(data.cover)
     })

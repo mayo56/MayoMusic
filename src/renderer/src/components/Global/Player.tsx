@@ -26,23 +26,6 @@ function Player(): React.JSX.Element {
       if (audioREF.current?.src === info.audio) {
         audioREF.current.currentTime = 0
         audioREF.current.play()
-
-        if ('mediaSession' in navigator) {
-          navigator.mediaSession.metadata = new MediaMetadata({
-            title: 'Ma Meilleure Ennemie',
-            artist: 'Stromae, Pomme',
-            album: 'Arcane Season 2 Soundtrack',
-            artwork: [
-              { src: 'https://example.com/image-96x96.jpg', sizes: '96x96', type: 'image/jpeg' },
-              {
-                src: 'https://example.com/image-128x128.jpg',
-                sizes: '128x128',
-                type: 'image/jpeg'
-              },
-              { src: 'https://example.com/image-192x192.jpg', sizes: '192x192', type: 'image/jpeg' }
-            ]
-          })
-        }
       } else {
         setAudioSRC(info.audio)
         const audioName = info.name.split('.')
@@ -52,6 +35,23 @@ function Player(): React.JSX.Element {
           index: info.index
         })
         console.warn(info)
+      }
+
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: info.name,
+          artist: 'Stromae, Pomme',
+          album: 'Arcane Season 2 Soundtrack',
+          artwork: [
+            { src: 'https://example.com/image-96x96.jpg', sizes: '96x96', type: 'image/jpeg' },
+            {
+              src: 'https://example.com/image-128x128.jpg',
+              sizes: '128x128',
+              type: 'image/jpeg'
+            },
+            { src: 'https://example.com/image-192x192.jpg', sizes: '192x192', type: 'image/jpeg' }
+          ]
+        })
       }
     })
   }, [])

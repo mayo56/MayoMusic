@@ -7,13 +7,14 @@ declare global {
     api: {
       library: {
         // REQ ALBUMS
-        reqAlbums(): void,
-        AlbumsList(callback: (albums: Album[]) => void)
-        reloadAlbums(): void
-        // REQ MUSICS
-        reqMusics(albumName: string): void
-        MusicsList(callback: (musics: { musics: string[]; cover: string | undefined }) => void)
-        // File
+        request: {
+          albums(): void,
+          musics(albumName: string): void
+        }
+        response: {
+          albums(callback: (albums: Album[]) => void)
+          musics(callback: (musics: { musics: string[]; cover: string | undefined }) => void)
+        }
         openMusicFolder(albumName: string): void
       },
       player: {
@@ -22,7 +23,7 @@ declare global {
         receiveMusic(callback: (info: { name: string, audio: string, index: number }) => void)
 
         // Controller
-        nextMusic(index: number | null ): void
+        nextMusic(index: number | null): void
         previousMusic(index: number | null): void
       },
       Global: {

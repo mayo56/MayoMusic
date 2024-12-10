@@ -15,27 +15,24 @@ export type Music = {
 // Custom APIs for renderer
 const api = {
   library: {
-    // REQ Library list of Albums
-    reqAlbums: (): void => {
-      ipcRenderer.send('reqAlbums')
+    request: {
+      albums: (): void => {
+        ipcRenderer.send('request.albums')
+      },
+      musics: (albumName: string): void => {
+        ipcRenderer.send('request.musics', albumName)
+      }
     },
-    AlbumsList: (callback: (albums: Album[]) => void): void => {
-      ipcRenderer.on('AlbumsList', (_, args: Album[]) => callback(args))
-    },
-    reloadAlbums: (): void => {
-      ipcRenderer.send('reloadAlbums')
-    },
-
-    // REQ Library list of musics of album
-    reqMusics: (albumName: string): void => {
-      ipcRenderer.send('reqMusics', albumName)
-    },
-    MusicsList: (
-      callback: (data: { musics: string[]; cover: string | undefined }) => void
-    ): void => {
-      ipcRenderer.on('MusicsList', (_, args: { musics: string[]; cover: string | undefined }) =>
-        callback(args)
-      )
+    response: {
+      albums: (callback: (albums: Album[]) => void): void => {
+        ipcRenderer.on('response.albumsList', (_, args: Album[]) => callback(args))
+      },
+      musics: (callback: (data: { musics: string[]; cover: string | undefined }) => void): void => {
+        ipcRenderer.on(
+          'response.musicsList',
+          (_, args: { musics: string[]; cover: string | undefined }) => callback(args)
+        )
+      }
     },
 
     // File

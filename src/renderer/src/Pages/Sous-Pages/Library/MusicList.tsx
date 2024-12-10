@@ -23,8 +23,8 @@ function MusicList(): React.JSX.Element {
   const [musics, setMusics] = React.useState<Music[]>([])
 
   React.useEffect(() => {
-    window.api.library.reqAlbums()
-    window.api.library.AlbumsList((musics): void => {
+    window.api.library.request.albums()
+    window.api.library.response.albums((musics): void => {
       setMusics(musics as unknown as Music[])
     })
   }, [])
