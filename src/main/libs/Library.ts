@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { AlbumConfig, AlbumData } from '../Types/types'
 import { AppSettings } from './store'
+import { Album } from '../../preload/index'
 
 /**
  * LibraryManager est une classe singleton gérant la bibliothèque musicale de l'application.
@@ -84,7 +85,10 @@ class LibraryManager {
    * @returns {AlbumData | null} Les données de l'album, ou `null` si non trouvé.
    */
   public getAlbum(albumName: string): AlbumData | null {
-    return this.albums.find((album) => album.name === albumName) || null
+    if (this.hasAlbum(albumName)) {
+      return this.albums.find((e) => e.name === albumName)!
+    }
+    return null
   }
 
   /**
@@ -103,10 +107,41 @@ class LibraryManager {
    */
   public getAlbumCoverPath(albumName: string): string | null {
     const album = this.getAlbum(albumName)
-    return album?.coverPath || null
+    console.log('getcoverpath:', albumName)
+    if (album) {
+      return album.coverPath
+    }
+    return null
   }
 
-  // --- Méthodes privées ---
+  /**
+   * Récupère la couverture d'un album en base64.
+   * @param albumName Le chemin absolu vers le dossier de l'album.
+   * @returns Une chaîne en base64 représentant l'image de couverture, ou `null` si aucune couverture n'est trouvée.
+   */
+  public getCoverAsBase64(albumName: string): string | undefined {
+    const coverFile = this.getAlbumCoverPath(albumName) // Chemin attendu du fichier couverture
+
+    // Vérifie si le fichier existe
+    if (!coverFile || !fs.existsSync(coverFile)) {
+      console.warn(`Fichier de couverture introuvable : ${coverFile}\nPour l'album: ${albumName}`)
+      return undefined
+    }
+
+    try {
+      // Lecture et conversion en base64
+      const fileBuffer = fs.readFileSync(coverFile)
+      const base64 = fileBuffer.toString('base64')
+      return `data:image/png;base64,${base64}`
+    } catch (error) {
+      console.error(`Erreur lors de la conversion de la couverture en base64 : ${error}`)
+      return undefined
+    }
+  }
+
+  // ------------------------------------------------------------------------------- //
+  //                               METHODS PRIVATE                                   //
+  // ------------------------------------------------------------------------------- //
 
   /**
    * Crée un dossier s'il n'existe pas.

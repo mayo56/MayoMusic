@@ -26,7 +26,7 @@ const data = (): void => {
    * Renvoi un 'response.musicsList' avec la liste des musiques de l'album.
    */
   ipcMain.on('request.musics', (event, args: string): void => {
-    const album = library.getAlbumTracks(args)
+    const album = library.getAlbum(args)
 
     // Vérifications
     if (!album) {
@@ -35,9 +35,17 @@ const data = (): void => {
 
     // Envoi de la réponse
     event.sender.send('response.musicsList', {
-      musics: album.tracks,
-      cover: album.coverPath
+      musics: album.tracks
     })
+  })
+
+  ipcMain.handle('request.album.cover', (_, args: string): undefined | string => {
+    const album = library.getAlbum(args)
+
+    // Checking
+    if (!album) return undefined
+
+    return library.getCoverAsBase64(album.name)
   })
 }
 

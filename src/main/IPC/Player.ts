@@ -32,8 +32,8 @@ const player = (): void => {
    * Lance la musique et charge la liste des autres musiques en file d'attente.
    */
   ipcMain.on('action.player.play', (event, args: { album: string; index: number }) => {
-    const tracks = library.getTracks(args.album)
-    const album = library.get(args.album)
+    const tracks = library.getAlbumTracks(args.album)
+    const album = library.getAlbum(args.album)
     // --- Verifications 1st step ---
     console.log(tracks)
     if (!tracks || !album) {
@@ -89,6 +89,7 @@ const player = (): void => {
   }
 
   /**
+   * @deprecated
    * Checking the queue of album
    * @param index
    * @param change

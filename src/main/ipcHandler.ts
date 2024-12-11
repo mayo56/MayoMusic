@@ -7,10 +7,14 @@ import LibraryManager from './libs/Library'
 
 // ----- GLOBAL VARIABLE -----
 const library = LibraryManager.getInstance()
+
 // ---------------------------
 
 function ipcHandler(): void {
-  library.initializeLibrary()
+  library
+    .initializeLibrary()
+    .then(() => console.log('[INFO] - Library chargée !'))
+    .catch((err) => console.error('[ERROR] - Library non chargée...\nError:\n', err))
   data()
   player()
   download_yt_dlp()

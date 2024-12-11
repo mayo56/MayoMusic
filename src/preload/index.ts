@@ -21,6 +21,9 @@ const api = {
       },
       musics: (albumName: string): void => {
         ipcRenderer.send('request.musics', albumName)
+      },
+      cover: async (albumName: string): Promise<string | undefined> => {
+        return await ipcRenderer.invoke('request.album.cover', albumName)
       }
     },
     response: {
