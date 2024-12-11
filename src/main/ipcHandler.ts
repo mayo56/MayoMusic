@@ -95,7 +95,7 @@ function ipcLibrary(): void {
       return {
         title: e.title,
         path: e.path,
-        author: e.path
+        author: e.author
       }
     })
     event.sender.send('response.albumsList', albums_list)
@@ -117,12 +117,14 @@ function ipcLibrary(): void {
   // ------------------------------------------------------------------------------- //
   //                                EVENT PLAYER                                     //
   // ------------------------------------------------------------------------------- //
+  // ------------
   // File d'attente de musique
   const queue: { albumName: string; order: string[]; path: string } = {
     albumName: '',
     order: [],
     path: ''
   }
+  // ------------
 
   /**
    * @dev
@@ -134,7 +136,7 @@ function ipcLibrary(): void {
     const temp_album = library.filter((e) => e.title === args.album)
     console.log(temp_album)
     if (!temp_album) {
-      console.log('inconnu album')
+      console.error('[ERROR] - Album Inconnu')
       return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
     }
     // -----
@@ -144,13 +146,13 @@ function ipcLibrary(): void {
     // --- Verifications 2d step ---
     // Vérification de l'existence de l'album
     if (!fs.existsSync(`${album.path}`)) {
-      console.log('inconnu folder')
+      console.error('[ERROR] - Dossier Album Inexistant')
       return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
     }
     // Vérification de l'existence du fichier
     else if (!fs.existsSync(`${album.path}/${musicName}`)) {
       console.log(album.path, musicName, fs.existsSync(`${album.path}/${musicName}`))
-      console.log('inconnu msuci')
+      console.error('[ERROR] - Music Inconnu')
       return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
     }
 
@@ -255,16 +257,6 @@ function ipcLibrary(): void {
 
     event.sender.send('action.player.currentTrack', info)
   })
-
-  // -------------------
-  // Format album folder
-  //
-
-  // Formater un album précis
-  ipcMain.on('format-album', (event, args) => {
-    // Mettre des infos dans le json de l'album
-    event.sender.send('', args)
-  })
 }
 
 // ------------------------------------------------------------------------------- //
@@ -272,7 +264,7 @@ function ipcLibrary(): void {
 // ------------------------------------------------------------------------------- //
 function ipcDownload(): void {
   // Verification de yt-dlp
-  ipcMain.on('yt-dlp-status:req', (event): void => {
+  ipcMain.on('status.request.yt-dlp', (event): void => {
     exec('yt-dlp --version', (err, stdout, stderr) => {
       // Valeur yt dlp
       const data = {
@@ -291,13 +283,13 @@ function ipcDownload(): void {
         data.version = stdout
       }
       // Envoie
-      return event.sender.send('yt-dlp-status:res', data)
+      return event.sender.send('status.response.yt-dlp', data)
     })
   })
 
   // Téléchargement des musiques
   ipcMain.on(
-    'yt-dlp-download:req',
+    'request.download.yt-dlp',
     async (
       event,
       args: { url: string; file_extension: string; quality: string; folderName: string }
@@ -393,20 +385,29 @@ function ipcHandler(): void {
     return null
   })
 
-  // Ouvrir l'emplacement physique de l'album
-  ipcMain.on('OpenAlbumDirectory', (_, albumName: string) => {
+  /**
+   * @dev
+   * Ouvre le répertoire de stockage des albums
+   */
+  ipcMain.on('action.album.open', (_, albumName: string) => {
     const pathname = `${library_pathname}/${albumName}`
     console.log(pathname)
     exec(`open "${pathname}"`)
   })
 
-  // Envoyer le pathname du répertoire d'album
-  ipcMain.handle('GetAlbumPathName', async (): Promise<string> => {
+  /**
+   * @dev
+   * Récupère le chemin d'accès au répertoire des albums.
+   */
+  ipcMain.handle('data.album.path', async (): Promise<string> => {
     return AppSettings().settings.savePath
   })
 
-  // Change album directory folder path name
-  ipcMain.handle('ChangeAlbumDirectoryPath', (_, pathname: string) => {
+  /**
+   * @dev
+   * Modifie le répertoire de stockage d'album.
+   */
+  ipcMain.handle('data.album.modify', (_, pathname: string) => {
     const settings_path = AppGlobalSetting
     const setting: settings = JSON.parse(fs.readFileSync(settings_path, 'utf-8'))
     setting.settings.savePath = pathname
