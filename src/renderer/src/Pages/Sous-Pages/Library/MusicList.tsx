@@ -26,30 +26,26 @@ function MusicList(): React.JSX.Element {
   }, [])
 
   return (
-    <div className={'MusicListContainer'}>
+    <div className="MusicListContainer">
       {/*
-      Barre de recherche
+          Barre de recherche et indicateur de chargement
       */}
-      <LibrarySearchBar />
-
-      {/*
-      Indications de chargement
-      */}
-      <div className={'loadBar'}>
-        <div className={'bar_left'}></div>
-        <span className={'count'}>{musics.length} titres chargés</span>
-        <div className={'bar'}></div>
+      <div className="header">
+        <LibrarySearchBar />
+        <div className="loadBar">
+          <div className="bar_left"></div>
+          <span className="count">{musics.length} titres chargés</span>
+          <div className="bar"></div>
+        </div>
       </div>
 
       {/*
-      Liste des musiques
+         Liste des musiques
       */}
-      <div className={'library'}>
-        {musics.map((album, key) => {
-          return (
-            <AlbumCard name={album.name} author={album.author} path={album.path} key={key} />
-          )
-        })}
+      <div className="library">
+        {musics.map((album, key) => (
+          <AlbumCard name={album.name} author={album.author} path={album.path} key={key} />
+        ))}
       </div>
     </div>
   )

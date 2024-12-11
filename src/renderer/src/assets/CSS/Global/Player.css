@@ -1,80 +1,86 @@
-/* -------------- */
-/*     PLAYER     */
-/* -------------- */
-
-/* Depuis le Player.tsx*/
+/* Conteneur principal */
 .player-container {
-  background-color: #0f0f0f;
-  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1f1f1f;
+  height: 50px;
+  padding: 0 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   color: white;
-
-  display: grid;
-  position: relative;
-  grid-template-columns: 30% 70%;
+  gap: 10px;
 }
 
-/* -- */
-/* Player Info Data */
+/* Contrôles de lecture */
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.player-controls img {
+  width: 25px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.player-controls img:hover {
+  transform: scale(1.1);
+}
+
+/* Barre de progression */
+.progress-bar {
+  flex: 1;
+  height: 5px;
+  appearance: none;
+  background: #555;
+  border-radius: 5px;
+  outline: none;
+}
+
+.progress-bar::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Volume */
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.volume-container img {
+  width: 20px;
+}
+
+.volume-slider {
+  width: 70px;
+  height: 5px;
+  appearance: none;
+  background: #555;
+  border-radius: 5px;
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Player info */
 .player-info {
   display: flex;
-  justify-content: start;
-  padding-left: 10px;
-  font: 400 14px / 1.6 "Open Sans", sans-serif;
 }
 .player-info .cover {
-  width: 40px;
-  height: 40px;
-}
-.player-data-origin-container {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
-  flex: 1;
-}
-.player-data-origin-container .title {
-  font-size: 15px;
-  vertical-align: middle;
-  line-height: 0;
-}
-.player-data-origin-container .author {
-  font-size: 13px;
-  vertical-align: middle;
-  line-height: 0;
-}
-
-/* -- */
-/* PLAYER CONTROLLER */
-.play-controller {
-  display: grid;
-  grid-template-rows: 50% 50%;
-}
-
-.play-controller img {
-  width: 15px;
-  border-radius: 5px;
-}
-
-.play-controller img:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-/* Progress bar */
-.player-progress {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.player-progress input {
-  flex: 1;
-}
-
-/* volume */
-.player-container .volume {
-  padding-top: 5px;
-  display: flex;
-  flex-direction: column;
-}
-
-.player-container .hide {
-  display: none;
+  height: 50px;
 }

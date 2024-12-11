@@ -28,6 +28,7 @@ CSS Global
   -webkit-app-region: drag;
 }
 
+
 /* Patern pour toutes les pages */
 .mm-global-pages-container {
   background-color: var(--global-page-background-color);
