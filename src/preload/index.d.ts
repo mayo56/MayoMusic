@@ -10,6 +10,7 @@ declare global {
         request: {
           albums(): void,
           musics(albumName: string): void
+          cover(albumName: string): Promise<string | undefined>
         }
         response: {
           albums(callback: (albums: Album[]) => void)

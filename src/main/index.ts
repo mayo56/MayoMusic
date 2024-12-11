@@ -1,7 +1,7 @@
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { app, BrowserWindow } from 'electron'
 import { createWindow } from './mainWindow'
-import { ipcDownload, ipcHandler, ipcLibrary } from './ipcHandler'
+import ipcHandler from './ipcHandler'
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -18,9 +18,7 @@ app.whenReady().then(() => {
   })
   // Generation du handler de l'Ipc
   // Et génération de notre fenêtre
-  ipcLibrary()
   ipcHandler()
-  ipcDownload()
   createWindow()
 
   app.on('activate', function () {

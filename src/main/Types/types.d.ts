@@ -17,3 +17,17 @@ export type music_setting = {
   author: string[]
   order: undefined | string[]
 }
+
+export type AlbumData = {
+  name: string
+  author: string | null
+  tracks: string[] // liste de musiques
+  coverPath: string // Chemin vers la cover
+  path: string
+}
+
+export type AlbumConfig = {
+  author?: string[]
+  cover?: string
+  order?: string[]
+}
