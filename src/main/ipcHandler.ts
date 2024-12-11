@@ -84,8 +84,12 @@ function ipcLibrary(): void {
   // ------------------------------------------------------------------------------- //
   //                              ALBUM/MUSICS DATA                                  //
   // ------------------------------------------------------------------------------- //
-  // REQ ALBUMS
-  // Request liste des albums
+
+  /**
+   * @dev
+   * Requête pour demander la liste des albums présente dans le dossier musiques.
+   * Renvoi un 'response.albumsList' avec la liste des albums.
+   */
   ipcMain.on('request.albums', (event): void => {
     const albums_list = library.map((e) => {
       return {
@@ -97,7 +101,11 @@ function ipcLibrary(): void {
     event.sender.send('response.albumsList', albums_list)
   })
 
-  // REQ MUSICS
+  /**
+   * @dev
+   * Requête pour demander la liste des musiques d'un album.
+   * Renvoi un 'response.musicsList' avec la liste des musiques de l'album.
+   */
   ipcMain.on('request.musics', (event, args: string): void => {
     // Envoie des données (en cache)
     event.sender.send('response.musicsList', {
@@ -115,8 +123,13 @@ function ipcLibrary(): void {
     order: [],
     path: ''
   }
-  // Start a music
-  ipcMain.on('sendMusic', (event, args: { album: string; index: number }) => {
+
+  /**
+   * @dev
+   * Permet de lire une musique sur le player.
+   * Lance la musique et charge la liste des autres musiques en file d'attente.
+   */
+  ipcMain.on('action.player.play', (event, args: { album: string; index: number }) => {
     // --- Verifications 1st step ---
     const temp_album = library.filter((e) => e.title === args.album)
     console.log(temp_album)
@@ -151,7 +164,7 @@ function ipcLibrary(): void {
     queue.path = album.path
 
     // Response
-    event.sender.send('playMusic', {
+    event.sender.send('action.player.currentTrack', {
       name: musicName,
       audio: `data:audio/mp3;base64,${audio}`,
       index: args.index
@@ -215,24 +228,32 @@ function ipcLibrary(): void {
     }
   }
 
-  // Next music
-  ipcMain.on('nextMusic', (event, index: number | null) => {
+  /**
+   * @dev
+   * 'action.player.nextTrack'
+   * @description Lance la musique suivante
+   */
+  ipcMain.on('action.player.nextTrack', (event, index: number | null) => {
     // --- Verifications ---
     const info = validityFileVerifications(index, 1, event)
     if (!info) return
     // ---------------------
 
-    event.sender.send('playMusic', info)
+    event.sender.send('action.player.currentTrack', info)
   })
 
-  // Previous music
-  ipcMain.on('previousMusic', (event, index: number | null) => {
+  /**
+   * @dev
+   * 'action.player.previousTrack`
+   * @description Lance la musique précédente
+   */
+  ipcMain.on('action.player.previousTrack', (event, index: number | null) => {
     // --- Verification ---
     const info = validityFileVerifications(index, 1, event)
     if (!info) return
     // --------------------
 
-    event.sender.send('playMusic', info)
+    event.sender.send('action.player.currentTrack', info)
   })
 
   // -------------------
