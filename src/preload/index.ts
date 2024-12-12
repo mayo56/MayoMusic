@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import Electron, { contextBridge, IpcRenderer, ipcRenderer, IpcRendererEvent } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 const Listeners = {
@@ -39,14 +39,26 @@ const api = {
       }
     },
     response: {
-      albums: (callback: (albums: Album[]) => void): void => {
-        ipcRenderer.on('response.albumsList', (_, args: Album[]) => callback(args))
+      albums: (callback: (albums: Album[]) => void): (() => Electron.IpcRenderer) => {
+        const listener = (_: IpcRendererEvent, data: Album[]): void => {
+          callback(data)
+        }
+        ipcRenderer.on('response.albumsList', listener)
+
+        return (): IpcRenderer => ipcRenderer.removeListener('response.albumsList', listener)
       },
-      musics: (callback: (data: { musics: string[]; cover: string | undefined }) => void): void => {
-        ipcRenderer.on(
-          'response.musicsList',
-          (_, args: { musics: string[]; cover: string | undefined }) => callback(args)
-        )
+      musics: (
+        callback: (data: { musics: string[]; cover: string | undefined }) => void
+      ): (() => Electron.IpcRenderer) => {
+        const listener = (
+          _: IpcRendererEvent,
+          data: { musics: string[]; cover: string | undefined }
+        ): void => {
+          callback(data)
+        }
+        ipcRenderer.on('response.musicsList', listener)
+
+        return () => ipcRenderer.removeListener('response.musicsList', listener)
       }
     },
 

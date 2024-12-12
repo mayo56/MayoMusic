@@ -19,11 +19,13 @@ function Album(): React.JSX.Element {
 
   React.useEffect(() => {
     if (!id) return
-    window.api.library.request.musics(id)
-    window.api.library.response.musics((data) => {
-      setMusicList(data.musics)
-      setCover(data.cover)
+    const listener = window.api.library.response.musics(({ musics }) => {
+      setMusicList(musics)
     })
+
+    window.api.library.request.musics(id)
+
+    return (): undefined => listener()
   }, [])
 
   // Launch music

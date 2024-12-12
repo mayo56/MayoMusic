@@ -19,10 +19,13 @@ function MusicList(): React.JSX.Element {
   const [musics, setMusics] = React.useState<Album[]>([])
 
   React.useEffect(() => {
-    window.api.library.request.albums()
-    window.api.library.response.albums((musics): void => {
-      setMusics(musics as unknown as Album[])
+    const removeListener = window.api.library.response.albums((data) => {
+      setMusics(data as unknown as Album[])
     })
+
+    window.api.library.request.albums()
+
+    return (): undefined => removeListener()
   }, [])
 
   return (
