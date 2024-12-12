@@ -15,9 +15,13 @@ function Player(): React.JSX.Element {
   const [volume, setVolume] = React.useState<number>(50)
   const [progress, setProgress] = React.useState<number>(0)
   const [showVolume, setShowVolume] = React.useState<boolean>(false)
+  const [duration, setDuration] = React.useState<string[]>(['00:00', '00:00'])
 
   const audioREF = React.useRef<HTMLAudioElement | null>(null)
 
+  /**
+   * Contrôle la lecture du média
+   */
   const togglePlay = (): void => {
     if (audioREF.current) {
       if (isPlaying) {
@@ -29,6 +33,10 @@ function Player(): React.JSX.Element {
     }
   }
 
+  /**
+   * Contrôle la variation de volume
+   * @param e
+   */
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newVolume = Number(e.target.value)
     setVolume(newVolume)
@@ -37,6 +45,10 @@ function Player(): React.JSX.Element {
     }
   }
 
+  /**
+   * Change la progression de la barre de progression
+   * @param e
+   */
   const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newProgress = Number(e.target.value)
     if (audioREF.current) {
@@ -45,18 +57,49 @@ function Player(): React.JSX.Element {
     }
   }
 
+  /**
+   * Change la progression via les données utilisateurs
+   */
   const updateProgress = (): void => {
     if (audioREF.current) {
+      // Progress bar
       const currentTime = audioREF.current.currentTime
       const duration = audioREF.current.duration
       setProgress((currentTime / duration) * 100)
+
+      const duration_hours = Math.floor(duration / 3600)
+      const current_hours = Math.floor(currentTime / 3600)
+      const duration_minutes = Math.floor((duration % 3600) / 60)
+      const current_minutes = Math.floor((currentTime % 3600) / 60)
+      const duration_secs = Math.floor(duration % 60)
+      const current_secs = Math.floor(currentTime % 60)
+      setDuration([
+        [
+          current_hours > 0 ? String(current_hours).padStart(2, '0') : null,
+          String(current_minutes).padStart(2, '0'),
+          String(current_secs).padStart(2, '0')
+        ]
+          .filter(Boolean) // Supprime les éléments null (pour ne pas afficher les heures si elles sont à zéro)
+          .join(':'),
+        [
+          duration_hours > 0 ? String(duration_hours).padStart(2, '0') : null,
+          String(duration_minutes).padStart(2, '0'),
+          String(duration_secs).padStart(2, '0')
+        ]
+          .filter(Boolean) // Supprime les éléments null (pour ne pas afficher les heures si elles sont à zéro)
+          .join(':')
+      ])
     }
   }
 
   // Events
   React.useEffect(() => {
     window.api.player.receiveMusic((data) => {
-      setAudioSRC(data.audio)
+      if (audioSRC === data.audio) {
+        audioREF.current!.currentTime = 0
+      } else {
+        setAudioSRC(data.audio)
+      }
     })
   }, [])
 
@@ -86,7 +129,9 @@ function Player(): React.JSX.Element {
       </div>
 
       <div className="player-progress">
-        <span>{Math.floor(progress)}%</span>
+        <span>
+          {duration[0]} - {duration[1]}
+        </span>
         <input type="range" value={progress} onChange={handleProgressChange} min="0" max="100" />
       </div>
 
