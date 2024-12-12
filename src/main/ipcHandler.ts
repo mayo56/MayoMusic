@@ -13,7 +13,7 @@ const library = LibraryManager.getInstance()
 function ipcHandler(): void {
   library
     .initializeLibrary()
-    .then(() => console.log('[INFO] - Library chargée !'))
+    .then(() => console.info('[INFO] - Library chargée !'))
     .catch((err) => console.error('[ERROR] - Library non chargée...\nError:\n', err))
   data()
   player()

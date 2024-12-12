@@ -136,6 +136,35 @@ class LibraryManager {
     }
   }
 
+  /**
+   * Récupère le fichier audio en base64
+   * @param albumName Nom de l'album
+   * @param trackTitle Titre de la musique
+   */
+  public getAudioAsBase64(albumName: string, trackTitle: string): string | undefined {
+    const album = this.getAlbum(albumName)
+
+    if (!album) {
+      console.warn(`Album inconnu: ${albumName}`)
+      return undefined
+    }
+
+    const filePath = path.join(album.path, trackTitle)
+    if (!album.tracks.includes(trackTitle) || !fs.existsSync(filePath)) {
+      console.warn(`Titre inconnu: ${trackTitle}`)
+      return undefined
+    }
+
+    try {
+      const fileBuffer = fs.readFileSync(filePath)
+      const base64 = fileBuffer.toString('base64')
+      return `data:audio/mp3;base64,${base64}`
+    } catch (err) {
+      console.error(`Error lors de la conversion de du fichier audio en base64: ${err}`)
+      return undefined
+    }
+  }
+
   // ------------------------------------------------------------------------------- //
   //                               METHODS PRIVATE                                   //
   // ------------------------------------------------------------------------------- //

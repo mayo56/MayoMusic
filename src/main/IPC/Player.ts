@@ -1,8 +1,9 @@
 // Import des dépendances
 import ErrorCreate from '../libs/Error'
-import { ipcMain, IpcMainEvent } from 'electron'
-import fs from 'node:fs'
+import { ipcMain } from 'electron'
+import path from 'path'
 import LibraryManager from '../libs/Library'
+import MusicQueue from '../libs/Queue'
 // ---------------------
 
 //  --- GLOBAL VARIABLE ---
@@ -19,11 +20,7 @@ const player = (): void => {
   // ------------------------------------------------------------------------------- //
   // ------------
   // File d'attente de musique
-  const queue: { albumName: string; order: string[]; path: string } = {
-    albumName: '',
-    order: [],
-    path: ''
-  }
+  const queue = new MusicQueue()
   // ------------
 
   /**
@@ -31,118 +28,46 @@ const player = (): void => {
    * Permet de lire une musique sur le player.
    * Lance la musique et charge la liste des autres musiques en file d'attente.
    */
-  ipcMain.on('action.player.play', (event, args: { album: string; index: number }) => {
-    const tracks = library.getAlbumTracks(args.album)
-    const album = library.getAlbum(args.album)
-    // --- Verifications 1st step ---
-    console.log(tracks)
-    if (!tracks || !album) {
-      console.error('[ERROR] - Album Inconnu')
-      return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
-    }
-    // -----
-    const trackName = tracks[args.index]
+  ipcMain.on('action.player.play', (event, args: { albumName: string; title: string }) => {
+    const album = library.getAlbum(args.albumName)
+    const track = library.getAudioAsBase64(args.albumName, args.title)
 
-    // --- Verifications 2d step ---
-    // Vérification de l'existence de l'album
-    if (!fs.existsSync(`${album.path}`)) {
-      console.error('[ERROR] - Dossier Album Inexistant')
+    if (!album || !track) {
       return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
     }
-    // Vérification de l'existence du fichier
-    else if (!fs.existsSync(`${album.path}/${trackName}`)) {
-      console.log(album.path, trackName, fs.existsSync(`${album.path}/${trackName}`))
-      console.error('[ERROR] - Music Inconnu')
-      return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
-    }
-
-    // --- Get audio file and send to Web ---
-    // Audio file
-    const audio = fs.readFileSync(`${album.path}/${trackName}`, 'base64')
 
     // Set Audio Queue
-    queue.order = album.tracks
-    queue.albumName = album.name
-    queue.path = album.path
+    queue.clearQueue()
+    const index = album.tracks.findIndex((value) => value === args.title)
+    for (const audioData in album.tracks) {
+      queue.addTrack({
+        albumName: args.albumName,
+        trackName: audioData,
+        path: path.join(album.path, audioData)
+      })
+    }
+    queue.setCurrentTrack(index)
 
     // Response
     event.sender.send('action.player.currentTrack', {
-      name: trackName,
-      audio: `data:audio/mp3;base64,${audio}`,
-      index: args.index
+      name: args.title,
+      album,
+      audio: track
     })
   })
-
-  /**
-   * Incrémente ou décrémente une variable
-   * @param index
-   * @param change
-   */
-  const indexUpdate = (index: number, change: number): number => {
-    index += change
-    if (index === queue.order.length) {
-      return 0
-    } else if (index < 0) {
-      return queue.order.length - 1
-    }
-    return index
-  }
-
-  /**
-   * @deprecated
-   * Checking the queue of album
-   * @param index
-   * @param change
-   * @param event
-   */
-  const validityFileVerifications = (
-    index: number | null,
-    change: number,
-    event: IpcMainEvent
-  ): { name: string; audio: string; index: number } | null => {
-    // --- Verification 1st step ---
-    // Queue and index arg
-    if (queue.albumName === '' || index === null) return null
-
-    // --- Verification 2nd step ---
-    // File validity
-    index = indexUpdate(index, change)
-    while (!fs.existsSync(`${queue.path}/${queue.order[index]}`)) {
-      const temp = index
-      index = indexUpdate(index, change)
-
-      // Si l'incrémentation est la même,
-      // alors il n'y a plus de fichier valide
-      if (temp === index) {
-        new ErrorCreate(event).setStatus(1).setMessage('').sendError()
-        return null
-      }
-    }
-
-    // --- If all good ---
-    // Get Audio File
-    const audio = fs.readFileSync(`${queue.path}/${queue.order[index]}`, 'base64')
-
-    // Send the result
-    return {
-      name: queue.order[index],
-      audio: `data:audio/mp3;base64,${audio}`,
-      index
-    }
-  }
 
   /**
    * @dev
    * 'action.player.nextTrack'
    * @description Lance la musique suivante
    */
-  ipcMain.on('action.player.nextTrack', (event, index: number | null) => {
-    // --- Verifications ---
-    const info = validityFileVerifications(index, 1, event)
-    if (!info) return
-    // ---------------------
+  ipcMain.on('action.player.nextTrack', (event) => {
+    const trackData = queue.nextTrack()
+    if (!trackData) return
+    const audio = library.getAudioAsBase64(trackData.albumName, trackData.trackName)
+    if (!audio) return
 
-    event.sender.send('action.player.currentTrack', info)
+    event.sender.send('action.player.currentTrack', audio)
   })
 
   /**
@@ -150,13 +75,13 @@ const player = (): void => {
    * 'action.player.previousTrack`
    * @description Lance la musique précédente
    */
-  ipcMain.on('action.player.previousTrack', (event, index: number | null) => {
-    // --- Verification ---
-    const info = validityFileVerifications(index, 1, event)
-    if (!info) return
-    // --------------------
+  ipcMain.on('action.player.previousTrack', (event) => {
+    const trackData = queue.previousTrack()
+    if (!trackData) return
+    const audio = library.getAudioAsBase64(trackData.albumName, trackData.trackName)
+    if (!audio) return
 
-    event.sender.send('action.player.currentTrack', info)
+    event.sender.send('action.player.currentTrack', audio)
   })
 }
 

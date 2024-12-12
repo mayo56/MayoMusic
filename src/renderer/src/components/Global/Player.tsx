@@ -97,6 +97,7 @@ function Player(): React.JSX.Element {
     window.api.player.receiveMusic((data) => {
       if (audioSRC === data.audio) {
         audioREF.current!.currentTime = 0
+        audioREF.current?.play()
       } else {
         setAudioSRC(data.audio)
       }
@@ -108,6 +109,7 @@ function Player(): React.JSX.Element {
       <audio
         src={audioSRC}
         ref={audioREF}
+        autoPlay={true}
         onTimeUpdate={updateProgress}
         onEnded={() => setIsPlaying(false)}
       />
