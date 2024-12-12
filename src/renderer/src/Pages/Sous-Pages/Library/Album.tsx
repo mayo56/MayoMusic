@@ -18,7 +18,7 @@ function Album(): React.JSX.Element {
   const [cover, setCover] = React.useState<undefined | string>(undefined)
 
   React.useEffect(() => {
-    if (!id) return nav('/')
+    if (!id) return nav('/library')
     const listener = window.api.library.response.musics(({ musics }) => {
       setMusicList(musics)
     })
@@ -72,7 +72,7 @@ function Album(): React.JSX.Element {
           return (
             <div
               className={'AlbumMusicCard'}
-              onClick={() => window.api.player.playMusic(id!, index)}
+              onClick={() => window.api.player.playMusic(id ?? '', index)}
               key={index}
             >
               <span className={'TrackNumber'}>{index + 1}</span>

@@ -53,6 +53,13 @@ function Player(): React.JSX.Element {
     }
   }
 
+  // Events
+  React.useEffect(() => {
+    window.api.player.receiveMusic((data) => {
+      setAudioSRC(data.audio)
+    })
+  }, [])
+
   return (
     <div className="player-container">
       <audio
@@ -71,15 +78,11 @@ function Player(): React.JSX.Element {
       </div>
 
       <div className="player-controls">
-        <button onClick={() => console.log('Previous')}>
-          <img src={skipBackIcon} alt="Skip Back" />
-        </button>
-        <button onClick={togglePlay}>
-          <img src={isPlaying ? pauseIcon : playIcon} alt="Play/Pause" />
-        </button>
-        <button onClick={() => console.log('Next')}>
-          <img src={skipForwardIcon} alt="Skip Forward" />
-        </button>
+        <img src={skipBackIcon} alt="Skip Back" />
+
+        <img onClick={togglePlay} src={isPlaying ? pauseIcon : playIcon} alt="Play/Pause" />
+
+        <img src={skipForwardIcon} alt="Skip Forward" />
       </div>
 
       <div className="player-progress">

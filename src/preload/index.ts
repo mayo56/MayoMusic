@@ -8,8 +8,16 @@ const Listeners = {
     cover: 'request.album.cover'
   },
   response: {
-    albums: 'response.albums',
-    musics: 'response.musics'
+    albums: 'response.albumsList',
+    musics: 'response.musicsList'
+  },
+  player: {
+    action: {
+      play: 'action.player.play',
+      nextTrack: 'action.player.nextTrack',
+      previousTrack: 'action.player.previousTrack',
+      currentTrack: 'action.player.currentTrack'
+    }
   }
 }
 
@@ -29,13 +37,13 @@ const api = {
   library: {
     request: {
       albums: (): void => {
-        ipcRenderer.send('request.albums')
+        ipcRenderer.send(Listeners.request.albums)
       },
       musics: (albumName: string): void => {
-        ipcRenderer.send('request.musics', albumName)
+        ipcRenderer.send(Listeners.request.musics, albumName)
       },
       cover: async (albumName: string): Promise<string | undefined> => {
-        return await ipcRenderer.invoke('request.album.cover', albumName)
+        return await ipcRenderer.invoke(Listeners.request.cover, albumName)
       }
     },
     response: {
@@ -43,9 +51,9 @@ const api = {
         const listener = (_: IpcRendererEvent, data: Album[]): void => {
           callback(data)
         }
-        ipcRenderer.on('response.albumsList', listener)
+        ipcRenderer.on(Listeners.response.albums, listener)
 
-        return (): IpcRenderer => ipcRenderer.removeListener('response.albumsList', listener)
+        return (): IpcRenderer => ipcRenderer.removeListener(Listeners.response.albums, listener)
       },
       musics: (
         callback: (data: { musics: string[]; cover: string | undefined }) => void
@@ -56,9 +64,9 @@ const api = {
         ): void => {
           callback(data)
         }
-        ipcRenderer.on('response.musicsList', listener)
+        ipcRenderer.on(Listeners.response.musics, listener)
 
-        return () => ipcRenderer.removeListener('response.musicsList', listener)
+        return () => ipcRenderer.removeListener(Listeners.response.musics, listener)
       }
     },
 
@@ -76,24 +84,25 @@ const api = {
   player: {
     // EVENT PLAY MUSIQUE
     playMusic: (album: string, index: number): void => {
-      ipcRenderer.send('sendMusic', { album, index })
+      ipcRenderer.send(Listeners.player.action.play, { album, index })
     },
     // Reception de la musique
     receiveMusic: (
       callback: (info: { name: string; audio: string; index: number | null }) => void
     ): void => {
-      ipcRenderer.on('playMusic', (_, args: { name: string; audio: string; index: number }) =>
-        callback(args)
+      ipcRenderer.on(
+        Listeners.player.action.currentTrack,
+        (_, args: { name: string; audio: string; index: number }) => callback(args)
       )
     },
 
     // nextMusic
     nextMusic: (index: number | null): void => {
-      ipcRenderer.send('nextMusic', index)
+      ipcRenderer.send(Listeners.player.action.nextTrack, index)
     },
     // previousMusic
     previousMusic: (index: number | null): void => {
-      ipcRenderer.send('previousMusic', index)
+      ipcRenderer.send(Listeners.player.action.previousTrack, index)
     }
   },
   download: {
