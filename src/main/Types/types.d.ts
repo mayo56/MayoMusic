@@ -22,7 +22,7 @@ export type AlbumData = {
   name: string
   author: string | null
   tracks: string[] // liste de musiques
-  coverPath: string // Chemin vers la cover
+  coverPath: string | null // Chemin vers la cover
   path: string
 }
 

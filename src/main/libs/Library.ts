@@ -2,7 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import { AlbumConfig, AlbumData } from '../Types/types'
 import { AppSettings } from './store'
-import { Album } from '../../preload/index'
 
 /**
  * LibraryManager est une classe singleton gérant la bibliothèque musicale de l'application.
@@ -27,7 +26,9 @@ class LibraryManager {
   /**
    * Constructeur privé empêchant l'instanciation directe.
    */
-  private constructor() {}
+  private constructor() {
+    /* Constructor vide - NE PAS REMPLIR */
+  }
 
   /**
    * Récupère l'instance unique de LibraryManager.
@@ -52,14 +53,14 @@ class LibraryManager {
 
     // Récupère et traite tous les dossiers représentant des albums
     const folderNames = await this.getSubdirectories(libraryPath)
-    this.albums = await Promise.all(
+    const albums_list = await Promise.all(
       folderNames.map((folderName) =>
         this.processAlbum(path.join(libraryPath, folderName), folderName)
       )
     )
 
     // Filtre les entrées nulles en cas d'erreurs lors du traitement des albums
-    this.albums = this.albums.filter(Boolean) as AlbumData[]
+    this.albums = albums_list.filter(Boolean) as AlbumData[]
   }
 
   /**
@@ -107,11 +108,7 @@ class LibraryManager {
    */
   public getAlbumCoverPath(albumName: string): string | null {
     const album = this.getAlbum(albumName)
-    console.log('getcoverpath:', albumName)
-    if (album) {
-      return album.coverPath
-    }
-    return null
+    return album?.coverPath || null
   }
 
   /**
@@ -124,7 +121,7 @@ class LibraryManager {
 
     // Vérifie si le fichier existe
     if (!coverFile || !fs.existsSync(coverFile)) {
-      console.warn(`Fichier de couverture introuvable : ${coverFile}\nPour l'album: ${albumName}`)
+      console.warn(`Fichier de couverture introuvable : ${albumName}`)
       return undefined
     }
 
@@ -185,14 +182,15 @@ class LibraryManager {
     try {
       const configPath = path.join(albumPath, 'setting.json')
       const config = await this.loadAlbumConfig(configPath)
-      const tracks = config?.order?.length > 0 ? config.order : await this.getAudioFiles(albumPath)
+      const tracks =
+        (config?.order?.length ?? 0) > 0 ? config?.order : await this.getAudioFiles(albumPath)
 
       return {
         name: folderName,
         path: albumPath,
         author: config?.author?.join(', ') || null,
         coverPath: config?.cover ? path.join(albumPath, config.cover) : null,
-        tracks
+        tracks: tracks ?? []
       }
     } catch (error) {
       console.error(`Erreur lors du traitement de l'album : ${folderName}`, error)

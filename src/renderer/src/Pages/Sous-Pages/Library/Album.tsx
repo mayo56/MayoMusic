@@ -18,12 +18,15 @@ function Album(): React.JSX.Element {
   const [cover, setCover] = React.useState<undefined | string>(undefined)
 
   React.useEffect(() => {
-    if (!id) return
+    if (!id) return nav('/')
     const listener = window.api.library.response.musics(({ musics }) => {
       setMusicList(musics)
     })
 
     window.api.library.request.musics(id)
+    window.api.library.request.cover(id).then((data) => {
+      setCover(data)
+    })
 
     return (): undefined => listener()
   }, [])
@@ -32,43 +35,49 @@ function Album(): React.JSX.Element {
   return (
     <div className={'AlbumContainer'}>
       {/*
-      Navigation bar
-      */}
+  Navigation bar
+  */}
       <div className={'AlbumNavBarContainer'}>
-        <img onClick={() => nav('/library')} src={back_arrow_icon} alt={'arrow back icon'} />
+        <img
+          onClick={() => nav('/library')}
+          src={back_arrow_icon}
+          alt={'Retour à la bibliothèque'}
+          aria-label={'Retour'}
+        />
         <img
           onClick={() => window.api.library.openMusicFolder(id!)}
           src={folder_icon}
-          alt={'folder icon'}
+          alt={'Ouvrir le dossier'}
+          aria-label={'Ouvrir le dossier'}
         />
       </div>
+
       {/*
-      Album info
-      */}
-      <div className={'info'}>
-        <img src={cover ? cover : music_icon} alt={'album cover'} />
-        <span className={'texte'}>{id}</span>
-        <div className={'separator'}>
-          <span className={'texte'}>{musicList.length} titres chargés</span>
-          <div className={'bar'} />
+  Album info
+  */}
+      <div className={'AlbumInfo'}>
+        <img src={cover || music_icon} alt={"Couverture de l'album"} className={'AlbumCover'} />
+        <h1 className={'AlbumTitle'}>{id}</h1>
+        <div className={'AlbumSeparator'}>
+          <span className={'AlbumTrackCount'}>{musicList.length} titres chargés</span>
         </div>
       </div>
 
       {/*
-      Liste des musiques
-      */}
+  Liste des musiques
+  */}
       <div className={'AlbumMusicList'}>
         {musicList.map((music, index): React.JSX.Element => {
-          const name = music.split('.')
-          name.pop()
+          const name = music.split('.').slice(0, -1).join('.') // Enlève l'extension
           return (
             <div
-              className={'AlbumMusicCardContainer'}
+              className={'AlbumMusicCard'}
               onClick={() => window.api.player.playMusic(id!, index)}
               key={index}
             >
-              <span className={'number'}>{index + 1}</span>
-              <span>{name.join('.')}</span>
+              <span className={'TrackNumber'}>{index + 1}</span>
+              <span className={'TrackName'}>{name}</span>
+              <span className={'TrackDuration'}>3:45</span> {/* Durée fictive */}
             </div>
           )
         })}
