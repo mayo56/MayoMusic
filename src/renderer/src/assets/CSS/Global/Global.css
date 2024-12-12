@@ -7,6 +7,7 @@
 :root {
   --global-page-background-color: rgba(0,0,0,0.5);
   --global-box-shadow: rgba(0,0,0,0.5);
+  --global-background-color: #1f1f1f;
 }
 
 /*
@@ -15,15 +16,9 @@ CSS Global
 
 */
 .mm-global-container {
-  width: 100vw;
-  height: 100vh;
-  max-width: 100vw;
-  max-height: 100vh;
-
-  transition: 0.5s all ease-in-out;
-
   display: grid;
-  grid-template-columns: 100px auto 0;
+  grid-template-columns: 100px auto;
+  background-color: var(--global-background-color); /* Couleur de fond générale */
 
   -webkit-app-region: drag;
 }
@@ -36,12 +31,14 @@ CSS Global
 
   -webkit-app-region: no-drag;
 
-  border-radius: 10px;
   margin: 5px 5px 5px 0;
   max-height: calc(100vh - 10px);
 
   display: grid;
   grid-template-rows: auto 50px;
+
+  overflow: hidden;
+  border-radius: 12px; /* Coins arrondis */
 }
 
 .mm-global-pages-content {
@@ -59,3 +56,4 @@ CSS Global
   );
   background-size: 100% 100%;
 }
+

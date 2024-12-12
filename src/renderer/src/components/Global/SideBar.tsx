@@ -1,7 +1,5 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-
-// CSS
 import '@renderer/assets/CSS/Global/SideBar.css'
 
 // Icons
@@ -11,7 +9,7 @@ import parameters_icon from '@renderer/assets/Images/construct-svgrepo-com.svg'
 function SideBar(): React.JSX.Element {
   const nav = useNavigate()
 
-  // CSS pour la localisation (menu)
+  // Gestion de la sélection
   const path = useLocation()
   const [menu, setMenu] = React.useState<number>(0)
   React.useEffect(() => {
@@ -23,32 +21,34 @@ function SideBar(): React.JSX.Element {
       setMenu(0)
     }
   }, [path.pathname])
+
   return (
-    <div className={'mm-global-left-bar'}>
-      <div></div>
-      {/*
-      Menu de selection de page
-      */}
-      <div className={'mm-global-left-bar-menu'}>
+    <div className="mm-global-left-bar">
+      <div>
+        {/* Séparateur supérieur */}
+        <div className="mm-global-left-bar-separator" />
+      </div>
+
+      {/* Menu */}
+      <div className="mm-global-left-bar-menu">
         <div
           className={`choice ${menu === 1 ? 'selected' : ''}`}
-          aria-label={'Library'}
+          aria-label="Library"
           onClick={() => nav('/library')}
         >
-          <img className={'icon'} src={library_icon} alt={'icon library'} />
+          <img className="icon" src={library_icon} alt="Library Icon" />
         </div>
         <div
           className={`choice ${menu === 2 ? 'selected' : ''}`}
-          aria-label={'Parameters'}
+          aria-label="Settings"
           onClick={() => nav('/settings')}
         >
-          <img className={'icon'} src={parameters_icon} alt={'icon parameters'} />
+          <img className="icon" src={parameters_icon} alt="Settings Icon" />
         </div>
       </div>
 
-      <div>
-        <p>Params</p>
-      </div>
+      {/* Footer */}
+      <div className="mm-global-left-bar-footer">Made with ❤️ by Mayo</div>
     </div>
   )
 }

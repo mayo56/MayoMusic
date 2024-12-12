@@ -1,6 +1,18 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
+const Listeners = {
+  request: {
+    albums: 'request.albums',
+    musics: 'request.musics',
+    cover: 'request.album.cover'
+  },
+  response: {
+    albums: 'response.albums',
+    musics: 'response.musics'
+  }
+}
+
 export type Album = {
   title: string
   path: string
@@ -38,6 +50,12 @@ const api = {
       }
     },
 
+    removeListener: {
+      albums: (data): void => {
+        ipcRenderer.removeListener(Listeners.response.albums, data)
+      }
+    },
+
     // File
     openMusicFolder: (albumName: string): void => {
       ipcRenderer.send('OpenAlbumDirectory', albumName)
@@ -66,15 +84,17 @@ const api = {
       ipcRenderer.send('previousMusic', index)
     }
   },
-  Global: {
-    fullscreen: (callback: (fullscreen_status: boolean) => void): void => {
-      ipcRenderer.on('fullscreen-status', (_, args: boolean) => callback(args))
-    }
-  },
   download: {
+    /**
+     * @deprecated
+     */
     yt_dlp_status_req: (): void => {
       ipcRenderer.send('yt-dlp-status:req')
     },
+    /**
+     * @deprecated
+     * @param callback
+     */
     yt_dlp_status_res: (
       callback: (data: { error: boolean; message: string; version: string }) => void
     ): void => {
@@ -91,6 +111,10 @@ const api = {
       )
     },
 
+    /**
+     * @deprecated
+     * @param data
+     */
     yt_dlp_download_req: (data: {
       url: string
       quality: string
