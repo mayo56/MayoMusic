@@ -9,6 +9,14 @@ import pauseIcon from '@renderer/assets/Images/pause-svgrepo-com.svg'
 import skipForwardIcon from '@renderer/assets/Images/play-skip-forward-svgrepo-com.svg'
 import volumeIcon from '@renderer/assets/Images/volume-high-svgrepo-com.svg'
 
+export type AlbumData = {
+  name: string
+  author: string | null
+  tracks: string[]
+  coverPath: string | null
+  path: string
+}
+
 function Player(): React.JSX.Element {
   const [audioSRC, setAudioSRC] = React.useState<string | undefined>(undefined)
   const [isPlaying, setIsPlaying] = React.useState<boolean>(false)
@@ -16,9 +24,9 @@ function Player(): React.JSX.Element {
   const [progress, setProgress] = React.useState<number>(0)
   const [showVolume, setShowVolume] = React.useState<boolean>(false)
   const [duration, setDuration] = React.useState<string[]>(['00:00', '00:00'])
-  const [trackData, setTrackData] = React.useState({
-    albumData: { author: '', name: '' },
-    trackName: ''
+  const [trackData, setTrackData] = React.useState<{ albumData: AlbumData; trackName: string }>({
+    albumData: { author: 'Artiste Inconnue', name: 'Inconnu', tracks: [], coverPath: '', path: '' },
+    trackName: 'Aucun son'
   })
   const [cover, setCover] = React.useState<string | undefined>(undefined)
 
@@ -63,38 +71,39 @@ function Player(): React.JSX.Element {
   }
 
   /**
+   * Formateur de temps
+   * @param time Temps à former
+   * @return {string} Format de temps en hh: mm: ss
+   */
+  const formatTime = (time: number): string => {
+    if (isNaN(time)) return '00:00'
+
+    const hours = Math.floor(time / 3600)
+    const minutes = Math.floor((time % 3600) / 60)
+    const seconds = Math.floor(time % 60)
+
+    return [
+      hours > 0 ? String(hours).padStart(2, '0') : null, // Affiche les heures seulement si elles sont > 0
+      String(minutes).padStart(2, '0'),
+      String(seconds).padStart(2, '0')
+    ]
+      .filter(Boolean) // Supprime les heures si elles sont null
+      .join(':')
+  }
+
+  /**
    * Change la progression via les données utilisateurs
    */
   const updateProgress = (): void => {
-    if (audioREF.current) {
-      // Progress bar
-      const currentTime = audioREF.current.currentTime
-      const duration = audioREF.current.duration
-      setProgress((currentTime / duration) * 100)
+    if (!audioREF.current) return
 
-      const duration_hours = Math.floor(duration / 3600)
-      const current_hours = Math.floor(currentTime / 3600)
-      const duration_minutes = Math.floor((duration % 3600) / 60)
-      const current_minutes = Math.floor((currentTime % 3600) / 60)
-      const duration_secs = Math.floor(duration % 60)
-      const current_secs = Math.floor(currentTime % 60)
-      setDuration([
-        [
-          current_hours > 0 ? String(current_hours).padStart(2, '0') : null,
-          String(current_minutes).padStart(2, '0'),
-          String(current_secs).padStart(2, '0')
-        ]
-          .filter(Boolean) // Supprime les éléments null (pour ne pas afficher les heures si elles sont à zéro)
-          .join(':'),
-        [
-          duration_hours > 0 ? String(duration_hours).padStart(2, '0') : null,
-          String(duration_minutes).padStart(2, '0'),
-          String(duration_secs).padStart(2, '0')
-        ]
-          .filter(Boolean) // Supprime les éléments null (pour ne pas afficher les heures si elles sont à zéro)
-          .join(':')
-      ])
-    }
+    const { currentTime, duration } = audioREF.current
+
+    // Met à jour la barre de progression
+    setProgress((currentTime / duration) * 100 || 0)
+
+    // Met à jour les durées formatées
+    setDuration([formatTime(currentTime), formatTime(duration)])
   }
 
   // Events
