@@ -35,7 +35,7 @@ CSS Global
   max-height: calc(100vh - 10px);
 
   display: grid;
-  grid-template-rows: auto 50px;
+  grid-template-rows: auto 70px;
 
   overflow: hidden;
   border-radius: 12px; /* Coins arrondis */

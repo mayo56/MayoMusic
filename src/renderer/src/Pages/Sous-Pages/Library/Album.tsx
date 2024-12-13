@@ -10,11 +10,26 @@ import music_icon from '@renderer/assets/Images/musical-notes-svgrepo-com.svg'
 import back_arrow_icon from '@renderer/assets/Images/arrow-back-svgrepo-com.svg'
 import folder_icon from '@renderer/assets/Images/folder-open-svgrepo-com.svg'
 
+type AlbumData = {
+  name: string
+  author: string | null
+  tracks: string[]
+  coverPath: string | null
+  path: string
+}
+
 function Album(): React.JSX.Element {
   const { id } = useParams()
   const nav = useNavigate()
 
   const [musicList, setMusicList] = React.useState<string[]>([])
+  const [album, setAlbum] = React.useState<AlbumData>({
+    name: 'AlbumInconnu',
+    author: null,
+    tracks: [],
+    coverPath: null,
+    path: ''
+  })
   const [cover, setCover] = React.useState<undefined | string>(undefined)
 
   React.useEffect(() => {
@@ -59,6 +74,7 @@ function Album(): React.JSX.Element {
       <div className={'AlbumInfo'}>
         <img src={cover || music_icon} alt={"Couverture de l'album"} className={'AlbumCover'} />
         <h1 className={'AlbumTitle'}>{id}</h1>
+        <h3 className={'AlbumAuthor'}>{album.author ?? 'Artiste Inconnu'}</h3>
         <div className={'AlbumSeparator'}>
           <span className={'AlbumTrackCount'}>{musicList.length} titres chargés</span>
         </div>

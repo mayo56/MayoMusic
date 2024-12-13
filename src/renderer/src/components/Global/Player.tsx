@@ -109,7 +109,7 @@ function Player(): React.JSX.Element {
   // Events
   React.useEffect(() => {
     window.api.player.action.currentTrack((data) => {
-      setTrackData({ albumData: data.album as unknown as any, trackName: data.trackName })
+      setTrackData({ albumData: data.album, trackName: data.trackName })
       if (audioSRC === data.audio) {
         audioREF.current!.currentTime = 0
         audioREF.current?.play()
@@ -132,18 +132,18 @@ function Player(): React.JSX.Element {
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onTimeUpdate={updateProgress}
-        onEnded={() => setIsPlaying(false)}
+        onEnded={() => window.api.player.action.nextTrack()}
       />
 
       <div className="player-info">
         <img className="cover" src={cover ? cover : musicIcon} alt="Music cover" />
         <div className="info-text">
-          <h4 className="title">{trackData.trackName}</h4>
+          <h4 className="title">{trackData.trackName.split('.').slice(0, -1).join('.')}</h4>
           <p className="artist">{trackData.albumData.author}</p>
         </div>
       </div>
 
-      <div>
+      <div className={'player-controls-container'}>
         <div className="player-controls">
           <img
             onClick={() => window.api.player.action.previousTrack()}

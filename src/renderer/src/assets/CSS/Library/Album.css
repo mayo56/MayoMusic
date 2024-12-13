@@ -54,6 +54,13 @@
   font-size: 24px;
   font-weight: bold;
   color: var(--text-color);
+  margin-bottom: 3px;
+}
+
+.AlbumAuthor {
+  font-size: 18px;
+  font-weight: 300;
+  color: #555;
   margin-bottom: 10px;
 }
 

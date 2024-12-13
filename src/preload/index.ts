@@ -3,10 +3,6 @@ import { contextBridge, ipcRenderer } from 'electron'
 import LibraryAPI from './api/library'
 import PlayerAPI from './api/player'
 
-export type Music = {
-  title: string
-}
-
 // Custom APIs for renderer
 const api = {
   library: LibraryAPI,
