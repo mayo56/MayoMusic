@@ -16,6 +16,11 @@ function Player(): React.JSX.Element {
   const [progress, setProgress] = React.useState<number>(0)
   const [showVolume, setShowVolume] = React.useState<boolean>(false)
   const [duration, setDuration] = React.useState<string[]>(['00:00', '00:00'])
+  const [trackData, setTrackData] = React.useState({
+    albumData: { author: '', name: '' },
+    trackName: ''
+  })
+  const [cover, setCover] = React.useState<string | undefined>(undefined)
 
   const audioREF = React.useRef<HTMLAudioElement | null>(null)
 
@@ -95,12 +100,17 @@ function Player(): React.JSX.Element {
   // Events
   React.useEffect(() => {
     window.api.player.action.currentTrack((data) => {
+      setTrackData({ albumData: data.album as unknown as any, trackName: data.trackName })
       if (audioSRC === data.audio) {
         audioREF.current!.currentTime = 0
         audioREF.current?.play()
       } else {
         setAudioSRC(data.audio)
       }
+      // ajout de la cover
+      window.api.library.data.cover(data.album.name).then((coverData) => {
+        setCover(coverData)
+      })
     })
   }, [])
 
@@ -117,34 +127,35 @@ function Player(): React.JSX.Element {
       />
 
       <div className="player-info">
-        <img className="cover" src={musicIcon} alt="Music cover" />
+        <img className="cover" src={cover ? cover : musicIcon} alt="Music cover" />
         <div className="info-text">
-          <h4 className="title">Titre de la musique</h4>
-          <p className="artist">Artiste inconnu</p>
+          <h4 className="title">{trackData.trackName}</h4>
+          <p className="artist">{trackData.albumData.author}</p>
         </div>
       </div>
 
-      <div className="player-controls">
-        <img
-          onClick={() => window.api.player.action.previousTrack()}
-          src={skipBackIcon}
-          alt="Skip Back"
-        />
+      <div>
+        <div className="player-controls">
+          <img
+            onClick={() => window.api.player.action.previousTrack()}
+            src={skipBackIcon}
+            alt="Skip Back"
+          />
 
-        <img onClick={togglePlay} src={isPlaying ? pauseIcon : playIcon} alt="Play/Pause" />
+          <img onClick={togglePlay} src={isPlaying ? pauseIcon : playIcon} alt="Play/Pause" />
 
-        <img
-          onClick={() => window.api.player.action.nextTrack()}
-          src={skipForwardIcon}
-          alt="Skip Forward"
-        />
-      </div>
+          <img
+            onClick={() => window.api.player.action.nextTrack()}
+            src={skipForwardIcon}
+            alt="Skip Forward"
+          />
+        </div>
 
-      <div className="player-progress">
-        <span>
-          {duration[0]} - {duration[1]}
-        </span>
-        <input type="range" value={progress} onChange={handleProgressChange} min="0" max="100" />
+        <div className="player-progress">
+          <span>{duration[0]}</span>
+          <input type="range" value={progress} onChange={handleProgressChange} min="0" max="100" />
+          <span>{duration[1]}</span>
+        </div>
       </div>
 
       <div className="volume-container">
