@@ -29,5 +29,5 @@ export type MusicResponseData = {
 export type TrackResponseType = {
   album: AlbumData
   trackName: nameType
-  audio: string | null
+  audio: string
 }

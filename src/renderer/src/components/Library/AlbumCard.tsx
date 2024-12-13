@@ -13,7 +13,7 @@ const AlbumCard = (props: {
   const [cover, setCover] = React.useState<string>(music_icon)
 
   React.useEffect(() => {
-    window.api.library.request.cover(props.name).then((res) => {
+    window.api.library.data.cover(props.name).then((res) => {
       if (res) {
         setCover(res)
       }

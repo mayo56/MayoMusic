@@ -25,8 +25,8 @@ const data = (): void => {
    * Requête pour demander la liste des musiques d'un album.
    * Renvoi un 'response.musicsList' avec la liste des musiques de l'album.
    */
-  ipcMain.on('request.musics', (event, args: string): void => {
-    const album = library.getAlbum(args)
+  ipcMain.on('request.musics', (event, albumName: string): void => {
+    const album = library.getAlbum(albumName)
 
     // Vérifications
     if (!album) {

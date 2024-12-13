@@ -10,7 +10,7 @@ interface LibraryAPI {
     /**
      * Requête pour demander la liste des musiques d'un album
      */
-    music(): void
+    music(albumName: string): void
   }
   response: {
     /**

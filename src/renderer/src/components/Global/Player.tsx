@@ -94,7 +94,7 @@ function Player(): React.JSX.Element {
 
   // Events
   React.useEffect(() => {
-    window.api.player.receiveMusic((data) => {
+    window.api.player.action.currentTrack((data) => {
       if (audioSRC === data.audio) {
         audioREF.current!.currentTime = 0
         audioREF.current?.play()

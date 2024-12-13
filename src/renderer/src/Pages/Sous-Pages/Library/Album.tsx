@@ -19,16 +19,16 @@ function Album(): React.JSX.Element {
 
   React.useEffect(() => {
     if (!id) return nav('/library')
-    const listener = window.api.library.response.musics(({ musics }) => {
-      setMusicList(musics)
+    const listener = window.api.library.response.musics(({ tracks }) => {
+      setMusicList(tracks)
     })
 
-    window.api.library.request.musics(id)
-    window.api.library.request.cover(id).then((data) => {
+    window.api.library.request.music(id)
+    window.api.library.data.cover(id).then((data) => {
       setCover(data)
     })
 
-    return (): undefined => listener()
+    return (): void => listener() as unknown as void
   }, [])
 
   // Launch music
@@ -45,7 +45,7 @@ function Album(): React.JSX.Element {
           aria-label={'Retour'}
         />
         <img
-          onClick={() => window.api.library.openMusicFolder(id!)}
+          onClick={() => undefined}
           src={folder_icon}
           alt={'Ouvrir le dossier'}
           aria-label={'Ouvrir le dossier'}
@@ -72,7 +72,7 @@ function Album(): React.JSX.Element {
           return (
             <div
               className={'AlbumMusicCard'}
-              onClick={() => window.api.player.playMusic(id ?? '', index)}
+              onClick={() => window.api.player.action.play(id ?? '', music)}
               key={index}
             >
               <span className={'TrackNumber'}>{index + 1}</span>

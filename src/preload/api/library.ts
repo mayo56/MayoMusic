@@ -18,8 +18,8 @@ const LibraryAPI = {
     /**
      * Requête pour demander la liste des musiques d'un album
      */
-    music: (): void => {
-      ipcRenderer.send(Listeners.library.request.music)
+    music: (albumName: string): void => {
+      ipcRenderer.send(Listeners.library.request.music, albumName)
     }
   },
   response: {

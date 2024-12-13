@@ -8,24 +8,25 @@ import LibrarySearchBar from '@renderer/components/Library/LibrarySearchBar'
 import '@renderer/assets/CSS/Library/MusicList.css'
 import AlbumCard from '@renderer/components/Library/AlbumCard'
 
-type Album = {
+type AlbumData = {
   name: string
-  path: string
   author: string | null
-  isActive: boolean
+  tracks: string[]
+  coverPath: string | null
+  path: string
 }
 
 function MusicList(): React.JSX.Element {
-  const [musics, setMusics] = React.useState<Album[]>([])
+  const [musics, setMusics] = React.useState<AlbumData[]>([])
 
   React.useEffect(() => {
     const removeListener = window.api.library.response.albums((data) => {
-      setMusics(data as unknown as Album[])
+      setMusics(data)
     })
 
-    window.api.library.request.albums()
+    window.api.library.request.album()
 
-    return (): undefined => removeListener()
+    return (): void => removeListener() as unknown as void
   }, [])
 
   return (
