@@ -1,186 +1,179 @@
-// React Import
 import React from 'react'
-
-// CSS
-// In SideBar.css
+import '@renderer/assets/CSS/Global/Player.css'
 
 // Icons
-import fullscreen_music_icon from '@renderer/assets/Images/resize-svgrepo-com.svg'
-import skip_back_icon from '@renderer/assets/Images/play-skip-back-svgrepo-com.svg'
-import play_icon from '@renderer/assets/Images/play-svgrepo-com (1).svg'
-import pause_icon from '@renderer/assets/Images/pause-svgrepo-com.svg'
-import skip_forward_con from '@renderer/assets/Images/play-skip-forward-svgrepo-com.svg'
-import volume_icon from '@renderer/assets/Images/volume-high-svgrepo-com.svg'
+import musicIcon from '@renderer/assets/Images/musical-notes-svgrepo-com.svg'
+import skipBackIcon from '@renderer/assets/Images/play-skip-back-svgrepo-com.svg'
+import playIcon from '@renderer/assets/Images/play-svgrepo-com (1).svg'
+import pauseIcon from '@renderer/assets/Images/pause-svgrepo-com.svg'
+import skipForwardIcon from '@renderer/assets/Images/play-skip-forward-svgrepo-com.svg'
+import volumeIcon from '@renderer/assets/Images/volume-high-svgrepo-com.svg'
+
+export type AlbumData = {
+  name: string
+  author: string | null
+  tracks: string[]
+  coverPath: string | null
+  path: string
+}
 
 function Player(): React.JSX.Element {
-  // -- Audio parameters --
   const [audioSRC, setAudioSRC] = React.useState<string | undefined>(undefined)
-  const audioREF = React.useRef<HTMLAudioElement | null>(null)
-  const [audioINFO, setAudioINFO] = React.useState<{ name: string; index: null | number }>({
-    name: 'Aucune musique',
-    index: null
+  const [isPlaying, setIsPlaying] = React.useState<boolean>(false)
+  const [volume, setVolume] = React.useState<number>(50)
+  const [progress, setProgress] = React.useState<number>(0)
+  const [showVolume, setShowVolume] = React.useState<boolean>(false)
+  const [duration, setDuration] = React.useState<string[]>(['00:00', '00:00'])
+  const [trackData, setTrackData] = React.useState<{ albumData: AlbumData; trackName: string }>({
+    albumData: { author: 'Artiste Inconnue', name: 'Inconnu', tracks: [], coverPath: '', path: '' },
+    trackName: 'Aucun son'
   })
-  // Events audio
-  React.useEffect(() => {
-    window.api.player.receiveMusic((info) => {
-      if (audioREF.current?.src === info.audio) {
-        audioREF.current.currentTime = 0
-        audioREF.current.play()
+  const [cover, setCover] = React.useState<string | undefined>(undefined)
+
+  const audioREF = React.useRef<HTMLAudioElement | null>(null)
+
+  /**
+   * Contrôle la lecture du média
+   */
+  const togglePlay = (): void => {
+    if (audioREF.current) {
+      if (isPlaying) {
+        audioREF.current.pause()
       } else {
-        setAudioSRC(info.audio)
-        const audioName = info.name.split('.')
-        audioName.pop()
-        setAudioINFO({
-          name: audioName.join('.'),
-          index: info.index
-        })
-        console.warn(info)
+        audioREF.current.play()
       }
+      setIsPlaying(!isPlaying)
+    }
+  }
+
+  /**
+   * Contrôle la variation de volume
+   * @param e
+   */
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const newVolume = Number(e.target.value)
+    setVolume(newVolume)
+    if (audioREF.current) {
+      audioREF.current.volume = newVolume / 100
+    }
+  }
+
+  /**
+   * Change la progression de la barre de progression
+   * @param e
+   */
+  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const newProgress = Number(e.target.value)
+    if (audioREF.current) {
+      audioREF.current.currentTime = (audioREF.current.duration * newProgress) / 100
+      setProgress(newProgress)
+    }
+  }
+
+  /**
+   * Formateur de temps
+   * @param time Temps à former
+   * @return {string} Format de temps en hh: mm: ss
+   */
+  const formatTime = (time: number): string => {
+    if (isNaN(time)) return '00:00'
+
+    const hours = Math.floor(time / 3600)
+    const minutes = Math.floor((time % 3600) / 60)
+    const seconds = Math.floor(time % 60)
+
+    return [
+      hours > 0 ? String(hours).padStart(2, '0') : null, // Affiche les heures seulement si elles sont > 0
+      String(minutes).padStart(2, '0'),
+      String(seconds).padStart(2, '0')
+    ]
+      .filter(Boolean) // Supprime les heures si elles sont null
+      .join(':')
+  }
+
+  /**
+   * Change la progression via les données utilisateurs
+   */
+  const updateProgress = (): void => {
+    if (!audioREF.current) return
+
+    const { currentTime, duration } = audioREF.current
+
+    // Met à jour la barre de progression
+    setProgress((currentTime / duration) * 100 || 0)
+
+    // Met à jour les durées formatées
+    setDuration([formatTime(currentTime), formatTime(duration)])
+  }
+
+  // Events
+  React.useEffect(() => {
+    window.api.player.action.currentTrack((data) => {
+      setTrackData({ albumData: data.album, trackName: data.trackName })
+      if (audioSRC === data.audio) {
+        audioREF.current!.currentTime = 0
+        audioREF.current?.play()
+      } else {
+        setAudioSRC(data.audio)
+      }
+      // ajout de la cover
+      window.api.library.data.cover(data.album.name).then((coverData) => {
+        setCover(coverData)
+      })
     })
   }, [])
 
-  // -- Show Informations --
-  const [showInfo, setShowInfo] = React.useState<boolean>(false)
-  // Formatage des timestamps de musique (player)
-  const formatDuration = (duration: number | undefined): string => {
-    if (duration) {
-      const hours = Math.floor(duration / 3600)
-      const minutes = Math.floor((duration % 3600) / 60)
-      const secs = Math.floor(duration % 60)
-
-      return [
-        hours > 0 ? String(hours).padStart(2, '0') : null, // Affiche les heures seulement si elles sont présentes
-        String(minutes).padStart(2, '0'),
-        String(secs).padStart(2, '0')
-      ]
-        .filter(Boolean) // Supprime les éléments null (pour ne pas afficher les heures si elles sont à zéro)
-        .join(':')
-    } else {
-      return '0:00'
-    }
-  }
-
-  // Volume
-  const [volume, setVolume] = React.useState<number>(100)
-  const volumeChange = (vol: number): void => {
-    setVolume(vol)
-    if (audioREF.current) {
-      audioREF.current.volume = vol / 100
-    }
-  }
-
-  // Current time (progress bar)
-  const [progressBar, setProgressBar] = React.useState<number>(0)
-  const UpdateTime = (): void => {
-    if (audioREF.current) {
-      // Progress Bar
-      const current = audioREF.current.currentTime
-      const duration = audioREF.current.duration
-      setProgressBar((current / duration) * 100)
-    } else {
-      setProgressBar(0)
-    }
-  }
-
-  const UserChangeTime = (time: number): void => {
-    if (audioREF.current) {
-      audioREF.current.currentTime = (time / 100) * audioREF.current.duration
-    }
-  }
-
-  // Play
-  const [isPlaying, setIsPlaying] = React.useState<boolean>(false)
-  const controlPlaying = (): void => {
-    if (audioREF.current) {
-      if (audioREF.current.paused) {
-        audioREF.current.play().then(() => setIsPlaying(true))
-      } else {
-        audioREF.current.pause()
-      }
-    }
-  }
-
-  const [showVolume, setShowVolume] = React.useState<boolean>(false)
   return (
-    <div
-      className={'player_Container'}
-      onMouseMove={() => setShowInfo(true)}
-      onMouseLeave={() => setShowInfo(false)}
-    >
-      {/*
-      Balise audio
-      */}
+    <div className="player-container">
       <audio
-        onPause={() => setIsPlaying(false)}
-        onPlay={() => setIsPlaying(true)}
-        onEnded={() => window.api.player.nextMusic(audioINFO.index)}
         src={audioSRC}
         ref={audioREF}
-        onTimeUpdate={UpdateTime}
-        autoPlay
+        autoPlay={true}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onTimeUpdate={updateProgress}
+        onEnded={() => window.api.player.action.nextTrack()}
       />
 
-      {/*
-      Player info
-      */}
-      {showInfo ? (
-        <div className={`player_info`}>
-          <span className={'title'}>{audioINFO.name}</span>
-          <div className={'timer'}>
-            <span>{formatDuration(audioREF.current?.currentTime)}</span>
-            <span>{formatDuration(audioREF.current?.duration)}</span>
-          </div>
-          {/*
-        Progress bar de la musique en cours
-        */}
-          <input
-            value={progressBar}
-            min={0}
-            max={100}
-            onChange={(e) => UserChangeTime(Number(e.target.value))}
-            type={'range'}
-          />
+      <div className="player-info">
+        <img className="cover" src={cover ? cover : musicIcon} alt="Music cover" />
+        <div className="info-text">
+          <h4 className="title">{trackData.trackName.split('.').slice(0, -1).join('.')}</h4>
+          <p className="artist">{trackData.albumData.author}</p>
         </div>
-      ) : (
-        <></>
-      )}
-
-      {/* Play controller, Volume controller */}
-      <div className={'play_controller'}>
-        <img
-          src={fullscreen_music_icon}
-          alt={'fullscreen music icon'}
-          className={'incoming_feature'}
-        />
-        <img
-          onClick={() => window.api.player.previousMusic(audioINFO.index)}
-          src={skip_back_icon}
-          alt={'skip back icon'}
-        />
-        <img onClick={controlPlaying} src={isPlaying ? pause_icon : play_icon} alt={'play icon'} />
-        <img
-          onClick={() => window.api.player.nextMusic(audioINFO.index)}
-          src={skip_forward_con}
-          alt={'skip forward icon'}
-        />
-        <img
-          onClick={() => setShowVolume((state) => !state)}
-          src={volume_icon}
-          alt={'volume icon'}
-        />
       </div>
 
-      {/*
-      Volume controller
-      */}
-      <div className={showVolume ? 'volume show' : 'volume hide'}>
-        <input
-          onChange={(e) => volumeChange(Number(e.target.value))}
-          type={'range'}
-          value={volume}
-          min={0}
-          max={100}
-        />
+      <div className={'player-controls-container'}>
+        <div className="player-controls">
+          <img
+            onClick={() => window.api.player.action.previousTrack()}
+            src={skipBackIcon}
+            alt="Skip Back"
+          />
+
+          <img onClick={togglePlay} src={isPlaying ? pauseIcon : playIcon} alt="Play/Pause" />
+
+          <img
+            onClick={() => window.api.player.action.nextTrack()}
+            src={skipForwardIcon}
+            alt="Skip Forward"
+          />
+        </div>
+
+        <div className="player-progress">
+          <span>{duration[0]}</span>
+          <input type="range" value={progress} onChange={handleProgressChange} min="0" max="100" />
+          <span>{duration[1]}</span>
+        </div>
+      </div>
+
+      <div className="volume-container">
+        <button onClick={() => setShowVolume(!showVolume)}>
+          <img src={volumeIcon} alt="Volume" />
+        </button>
+        {showVolume && (
+          <input type="range" value={volume} onChange={handleVolumeChange} min="0" max="100" />
+        )}
       </div>
     </div>
   )

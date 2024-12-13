@@ -1,80 +1,23 @@
-import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-
-export type Album = {
-  title: string
-  path: string
-  cover: undefined | string
-  author: string
-}
-
-export type Music = {
-  title: string
-}
+import { contextBridge, ipcRenderer } from 'electron'
+import LibraryAPI from './api/library'
+import PlayerAPI from './api/player'
 
 // Custom APIs for renderer
 const api = {
-  library: {
-    // REQ Library list of Albums
-    reqAlbums: (): void => {
-      ipcRenderer.send('reqAlbums')
-    },
-    AlbumsList: (callback: (albums: Album[]) => void): void => {
-      ipcRenderer.on('AlbumsList', (_, args: Album[]) => callback(args))
-    },
-    reloadAlbums: (): void => {
-      ipcRenderer.send('reloadAlbums')
-    },
-
-    // REQ Library list of musics of album
-    reqMusics: (albumName: string): void => {
-      ipcRenderer.send('reqMusics', albumName)
-    },
-    MusicsList: (
-      callback: (data: { musics: string[]; cover: string | undefined }) => void
-    ): void => {
-      ipcRenderer.on('MusicsList', (_, args: { musics: string[]; cover: string | undefined }) =>
-        callback(args)
-      )
-    },
-
-    // File
-    openMusicFolder: (albumName: string): void => {
-      ipcRenderer.send('OpenAlbumDirectory', albumName)
-    }
-  },
-  player: {
-    // EVENT PLAY MUSIQUE
-    playMusic: (album: string, index: number): void => {
-      ipcRenderer.send('sendMusic', { album, index })
-    },
-    // Reception de la musique
-    receiveMusic: (
-      callback: (info: { name: string; audio: string; index: number | null }) => void
-    ): void => {
-      ipcRenderer.on('playMusic', (_, args: { name: string; audio: string; index: number }) =>
-        callback(args)
-      )
-    },
-
-    // nextMusic
-    nextMusic: (index: number | null): void => {
-      ipcRenderer.send('nextMusic', index)
-    },
-    // previousMusic
-    previousMusic: (index: number | null): void => {
-      ipcRenderer.send('previousMusic', index)
-    }
-  },
-  Global: {
-    fullscreen: (callback: (fullscreen_status: boolean) => void): void => {
-      ipcRenderer.on('fullscreen-status', (_, args: boolean) => callback(args))
-    }
-  },
+  library: LibraryAPI,
+  player: PlayerAPI,
   download: {
+    /**
+     * @deprecated
+     */
     yt_dlp_status_req: (): void => {
       ipcRenderer.send('yt-dlp-status:req')
     },
+    /**
+     * @deprecated
+     * @param callback
+     */
     yt_dlp_status_res: (
       callback: (data: { error: boolean; message: string; version: string }) => void
     ): void => {
@@ -91,6 +34,10 @@ const api = {
       )
     },
 
+    /**
+     * @deprecated
+     * @param data
+     */
     yt_dlp_download_req: (data: {
       url: string
       quality: string

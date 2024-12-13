@@ -1,127 +1,181 @@
-/*
---------------
-CSS Liste de musique (page principale)
-
-*/
-/* Contient le tout */
+/* Conteneur principal */
 .MusicListContainer {
-  overflow: scroll;
+  overflow-y: auto;
   width: 100%;
-  height: 100%
+  height: 100%;
+  background-color: #f9f9f9;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-/* Contient que la liste des musiques */
+/* En-tête regroupant la recherche et le compteur */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Barre de recherche */
+.LibrarySearchBarContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.searchBarContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #dcdcdc;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.searchBarContainer input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #fff;
+}
+
+.searchBarContainer button {
+  border: none;
+  background-color: #4caf50;
+  color: #fff;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.searchBarContainer button:hover {
+  background-color: #45a049;
+}
+
+/* Indicateurs de chargement */
+.loadBar {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+}
+
+.loadBar .bar, .loadBar .bar_left {
+  flex: 1;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+.loadBar .count {
+  font-weight: 500;
+  margin: 0 10px;
+}
+
+/* Liste des albums */
+/* Conteneur principal de la bibliothèque */
 .library {
   display: flex;
   flex-wrap: wrap;
-  justify-content: start;
-  align-items: start;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 10px; /* Ajout d'un espace entre les cartes */
 }
-.library .libraryMusic {
-  background-color: transparent;
-  border-bottom: 1px solid rgba(240,240,240,1);
+
+.libraryMusic {
+  background-color: #fff;
+  border-bottom: 1px solid rgba(240, 240, 240, 1);
+  border-radius: 6px; /* Ajout de coins légèrement arrondis */
   cursor: pointer;
-
-  padding: 10px;
-
-  width: 100%;
-
+  padding: 8px; /* Réduction du padding */
+  width: 95%; /* Ajusté pour donner plus d’espace */
+  max-width: 280px; /* Limite de largeur */
   display: flex;
-  justify-content: start;
   align-items: center;
-  transition: all 0.2s linear;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ajout d'une légère ombre */
 }
 
-.library .libraryMusic:hover {
+.libraryMusic:hover {
   background-color: rgba(250, 250, 250, 1);
+  transform: translateY(-3px); /* Ajout d'un léger effet de survol */
 }
 
+/* Image des albums */
+.libraryMusic img {
+  width: 56px; /* Légère réduction de la taille */
+  height: 56px;
+  border-radius: 5px;
+  background-color: white;
+  margin-right: 10px; /* Ajout d'un espacement entre l'image et le texte */
+}
+
+/* Informations des albums */
 .libraryMusicInfo {
   max-width: calc(100% - 70px);
   flex: 1;
 }
 
 .libraryMusicInfo p {
-  margin: 5px 5px 5px 10px;
+  margin: 4px 0;
 }
 
-.libraryMusic img {
-  width: 64px;
-  height: 64px;
-  border-radius: 5px;
-  background-color: white;
-}
 .libraryMusicInfo .title {
   font-weight: 500;
-  font-size: 16px;
-  text-wrap: nowrap;
+  font-size: 15px; /* Taille de texte légèrement réduite */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: calc(100% - 15px);
 }
+
 .libraryMusicInfo .author {
-  font-size: 14px;
-  font-weight: 100;
+  font-size: 13px; /* Taille de texte légèrement réduite */
+  font-weight: 300;
+  color: #555; /* Couleur de texte plus douce */
 }
 
-@media screen and (min-width: 1200px) {
-  .library .libraryMusic {
-    width: calc(90% / 2);
-    margin-inline: 5px;
+/* Responsivité : réduction sur écrans plus petits */
+@media screen and (max-width: 768px) {
+  .libraryMusic {
+    width: calc(100% - 20px); /* Utilisation de tout l’espace disponible */
+    max-width: none;
+    padding: 6px; /* Réduction du padding sur petits écrans */
   }
 
+  .libraryMusic img {
+    width: 50px; /* Réduction de la taille de l'image */
+    height: 50px;
+  }
+
+  .libraryMusicInfo .title {
+    font-size: 14px;
+  }
+
+  .libraryMusicInfo .author {
+    font-size: 12px;
+  }
+}
+
+/* Responsivité : écrans très petits */
+@media screen and (max-width: 480px) {
   .library {
-    margin: auto;
-    width: calc(100% - 30px);
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
   }
-}
 
+  .libraryMusic {
+    padding: 6px;
+  }
 
+  .libraryMusic img {
+    max-height: 80px;
+  }
 
-/* Load bar */
-.loadBar {
-  display: flex;
-  align-items: center;
-}
+  .libraryMusicInfo .title {
+    font-size: 12px;
+  }
 
-.loadBar .bar {
-  flex: 1;
-  border-bottom: 1px solid var(--border-color);
-  margin-inline: 5px;
-}
-.loadBar .bar_left {
-  flex: 0.01;
-  border-bottom: solid 1px var(--border-color);
-  margin-inline: 5px;
-}
-
-.loadBar .count {
-  margin-inline: 5px;
-  font-weight: 50;
-  font-size: 14px;
-}
-
-/* Search Bar */
-.LibrarySearchBarContainer {
-  display: flex;
-  padding: 10px;
-}
-.searchBarContainer {
-  border: 1px solid var(--border-color);
-  border-radius: 20px;
-}
-.searchBarContainer input {
-  outline: none;
-  border: none;
-  padding: 5px;
-  padding-inline: 10px;
-  border-radius: 20px 0 0 20px;
-}
-
-.searchBarContainer button {
-  border-radius: 0 20px 20px 0;
-  height: 100%;
-  border: none;
-  padding: 5px;
-
+  .libraryMusicInfo .author {
+    font-size: 10px;
+  }
 }

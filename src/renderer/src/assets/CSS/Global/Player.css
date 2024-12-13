@@ -1,0 +1,195 @@
+.player-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #0F0F0F; /* Clair pour un contraste doux */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex: 0.3;
+}
+
+.player-info .cover {
+  width: 50px;
+  height: 50px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.player-info .info-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-text .title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #FFF;
+
+  width: 150px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.info-text .artist {
+  font-size: 12px;
+  color: #EEE;
+}
+
+
+/* PLAYER control */
+.player-controls-container {
+  flex: 1;
+}
+.player-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  flex: 1.5;
+}
+
+.player-controls img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  filter: grayscale(1);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.player-controls img:hover {
+  filter: grayscale(0);
+  transform: scale(1.1);
+}
+
+.player-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 2;
+}
+
+.player-progress span {
+  font-size: 12px;
+  color: #DDD;
+}
+
+.player-progress input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 8px; /* Plus large pour un meilleur contrôle */
+  background: #ddd;
+  border-radius: 4px;
+  outline: none;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.player-progress input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #1db954; /* Couleur verte moderne */
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.volume-container button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.volume-container img {
+  width: 20px;
+  height: 20px;
+}
+
+
+
+
+
+
+.player-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espace entre les timestamps et la barre */
+  width: 100%;
+}
+
+.player-progress span {
+  font-size: 12px; /* Texte petit et discret */
+  color: #b3b3b3; /* Gris neutre */
+}
+
+.player-progress input[type="range"] {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px; /* Barre fine */
+  background: #b3b3b3; /* Fond gris léger */
+  border-radius: 2px; /* Coins arrondis */
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+}
+
+.player-progress input[type="range"]::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #1db954;
+  z-index: 1;
+}
+
+.player-progress input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px; /* Point bien visible */
+  width: 12px;
+  background: #fff; /* Blanc pur */
+  border-radius: 50%;
+  border: 2px solid #1db954; /* Bordure verte Spotify */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3); /* Légère ombre pour du relief */
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.player-progress input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2); /* Zoom léger au survol */
+}
+
+.player-progress input[type="range"]::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  background: #fff;
+  border-radius: 50%;
+  border: 2px solid #1db954;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+}
+
+.player-progress input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
