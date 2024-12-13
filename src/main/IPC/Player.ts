@@ -28,9 +28,9 @@ const player = (): void => {
    * Permet de lire une musique sur le player.
    * Lance la musique et charge la liste des autres musiques en file d'attente.
    */
-  ipcMain.on('action.player.play', (event, args: { albumName: string; title: string }) => {
-    const album = library.getAlbum(args.albumName)
-    const track = library.getAudioAsBase64(args.albumName, args.title)
+  ipcMain.on('action.player.play', (event, data: { albumName: string; trackName: string }) => {
+    const album = library.getAlbum(data.albumName)
+    const track = library.getAudioAsBase64(data.albumName, data.trackName)
 
     if (!album || !track) {
       return new ErrorCreate(event).setStatus(1).setMessage('').sendError()
@@ -38,10 +38,10 @@ const player = (): void => {
 
     // Set Audio Queue
     queue.clearQueue()
-    const index = album.tracks.findIndex((value) => value === args.title)
+    const index = album.tracks.findIndex((value) => value === data.trackName)
     for (const audioData in album.tracks) {
       queue.addTrack({
-        albumName: args.albumName,
+        albumName: data.albumName,
         trackName: audioData,
         path: path.join(album.path, audioData)
       })
@@ -50,8 +50,8 @@ const player = (): void => {
 
     // Response
     event.sender.send('action.player.currentTrack', {
-      name: args.title,
       album,
+      trackName: data.trackName,
       audio: track
     })
   })
@@ -64,10 +64,15 @@ const player = (): void => {
   ipcMain.on('action.player.nextTrack', (event) => {
     const trackData = queue.nextTrack()
     if (!trackData) return
+    const album = library.getAlbum(trackData.albumName)
     const audio = library.getAudioAsBase64(trackData.albumName, trackData.trackName)
-    if (!audio) return
+    if (!audio || !album) return
 
-    event.sender.send('action.player.currentTrack', audio)
+    event.sender.send('action.player.currentTrack', {
+      album,
+      trackName: trackData.trackName,
+      audio
+    })
   })
 
   /**
@@ -78,10 +83,15 @@ const player = (): void => {
   ipcMain.on('action.player.previousTrack', (event) => {
     const trackData = queue.previousTrack()
     if (!trackData) return
+    const album = library.getAlbum(trackData.albumName)
     const audio = library.getAudioAsBase64(trackData.albumName, trackData.trackName)
-    if (!audio) return
+    if (!audio || !album) return
 
-    event.sender.send('action.player.currentTrack', audio)
+    event.sender.send('action.player.currentTrack', {
+      album,
+      trackName: trackData.trackName,
+      audio
+    })
   })
 }
 

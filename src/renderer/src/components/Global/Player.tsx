@@ -110,6 +110,8 @@ function Player(): React.JSX.Element {
         src={audioSRC}
         ref={audioREF}
         autoPlay={true}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
         onTimeUpdate={updateProgress}
         onEnded={() => setIsPlaying(false)}
       />

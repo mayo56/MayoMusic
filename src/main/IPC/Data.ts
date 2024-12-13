@@ -35,7 +35,8 @@ const data = (): void => {
 
     // Envoi de la réponse
     event.sender.send('response.musicsList', {
-      musics: album.tracks
+      album,
+      tracks: album.tracks
     })
   })
 

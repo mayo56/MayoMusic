@@ -20,6 +20,7 @@ function Album(): React.JSX.Element {
   React.useEffect(() => {
     if (!id) return nav('/library')
     const listener = window.api.library.response.musics(({ tracks }) => {
+      console.info(tracks)
       setMusicList(tracks)
     })
 
