@@ -1,6 +1,6 @@
 // Dépendances
 import { ipcRenderer, IpcRenderer, IpcRendererEvent } from 'electron'
-import { AlbumData, MusicResponseData } from '../Types'
+import { AlbumData, MusicResponseData } from '../type/Types'
 import Listeners from '../Listeners'
 // -------------
 

@@ -1,33 +1,7 @@
-import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { contextBridge, ipcRenderer } from 'electron'
 import LibraryAPI from './api/library'
-
-const Listeners = {
-  request: {
-    albums: 'request.albums',
-    musics: 'request.musics',
-    cover: 'request.album.cover'
-  },
-  response: {
-    albums: 'response.albumsList',
-    musics: 'response.musicsList'
-  },
-  player: {
-    action: {
-      play: 'action.player.play',
-      nextTrack: 'action.player.nextTrack',
-      previousTrack: 'action.player.previousTrack',
-      currentTrack: 'action.player.currentTrack'
-    }
-  }
-}
-
-export type Album = {
-  title: string
-  path: string
-  cover: undefined | string
-  author: string
-}
+import PlayerAPI from './api/player'
 
 export type Music = {
   title: string
@@ -36,35 +10,7 @@ export type Music = {
 // Custom APIs for renderer
 const api = {
   library: LibraryAPI,
-
-  // File
-  openMusicFolder: (albumName: string): void => {
-    ipcRenderer.send('OpenAlbumDirectory', albumName)
-  },
-  player: {
-    // EVENT PLAY MUSIQUE
-    playMusic: (album: string, index: number): void => {
-      ipcRenderer.send(Listeners.player.action.play, { album, index })
-    },
-    // Reception de la musique
-    receiveMusic: (
-      callback: (info: { name: string; audio: string; index: number | null }) => void
-    ): void => {
-      ipcRenderer.on(
-        Listeners.player.action.currentTrack,
-        (_, args: { name: string; audio: string; index: number }) => callback(args)
-      )
-    },
-
-    // nextMusic
-    nextMusic: (index: number | null): void => {
-      ipcRenderer.send(Listeners.player.action.nextTrack, index)
-    },
-    // previousMusic
-    previousMusic: (index: number | null): void => {
-      ipcRenderer.send(Listeners.player.action.previousTrack, index)
-    }
-  },
+  player: PlayerAPI,
   download: {
     /**
      * @deprecated

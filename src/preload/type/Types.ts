@@ -22,3 +22,12 @@ export type MusicResponseData = {
   album: AlbumData
   tracks: trackType
 }
+
+/**
+ * Type de data retour des musiques (player)
+ */
+export type TrackResponseType = {
+  album: AlbumData
+  trackName: nameType
+  audio: string | null
+}

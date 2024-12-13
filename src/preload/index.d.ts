@@ -1,35 +1,13 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import { Album } from './index'
+import LibraryAPI from './type/library-api'
+import PlayerAPI from './type/player-api'
 
 declare global {
   interface Window {
     electron: ElectronAPI;
     api: {
-      library: {
-        // REQ ALBUMS
-        request: {
-          albums(): void,
-          musics(albumName: string): void
-          cover(albumName: string): Promise<string | undefined>
-        }
-        response: {
-          albums(callback: (albums: Album[]) => void)
-          musics(callback: (musics: { musics: string[]; cover: string | undefined }) => void)
-        }
-        openMusicFolder(albumName: string): void
-      },
-      player: {
-        // EVENT PLAY MUSIC
-        playMusic(album: string, index: number): void
-        receiveMusic(callback: (info: { name: string, audio: string, index: number }) => void)
-
-        // Controller
-        nextMusic(index: number | null): void
-        previousMusic(index: number | null): void
-      },
-      Global: {
-        fullscreen(callback: (fullscreen_status: boolean) => void)
-      },
+      library: LibraryAPI
+      player: PlayerAPI
       download: {
         yt_dlp_status_req(): void
         yt_dlp_status_res(callback: (data: {
