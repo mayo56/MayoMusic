@@ -30,6 +30,8 @@ interface LibraryAPI {
      * @param albumName
      */
     cover(albumName: string): Promise<string | undefined>
+
+    album(albumName: string): Promise<AlbumData | null>
   }
 }
 

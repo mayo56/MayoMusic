@@ -43,6 +43,13 @@ function Album(): React.JSX.Element {
     window.api.library.data.cover(id).then((data) => {
       setCover(data)
     })
+    window.api.library.data.album(id).then((data) => {
+      if (data) {
+        setAlbum(data)
+      } else {
+        nav('/library')
+      }
+    })
 
     return (): void => listener() as unknown as void
   }, [])

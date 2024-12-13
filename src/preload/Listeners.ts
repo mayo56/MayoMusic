@@ -12,7 +12,8 @@ const Listeners = {
       music: 'response.musicsList'
     },
     data: {
-      cover: 'request.album.cover'
+      cover: 'request.album.cover',
+      album: 'request.album.data'
     }
   },
   player: {

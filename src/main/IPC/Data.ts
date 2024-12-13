@@ -1,5 +1,6 @@
+import { ipcMain, IpcMainInvokeEvent } from 'electron'
 import LibraryManager from '../libs/Library'
-import { ipcMain } from 'electron'
+import { AlbumData } from '../Types/types'
 import ErrorCreate from '../libs/Error'
 
 // --- GLOBAL VARIABLE ---
@@ -40,14 +41,27 @@ const data = (): void => {
     })
   })
 
-  ipcMain.handle('request.album.cover', (_, args: string): undefined | string => {
-    const album = library.getAlbum(args)
+  /**
+   * Requête pour récupérer la data image (cover) d'un album
+   */
+  ipcMain.handle('request.album.cover', (_, albumName: string): undefined | string => {
+    const album = library.getAlbum(albumName)
 
     // Checking
     if (!album) return undefined
 
     return library.getCoverAsBase64(album.name)
   })
+
+  /**
+   * Requête pour récupérer la data d'un album
+   */
+  ipcMain.handle(
+    'request.album.data',
+    (_: IpcMainInvokeEvent, albumName: string): null | AlbumData => {
+      return library.getAlbum(albumName)
+    }
+  )
 }
 
 export default data

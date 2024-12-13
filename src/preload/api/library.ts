@@ -56,6 +56,14 @@ const LibraryAPI = {
      */
     cover: async (albumName: string): Promise<string | undefined> => {
       return await ipcRenderer.invoke(Listeners.library.data.cover, albumName)
+    },
+
+    /**
+     * Listener data invoke pour récupérer les infos sur un album
+     * @param albumName
+     */
+    album: async (albumName: string): Promise<AlbumData | null> => {
+      return await ipcRenderer.invoke(Listeners.library.data.album, albumName)
     }
   }
 }
