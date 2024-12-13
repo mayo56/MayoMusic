@@ -1,5 +1,6 @@
-import Electron, { contextBridge, IpcRenderer, ipcRenderer, IpcRendererEvent } from 'electron'
+import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import LibraryAPI from './api/library'
 
 const Listeners = {
   request: {
@@ -34,52 +35,11 @@ export type Music = {
 
 // Custom APIs for renderer
 const api = {
-  library: {
-    request: {
-      albums: (): void => {
-        ipcRenderer.send(Listeners.request.albums)
-      },
-      musics: (albumName: string): void => {
-        ipcRenderer.send(Listeners.request.musics, albumName)
-      },
-      cover: async (albumName: string): Promise<string | undefined> => {
-        return await ipcRenderer.invoke(Listeners.request.cover, albumName)
-      }
-    },
-    response: {
-      albums: (callback: (albums: Album[]) => void): (() => Electron.IpcRenderer) => {
-        const listener = (_: IpcRendererEvent, data: Album[]): void => {
-          callback(data)
-        }
-        ipcRenderer.on(Listeners.response.albums, listener)
+  library: LibraryAPI,
 
-        return (): IpcRenderer => ipcRenderer.removeListener(Listeners.response.albums, listener)
-      },
-      musics: (
-        callback: (data: { musics: string[]; cover: string | undefined }) => void
-      ): (() => Electron.IpcRenderer) => {
-        const listener = (
-          _: IpcRendererEvent,
-          data: { musics: string[]; cover: string | undefined }
-        ): void => {
-          callback(data)
-        }
-        ipcRenderer.on(Listeners.response.musics, listener)
-
-        return () => ipcRenderer.removeListener(Listeners.response.musics, listener)
-      }
-    },
-
-    removeListener: {
-      albums: (data): void => {
-        ipcRenderer.removeListener(Listeners.response.albums, data)
-      }
-    },
-
-    // File
-    openMusicFolder: (albumName: string): void => {
-      ipcRenderer.send('OpenAlbumDirectory', albumName)
-    }
+  // File
+  openMusicFolder: (albumName: string): void => {
+    ipcRenderer.send('OpenAlbumDirectory', albumName)
   },
   player: {
     // EVENT PLAY MUSIQUE
