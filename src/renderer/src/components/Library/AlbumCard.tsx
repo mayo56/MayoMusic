@@ -23,7 +23,7 @@ const AlbumCard = (props: {
   return (
     <div
       className={'libraryMusic'}
-      title={`${props.name}\n${props.path}`}
+      title={`${props.name}\nBy ${props.author ?? 'Artiste Inconnu'}`}
       onClick={() => nav(`/library/${props.name}`)}
     >
       <img src={cover} alt={'cover ' + props.name} />

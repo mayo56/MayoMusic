@@ -1,9 +1,9 @@
 // Import des dépendances
+import LibraryManager from '../libs/Library'
 import ErrorCreate from '../libs/Error'
+import MusicQueue from '../libs/Queue'
 import { ipcMain } from 'electron'
 import path from 'path'
-import LibraryManager from '../libs/Library'
-import MusicQueue from '../libs/Queue'
 // ---------------------
 
 //  --- GLOBAL VARIABLE ---
@@ -39,7 +39,7 @@ const player = (): void => {
     // Set Audio Queue
     queue.clearQueue()
     const index = album.tracks.findIndex((value) => value === data.trackName)
-    for (const audioData in album.tracks) {
+    for (const audioData of album.tracks) {
       queue.addTrack({
         albumName: data.albumName,
         trackName: audioData,

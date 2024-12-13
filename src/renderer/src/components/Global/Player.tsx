@@ -125,11 +125,19 @@ function Player(): React.JSX.Element {
       </div>
 
       <div className="player-controls">
-        <img src={skipBackIcon} alt="Skip Back" />
+        <img
+          onClick={() => window.api.player.action.previousTrack()}
+          src={skipBackIcon}
+          alt="Skip Back"
+        />
 
         <img onClick={togglePlay} src={isPlaying ? pauseIcon : playIcon} alt="Play/Pause" />
 
-        <img src={skipForwardIcon} alt="Skip Forward" />
+        <img
+          onClick={() => window.api.player.action.nextTrack()}
+          src={skipForwardIcon}
+          alt="Skip Forward"
+        />
       </div>
 
       <div className="player-progress">

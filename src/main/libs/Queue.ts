@@ -23,9 +23,13 @@ class MusicQueue {
     return null
   }
 
+  public getIndex(): number {
+    return this.queue.currentIndex
+  }
+
   /** Set l'index de queue */
   public setCurrentTrack(index: number): QueueTrack | null {
-    if (this.queue.currentIndex >= 0 && this.queue.currentIndex < this.queue.tracks.length) {
+    if (index >= 0 && index < this.queue.tracks.length) {
       this.queue.currentIndex = index
       return this.getCurrentTrack()
     }
