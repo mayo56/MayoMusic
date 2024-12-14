@@ -119,6 +119,32 @@ function Player(): React.JSX.Element {
       // ajout de la cover
       window.api.library.data.cover(data.album.name).then((coverData) => {
         setCover(coverData)
+        // --- MediaSession ---
+        if ('mediaSession' in navigator) {
+          console.info('[INFO] - MediaSession mis à jour.')
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: data.trackName,
+            artist: data.album.author ?? 'Aucun',
+            album: data.album.name,
+            artwork: [
+              {
+                sizes: '512/512',
+                src: coverData ?? musicIcon,
+                type: 'image/png'
+              }
+            ]
+          })
+        }
+        navigator.mediaSession.setActionHandler('play', () => {
+          togglePlay()
+        })
+        navigator.mediaSession.setActionHandler('nexttrack', () => {
+          window.api.player.action.nextTrack()
+        })
+        navigator.mediaSession.setActionHandler('previoustrack', () => {
+          window.api.player.action.previousTrack()
+        })
+        // -------------------
       })
     })
   }, [])
