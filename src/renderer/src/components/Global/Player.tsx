@@ -131,15 +131,16 @@ function Player(): React.JSX.Element {
             artwork: [{ sizes: '512/512', src: coverData ?? musicIcon, type: 'image/png' }]
           })
         }
-        navigator.mediaSession.setActionHandler('play', () => {
-          togglePlay()
-        })
-        navigator.mediaSession.setActionHandler('nexttrack', () => {
+        // Play
+        navigator.mediaSession.setActionHandler('play', () => togglePlay())
+        // Next Track
+        navigator.mediaSession.setActionHandler('nexttrack', () =>
           window.api.player.action.nextTrack()
-        })
-        navigator.mediaSession.setActionHandler('previoustrack', () => {
+        )
+        // Previous Track
+        navigator.mediaSession.setActionHandler('previoustrack', () =>
           window.api.player.action.previousTrack()
-        })
+        )
         // -------------------
       })
     })
