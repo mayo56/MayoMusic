@@ -109,7 +109,9 @@ function Player(): React.JSX.Element {
   // Events
   React.useEffect(() => {
     window.api.player.action.currentTrack((data) => {
-      setTrackData({ albumData: data.album, trackName: data.trackName })
+      const trackName = data.trackName.split('.')
+      if (trackName.length > 0) trackName.pop()
+      setTrackData({ albumData: data.album, trackName: trackName.join('.') })
       if (audioSRC === data.audio) {
         audioREF.current!.currentTime = 0
         audioREF.current?.play()
@@ -123,16 +125,10 @@ function Player(): React.JSX.Element {
         if ('mediaSession' in navigator) {
           console.info('[INFO] - MediaSession mis à jour.')
           navigator.mediaSession.metadata = new MediaMetadata({
-            title: data.trackName,
+            title: trackName.join('.'),
             artist: data.album.author ?? 'Aucun',
             album: data.album.name,
-            artwork: [
-              {
-                sizes: '512/512',
-                src: coverData ?? musicIcon,
-                type: 'image/png'
-              }
-            ]
+            artwork: [{ sizes: '512/512', src: coverData ?? musicIcon, type: 'image/png' }]
           })
         }
         navigator.mediaSession.setActionHandler('play', () => {
@@ -164,7 +160,7 @@ function Player(): React.JSX.Element {
       <div className="player-info">
         <img className="cover" src={cover ? cover : musicIcon} alt="Music cover" />
         <div className="info-text">
-          <h4 className="title">{trackData.trackName.split('.').slice(0, -1).join('.')}</h4>
+          <h4 className="title">{trackData.trackName}</h4>
           <p className="artist">{trackData.albumData.author}</p>
         </div>
       </div>
