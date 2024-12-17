@@ -1,11 +1,13 @@
 // React import
 import React from 'react'
-import { Route, Routes } from 'react-router-dom' // Style
-import '@renderer/assets/CSS/Global/Global.css' // Différentes pages
-import Library from '@renderer/Pages/Library' // Side Bar
+import { Outlet } from 'react-router-dom'
+
+// Style
+import '@renderer/assets/CSS/Global/Global.css'
+
+// Components
 import GlobalController from '@renderer/components/Global/GlobalController'
 import SideBar from '@renderer/components/Global/SideBar'
-import Settings from '@renderer/Pages/Settings'
 import Player from '@renderer/components/Global/Player'
 
 function Global(): React.JSX.Element {
@@ -20,21 +22,12 @@ function Global(): React.JSX.Element {
       </div>
 
       {/*
-      Différentes pages
+      Affichage des différentes pages
+      (Layout)
       */}
       <div className={'mm-global-pages-container'}>
         <div className={'mm-global-pages-content'}>
-          <Routes>
-            {/*
-          Pages paramètres
-          */}
-            <Route path={'/settings/*'} element={<Settings />} />
-
-            {/*
-          Pages de bibliothèque et album
-          */}
-            <Route path={'/library/*'} element={<Library />} />
-          </Routes>
+          <Outlet />
         </div>
         <Player />
       </div>

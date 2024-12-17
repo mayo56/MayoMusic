@@ -1,14 +1,12 @@
 // React Import
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 // CSS
 import '@renderer/assets/CSS/Settings/settings.css'
 
 // Components / Pages
 import MenuNav from '@renderer/components/Settings/MenuNav'
-import YoutubeDLPage from '@renderer/Pages/Sous-Pages/Settings/Download/Youtube-DL'
-import ComingSoon from '@renderer/Pages/Sous-Pages/Settings/Error/CommingSoon'
 
 function Settings(): React.JSX.Element {
   return (
@@ -38,10 +36,7 @@ function Settings(): React.JSX.Element {
         categories={['User settings', 'Téléchargement']}
       />
       <div className={'SettingsPage'}>
-        <Routes>
-          <Route path={'download/yt-dlp'} element={<YoutubeDLPage />} />
-          <Route path={'*'} element={<ComingSoon />} />
-        </Routes>
+        <Outlet />
       </div>
     </div>
   )
