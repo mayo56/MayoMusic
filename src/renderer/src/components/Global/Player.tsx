@@ -112,7 +112,7 @@ function Player(): React.JSX.Element {
       const trackName = data.trackName.split('.')
       if (trackName.length > 0) trackName.pop()
       setTrackData({ albumData: data.album, trackName: trackName.join('.') })
-      if (audioSRC === data.audio) {
+      if (audioREF.current?.src === data.audio) {
         audioREF.current!.currentTime = 0
         audioREF.current?.play()
       } else {

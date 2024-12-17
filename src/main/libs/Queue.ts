@@ -41,8 +41,10 @@ class MusicQueue {
     if (this.queue.currentIndex < this.queue.tracks.length - 1) {
       this.queue.currentIndex++
       return this.getCurrentTrack()
+    } else {
+      this.queue.currentIndex = 0
+      return this.getCurrentTrack()
     }
-    return null // Plus de pistes
   }
 
   /** Reviens à la piste précédente */
@@ -50,8 +52,10 @@ class MusicQueue {
     if (this.queue.currentIndex > 0) {
       this.queue.currentIndex--
       return this.getCurrentTrack()
+    } else {
+      this.queue.currentIndex = this.queue.tracks.length - 1
+      return this.getCurrentTrack()
     }
-    return null // Pas de piste précédente
   }
 
   /** Obtenir la piste en cours */
