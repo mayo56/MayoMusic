@@ -17,7 +17,7 @@
 
 <!-- BEGIN Supported Languages -->
 
-| Langue   |     Supported      |
+| Langue   |      Supporté      |
 |----------|:------------------:|
 | Français | :white_check_mark: |
 | Anglais  |        :x:         |
@@ -41,11 +41,11 @@
 
 Télécharger les versions directement compilées via le [releases GitHub](https://github.com/mayo56/MayoMusic/releases) !
 
-| Platform | Version        |     Available      |
-|----------|----------------|:------------------:|
-| macOS    | Mac OSX 10.12+ | :white_check_mark: |
-| Windows  | Windows 10+    | :white_check_mark: |
-| Linux    | /              |  :x: (non testé)   |
+| Plateforme | Version        |      Validité      |
+|------------|----------------|:------------------:|
+| macOS      | Mac OSX 10.12+ | :white_check_mark: |
+| Windows    | Windows 10+    | :white_check_mark: |
+| Linux      | /              |  :x: (non testé)   |
 
 ## Instructions (Avancées)
 
@@ -79,7 +79,7 @@ npm run build:linux
 
 Tableau des compatibilités (Voir sur [le site de Electron]())
 
-| Plateforme | Valide             |
+| Plateforme | Validité           |
 |------------|--------------------|
 | macOS      | :white_check_mark: |
 | Windows    | :white_check_mark: |
