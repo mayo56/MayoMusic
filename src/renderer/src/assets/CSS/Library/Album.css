@@ -6,9 +6,8 @@
 }
 
 .AlbumContainer {
-  height: calc(100vh - 30px);
-  border-radius: 8px;
   overflow-y: auto;
+  overflow-x: hidden;
   background-color: var(--secondary-color);
   padding: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

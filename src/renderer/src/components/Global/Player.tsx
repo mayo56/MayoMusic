@@ -129,9 +129,7 @@ function Player(): React.JSX.Element {
             title: trackName.join('.'),
             artist: data.album.author ?? 'Aucun',
             album: data.album.name,
-            artwork: [
-              { sizes: '512/512', src: coverData ?? musicIcon_black, type: 'image/png' }
-            ]
+            artwork: [{ sizes: '512/512', src: coverData ?? musicIcon_black, type: 'image/png' }]
           })
         }
         // Play
