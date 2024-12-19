@@ -1,7 +1,8 @@
-import { ipcMain, IpcMainInvokeEvent } from 'electron'
+import { ipcMain, IpcMainEvent, IpcMainInvokeEvent } from 'electron'
 import LibraryManager from '../libs/Library'
 import { AlbumData } from '../Types/types'
 import ErrorCreate from '../libs/Error'
+import Listeners from '../libs/Listeners'
 
 // --- GLOBAL VARIABLE ---
 const library = LibraryManager.getInstance()
@@ -17,8 +18,8 @@ const data = (): void => {
    * Requête pour demander la liste des albums présente dans le dossier musiques.
    * Renvoi un 'response.albumsList' avec la liste des albums.
    */
-  ipcMain.on('request.albums', (event): void => {
-    event.sender.send('response.albumsList', library.getAlbums())
+  ipcMain.on(Listeners.library.request.album, (event): void => {
+    event.sender.send(Listeners.library.response.album, library.getAlbums())
   })
 
   /**
@@ -26,7 +27,7 @@ const data = (): void => {
    * Requête pour demander la liste des musiques d'un album.
    * Renvoi un 'response.musicsList' avec la liste des musiques de l'album.
    */
-  ipcMain.on('request.musics', (event, albumName: string): void => {
+  ipcMain.on(Listeners.library.request.music, (event, albumName: string): void => {
     const album = library.getAlbum(albumName)
 
     // Vérifications
@@ -35,7 +36,7 @@ const data = (): void => {
     }
 
     // Envoi de la réponse
-    event.sender.send('response.musicsList', {
+    event.sender.send(Listeners.library.response.music, {
       album,
       tracks: album.tracks
     })
@@ -44,7 +45,7 @@ const data = (): void => {
   /**
    * Requête pour récupérer la data image (cover) d'un album
    */
-  ipcMain.handle('request.album.cover', (_, albumName: string): undefined | string => {
+  ipcMain.handle(Listeners.library.data.cover, (_, albumName: string): undefined | string => {
     const album = library.getAlbum(albumName)
 
     // Checking
@@ -57,11 +58,23 @@ const data = (): void => {
    * Requête pour récupérer la data d'un album
    */
   ipcMain.handle(
-    'request.album.data',
+    Listeners.library.data.album,
     (_: IpcMainInvokeEvent, albumName: string): null | AlbumData => {
       return library.getAlbum(albumName)
     }
   )
+
+  /**
+   * Requête pour recharger les albums
+   */
+  ipcMain.on(Listeners.library.data.reload, (event: IpcMainEvent) => {
+    library
+      .initializeLibrary()
+      .then(() => {
+        event.sender.send(Listeners.library.response.album, library.getAlbums())
+      })
+      .catch((err) => console.error(err))
+  })
 }
 
 export default data
