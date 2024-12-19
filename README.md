@@ -1,10 +1,7 @@
-# MayoMusic
-
-MayoMusic is a local music player based on
-[Arc Browser](https://arc.net "Arc Browser") style.
-
 <!-- BEGIN Version & Dependencies -->
 <div align="center">
+
+![lol](./.github/images/logo.png)
 
 [![GitHub Pre-Release](https://img.shields.io/github/v/release/mayo56/MayoMusic?include_prereleases&style=for-the-badge&label=Pre-release&color=brightgreen)](#INSTALLATION)
 [![GitHub Release](https://img.shields.io/github/v/release/mayo56/MayoMusic?style=for-the-badge&label=Release&color=brightgreen)](#INSTALLATION)
@@ -20,116 +17,82 @@ MayoMusic is a local music player based on
 
 <!-- BEGIN Supported Languages -->
 
-| Language | Supported | Documentation                                                               |
-|----------|:---------:|-----------------------------------------------------------------------------|
-| French   |     ✅     | [README fr](https://github.com/mayo56/MayoMusic/blob/main/DOC/README_fr.md) |
-| English  |     ❌     | [README en](https://github.com/mayo56/MayoMusic/README.md)                  |
+| Langue   |     Supported      |
+|----------|:------------------:|
+| Français | :white_check_mark: |
+| Anglais  |        :x:         |
 
 <!-- END Supported languages -->
 
 <!-- BEGIN Summary -->
 
 * [INSTALLATION](#INSTALLATION)
-  * [Instructions](#detail-instructions)
-  * [Update](#update)
-  * [Dependencies](#dependencies)
-  * [Compile](#compile)
-* [USAGE](#usage)
-  * [Music](#music)
+  * [Instructions générales](#instructions-générales)
+  * [Instructions avancées](#instructions-avancées)
+  * [Mises à jour](#mise-à-jour)
+* [UTILISATION](#utilisation)
 * [CONFIGURATION](#configuration)
-* [GOALS](#goals)
 
 <!-- END Summary -->
 
 # INSTALLATION
 
-## Detail Instructions
+## Instructions (Générales)
 
-| Platform | Available | Link |
-|----------|-----------|------|
-| MacOS    | Yes       | /    |
-| Linux    | No        | /    |
-| Windows  | No        | /    |
+Télécharger les versions directement compilées via le [releases GitHub](https://github.com/mayo56/MayoMusic/releases) !
 
-## Update
+| Platform | Version        |     Available      |
+|----------|----------------|:------------------:|
+| macOS    | Mac OSX 10.12+ | :white_check_mark: |
+| Windows  | Windows 10+    | :white_check_mark: |
+| Linux    | /              |  :x: (non testé)   |
 
-`Not available yet`
+## Instructions (Avancées)
 
-## Dependencies
+> Compilez par vous-même !
+>
+> :warning: Vous devez avoir NodeJS d'installé sur votre machine.
+> Voir sur [le site de NodeJS](https://nodejs.org).
 
-Optional dependencies
-
-| Name    | Download                         | Usage                                   |
-|---------|----------------------------------|-----------------------------------------|
-| YT-DLP* | https://github.com/yt-dlp/yt-dlp | Download musics directly into MayoMusic |
-
-*YT-DLP: global viable must be `yt-dlp`.
-
-## Compile
-
-<div align="left">
-
-[![Node.js Badge](https://img.shields.io/badge/node.js-node?style=for-the-badge&logo=nodedotjs&logoColor=green&color=black)](https://nodejs.org/ "Node.js")
-
-</div>
-
-Download the project and install it dependencies
-
+Téléchargez le projet
 ```shell
+# Cloner le repo
 git clone https://github.com/mayo56/MayoMusic.git
 cd MayoMusic
+
+# Installer les dépendances
 npm install
 ```
-
-Compile according to your operating system
-
+Compilez le projet selon votre plateforme (`macOS`, `Windows`, `Linux`)
 ```shell
-# MacOS
-npm build:mac
+# macOS
+npm run build:mac
 # Windows
-npm build:win
+npm run build:win
 # Linux
-npm build:linux
+npm run build:linux
 ```
 
-The build is into the folder `dist`
+## Mise à jour
+### Automatique
+> :test_tube: Cette fonctionnalité arrivera prochainement
 
-ENJOY !
+Tableau des compatibilités (Voir sur [le site de Electron]())
 
-# USAGE
+| Plateforme | Valide             |
+|------------|--------------------|
+| macOS      | :white_check_mark: |
+| Windows    | :white_check_mark: |
+| Linux      | :x:                |
 
-## Music
+### Manuelles
+> :warning: Solutions peu pratiques
+
+Vous pouvez checker régulièrement la liste des [GitHub releases](https://github.com/mayo56/MayoMusic/releases)
+pour installer les mises à jour.
+
+# UTILISATION
+`Doc work in progress`
 
 # CONFIGURATION
-
-## Supported files
-
-| File | Extension | Supported |
-|------|-----------|:---------:|
-| MPEG | `.mp3`    |     ✅     |
-| MPEG | `.mp4`    |     ❌     |
-| OGG  | `.ogg`    |     ✅     |
-| WEBM | `.webm`   |     ✅     |
-| OPUS | `.opus`   |     ✅     |
-| M4A  | `.m4a`    |     ✅     |
-
-# GOALS
-
-Create beautiful music player, simply to use and local/server
-- Player
-  - [x] Read audio files
-  - [x] Queue system
-  - [x] Volume
-  - [x] Progress bar for music
-  - [ ] Loop
-- Settings
-  - [ ] Modify path name for audio container
-  - [ ] auto format folder
-  - [x] Download music with YT-DLP (with bugs)
-  - [ ] Modify window color
-  - [ ] Connect to remote server (in the futur)
-- Music
-  - [x] Read album folder
-  - [x] Display cover and albums
-  - [x] Display music list
-  - [ ] Show folder of the album
+`Doc work in progress`
