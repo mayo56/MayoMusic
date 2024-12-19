@@ -3,10 +3,10 @@ import React from 'react'
 
 function LibrarySearchBar(): React.JSX.Element {
   /**
-   * @deprecated
+   * Fonction reload des albums
    */
   const reloadRequest = (): void => {
-    console.warn('Reload list')
+    window.api.library.data.reload()
   }
   return (
     <div className={'LibrarySearchBarContainer'}>

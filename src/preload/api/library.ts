@@ -64,6 +64,13 @@ const LibraryAPI = {
      */
     album: async (albumName: string): Promise<AlbumData | null> => {
       return await ipcRenderer.invoke(Listeners.library.data.album, albumName)
+    },
+
+    /**
+     * Requête pour demander le reload des albums
+     */
+    reload: async (): Promise<void> => {
+      ipcRenderer.send(Listeners.library.data.reload)
     }
   }
 }

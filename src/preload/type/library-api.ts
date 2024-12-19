@@ -31,7 +31,16 @@ interface LibraryAPI {
      */
     cover(albumName: string): Promise<string | undefined>
 
+    /**
+     * Listener data invoke pour récupérer les infos sur un album
+     * @param albumName
+     */
     album(albumName: string): Promise<AlbumData | null>
+
+    /**
+     * Requête pour demander le reload des albums
+     */
+    reload(): Promise<void>
   }
 }
 

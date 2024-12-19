@@ -21,6 +21,7 @@ function MusicList(): React.JSX.Element {
 
   React.useEffect(() => {
     const removeListener = window.api.library.response.albums((data) => {
+      console.log(data)
       setMusics(data)
     })
 
@@ -38,7 +39,7 @@ function MusicList(): React.JSX.Element {
         <LibrarySearchBar />
         <div className="loadBar">
           <div className="bar_left"></div>
-          <span className="count">{musics.length} titres chargés</span>
+          <span className="count">{musics?.length ?? 0} titres chargés</span>
           <div className="bar"></div>
         </div>
       </div>
@@ -47,7 +48,7 @@ function MusicList(): React.JSX.Element {
          Liste des musiques
       */}
       <div className="library">
-        {musics.map((album, key) => (
+        {musics?.map((album, key) => (
           <AlbumCard name={album.name} author={album.author} path={album.path} key={key} />
         ))}
       </div>
