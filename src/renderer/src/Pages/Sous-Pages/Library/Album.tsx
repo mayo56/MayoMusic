@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import '@renderer/assets/CSS/Library/Album.css'
 
 // Icons
-import music_icon from '@renderer/assets/Images/musical-notes-svgrepo-com.svg'
+import music_icon from '@renderer/assets/Images/musicIcon_black.svg'
 import back_arrow_icon from '@renderer/assets/Images/arrow-back-svgrepo-com.svg'
 import folder_icon from '@renderer/assets/Images/folder-open-svgrepo-com.svg'
 

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import React from 'react'
 
 // Icons
-import music_icon from '@renderer/assets/Images/musical-notes-svgrepo-com.svg'
+import music_icon from '@renderer/assets/Images/musicIcon_black.svg'
 
 const AlbumCard = (props: {
   name: string

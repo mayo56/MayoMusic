@@ -2,7 +2,8 @@ import React from 'react'
 import '@renderer/assets/CSS/Global/Player.css'
 
 // Icons
-import musicIcon from '@renderer/assets/Images/musical-notes-svgrepo-com.svg'
+import musicIcon_black from '@renderer/assets/Images/musicIcon_black.svg'
+import musicIcon_white from '@renderer/assets/Images/musicIcon_white.svg'
 import skipBackIcon from '@renderer/assets/Images/play-skip-back-svgrepo-com.svg'
 import playIcon from '@renderer/assets/Images/play-svgrepo-com (1).svg'
 import pauseIcon from '@renderer/assets/Images/pause-svgrepo-com.svg'
@@ -128,7 +129,9 @@ function Player(): React.JSX.Element {
             title: trackName.join('.'),
             artist: data.album.author ?? 'Aucun',
             album: data.album.name,
-            artwork: [{ sizes: '512/512', src: coverData ?? musicIcon, type: 'image/png' }]
+            artwork: [
+              { sizes: '512/512', src: coverData ?? musicIcon_black, type: 'image/png' }
+            ]
           })
         }
         // Play
@@ -159,7 +162,7 @@ function Player(): React.JSX.Element {
       />
 
       <div className="player-info">
-        <img className="cover" src={cover ? cover : musicIcon} alt="Music cover" />
+        <img className="cover" src={cover ? cover : musicIcon_white} alt="Music cover" />
         <div className="info-text">
           <h4 className="title">{trackData.trackName}</h4>
           <p className="artist">{trackData.albumData.author}</p>
