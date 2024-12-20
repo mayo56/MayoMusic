@@ -11,30 +11,7 @@ import MenuNav from '@renderer/components/Settings/MenuNav'
 function Settings(): React.JSX.Element {
   return (
     <div className={'SettingsContainer'}>
-      <MenuNav
-        menuList={[
-          [
-            {
-              label: 'Global',
-              path: '/settings',
-              experimental: true
-            },
-            {
-              label: 'Info',
-              path: '/settings/download',
-              experimental: true
-            }
-          ],
-          [
-            {
-              label: 'yt-dlp',
-              path: '/settings/download/yt-dlp',
-              experimental: true
-            }
-          ]
-        ]}
-        categories={['User settings', 'Téléchargement']}
-      />
+      <MenuNav />
       <div className={'SettingsPage'}>
         <Outlet />
       </div>

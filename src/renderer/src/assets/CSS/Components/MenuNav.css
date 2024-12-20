@@ -6,57 +6,35 @@
 
 .MenuNavContainer {
   display: flex;
-  justify-content: start;
   align-items: start;
+  justify-content: start;
   flex-direction: column;
+  gap: 5px;
 
-  height: calc(100vh - 40px);
-
-  padding: 5px;
+  height: 100%;
+  padding: 20px;
+  padding-inline: 15px;
+  box-sizing: border-box;
 
   background-color: white;
-  border-right: var(--border-color) 1px solid;
 
   overflow: scroll;
 }
 
-/* CATEGORY */
-.MenuNavCategoryContainer {
+.param-menu-button {
   width: 100%;
-}
-.MenuNavCategoryContainer .name {
-  font-size: 14px;
-  font-weight: 200;
-  color: var(--global-page-shadow-color);
-
-  margin-bottom: 5px;
-  margin-top: 10px;
-}
-
-/* BUTTON */
-.MenuNavButtonContainer {
-  background-color: transparent;
-  padding: 3px 5px 3px 5px;
-  margin: 1px 5px 1px 5px;
-  border-radius: 5px;
-  cursor: pointer;
-
-  display: flex;
-  justify-content: start;
-  align-items: center;
-}
-.MenuNavButtonContainer:hover {
-  background-color: rgba(0,0,0,0.05);
-}
-.MenuNavButtonContainer .label {
-  font-size: 16px;
-}
-.MenuNavButtonContainer .icon {
-  width: 15px;
-}
-.MenuNavContainer .selected {
+  padding: 5px;
   background-color: rgba(0,0,0,0.1);
+  border-radius: 5px;
+
+  box-sizing: border-box;
+  cursor: pointer;
 }
-.MenuNavContainer .selected:hover {
-  background-color: rgba(0,0,0,0.05);
+
+.param-menu-button:hover {
+  background-color: #4caf50;
+}
+
+.param-menu-button-location {
+  background-color: rgba(0,0,0,0.2);
 }
