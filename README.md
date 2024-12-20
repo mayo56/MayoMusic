@@ -77,7 +77,7 @@ npm run build:linux
 ### Automatique
 > :test_tube: Cette fonctionnalité arrivera prochainement
 
-Tableau des compatibilités (Voir sur [le site de Electron]())
+Tableau des compatibilités (Voir sur [le site de Electron](https://www.electronjs.org/docs/latest/api/auto-updater))
 
 | Plateforme | Validité           |
 |------------|--------------------|
