@@ -8,11 +8,13 @@ import Settings from '@renderer/Pages/Settings'
 import Global from './Pages/Global'
 
 // Import pages
-import YoutubeDLPage from '@renderer/Pages/Sous-Pages/Settings/Download/Youtube-DL'
 import ComingSoon from '@renderer/Pages/Sous-Pages/Settings/Error/CommingSoon'
 import MusicList from '@renderer/Pages/Sous-Pages/Library/MusicList'
 import Album from '@renderer/Pages/Sous-Pages/Library/Album'
 import General from '@renderer/Pages/Sous-Pages/Settings/Pages/General'
+import Music from '@renderer/Pages/Sous-Pages/Settings/Pages/Music'
+import Advanced from '@renderer/Pages/Sous-Pages/Settings/Pages/Advanced'
+import About from '@renderer/Pages/Sous-Pages/Settings/Pages/About'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -32,7 +34,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           {/* Routes Paramètres */}
           <Route path={'/settings'} element={<Settings />}>
             <Route index element={<General />} />
-            <Route path={'download/yt-dlp'} element={<YoutubeDLPage />} />
+            <Route path={'music'} element={<Music />} />
+            <Route path={'advanced'} element={<Advanced />} />
+            <Route path={'about'} element={<About />} />
             <Route path={'*'} element={<ComingSoon />} />
           </Route>
         </Route>

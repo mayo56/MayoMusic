@@ -8,8 +8,7 @@ import '@renderer/assets/CSS/Components/MenuNav.css'
 function MenuNav(): React.JSX.Element {
   const categories = [
     { name: 'Général', path: '/settings' },
-    { name: 'Fichiers', path: '/settings/files' },
-    { name: 'Apparence', path: '/settings/appearance' },
+    { name: 'Musique', path: '/settings/files' },
     { name: 'Avancée', path: '/settings/advanced' },
     { name: 'À propos', path: '/settings/about' }
   ]
